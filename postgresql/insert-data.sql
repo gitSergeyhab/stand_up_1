@@ -67,7 +67,7 @@ INSERT INTO comedians(
 ('Денис', 'Чужой', 'Denis', 'Chuzhoy', 2, '', '/avatars/comedian/comedian_avatar/Chuzhoy.jpeg', '1988-07-23');
 
 
-INSERT INTO palaces(place_name, fk_country_id, place_city, fk_user_added_id, description) VALUES
+INSERT INTO places(place_name, fk_country_id, place_city, fk_user_added_id, description) VALUES
 ('SUPER-CLUB', 1, 'Tula', 2, 'very nice');
 
 
