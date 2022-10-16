@@ -1,8 +1,8 @@
 import dotenv from 'dotenv';
+dotenv.config();
 import express from 'express';
 import { router } from './routers';
 import { sequelize } from './sequelize';
-dotenv.config();
 const app = express();
 
 const port = process.env.PORT || 4000;

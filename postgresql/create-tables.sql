@@ -76,21 +76,39 @@ CREATE TABLE places (
     description TEXT
     );
 
+CREATE TABLE show_statuses (
+    show_status_id SMALLSERIAL PRIMARY KEY,
+    show_status_name VARCHAR(32) DEFAULT 'completed'
+)
+
+
+
+
 CREATE TABLE shows ( 
     show_id BIGSERIAL PRIMARY KEY, 
     fk_comedian_id INTEGER NOT NULL REFERENCES comedians(comedian_id),
     fk_country_id INTEGER REFERENCES countries(country_id),
     fk_language_id INTEGER NOT NULL REFERENCES languages(language_id),
     fk_place_id INTEGER REFERENCES places(place_id),
-    city VARCHAR(256),
     show_date DATE,
     show_date_added DATE DEFAULT CURRENT_DATE,
     fk_user_added_id INTEGER REFERENCES users(user_id),
     show_name VARCHAR(256),
     description TEXT,
     average_show_rating REAL,
-    number_show_rating INTEGER
+    number_show_rating INTEGER,
+    show_poster VARCHAR(256)
+    fk_show_status_id SMALLINT REFERENCES show_statuses(show_status_id)  DEFAULT 1
     );
+
+CREATE TABLE show_videos (
+    show_video_id SMALLSERIAL PRIMARY KEY,
+    show_videos_path VARCHAR(256),
+    is_video_professional BOOLEAN DEFAULT FALSE,
+    minutes SMALLINT,
+    fk_show_id BIGINT REFERENCES shows(show_id) NOT NULL,
+    fk_user_id INTEGER REFERENCES users(user_id)
+);
 
 
 
@@ -167,3 +185,13 @@ CREATE TABLE show_views (
     fk_show_id INTEGER NOT NULL REFERENCES shows(show_id),
     view_date TIMESTAMP without time zone DEFAULT CURRENT_TIMESTAMP
 );
+
+--
+CREATE TABLE place_views (
+    view_id BIGSERIAL PRIMARY KEY,
+    fk_user_id INTEGER REFERENCES users(user_id),
+    fk_place_id INTEGER NOT NULL REFERENCES places(place_id),
+    view_date TIMESTAMP without time zone DEFAULT CURRENT_TIMESTAMP
+);
+
+--

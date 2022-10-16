@@ -4,26 +4,16 @@ import { Request, Response } from "express";
 class ComedianController {
     async getComedianByLocation(req: Request, res: Response) {
         try {
-            const limit = +req.query.limit || null;
-            const offset = isNaN(+req.query.offset) ?  null : +req.query.offset;
-            const {country_id, comedian_city, comedian_city_en} = req.query;
 
-            const comedianCountry = country_id ? 'fk_country_id = :country_id' : '';
-            const comedianCity = comedian_city ? 'comedian_city = :comedian_city' : '';
-            const comedianCityEn = comedian_city_en ? 'comedian_city_en = :comedian_city_en' : '';
-
-            const locations = [comedianCountry, comedianCity, comedianCityEn].filter((item) => item);
-
-            const locationQuery = locations.length ? `WHERE ${locations.filter((item) => item).join(' AND ')}` : '';
-
+            const {country_id, comedian_city, comedian_city_en, limit = null, offset = null} = req.query;
     
-            if (limit && offset !== null) {
                 const data = await sequelize.query(
                     `
                     SELECT * FROM comedians
+                    WHERE fk_country_id = ${country_id ? ':country_id' : 'fk_country_id'}
+                    AND (comedian_city = ${comedian_city ? ':comedian_city' : 'comedian_city'} OR comedian_city_en = ${comedian_city_en ? ':comedian_city_en' : 'comedian_city_en'})
                     LIMIT :limit
                     OFFSET :offset
-                    ${locationQuery}
                     ;
                     `,
                     { 
@@ -34,21 +24,9 @@ class ComedianController {
         
                 return res.status(200).json({data})
                 
-            } else {
 
-                const comedians = await sequelize.query(
-                    `
-                    SELECT * FROM comedians ${locationQuery};
-                    `,
-                    { 
-                        replacements: {country_id, comedian_city, comedian_city_en},
-                        type: 'SELECT'
-                    }
-                );
-        
-                return res.status(200).json({comedians})
-            }
-        } catch {
+        } catch(e) {
+            console.log(e)
             return res.status(500).json({message: 'error get comedians'})
         }
     }
@@ -62,9 +40,39 @@ class ComedianController {
                 return res.status(400).json({message: 'there is not comedian_id'})
             }
 
+            // remade! - pictures + resources
             const users = await sequelize.query(
                 `
-                SELECT * FROM comedians WHERE comedian_id = :id;
+                SELECT 
+                    comedian_id, 
+                    comedian_first_name,
+                    comedian_last_name,
+                    comedian_first_name_en,
+                    comedian_last_name_en,
+                    comedian_city,
+                    comedian_city_en,
+                    comedian_avatar,
+                    comedian_date_birth,
+                    comedian_date_death,
+                    comedian_date_added,
+                    average_comedian_rating,
+                    number_comedian_rating,
+                    number_day_viewing,
+                    number_week_viewing,
+                    number_month_viewing,
+                    number_viewing,
+                    comedians.description,
+                    country_id, country_name, country_name_en,
+                    user_id, user_nik,
+                    picture_path,
+                    fk_resource_type_id, resource_href
+                FROM comedians 
+                LEFT JOIN countries ON comedians.fk_country_id = country_id
+                LEFT JOIN users ON comedians.fk_user_added_id = user_id
+                LEFT JOIN pictures ON comedian_id = pictures.fk_comedian_id
+                LEFT JOIN resources ON comedian_id = resources.fk_comedian_id 
+                
+                WHERE comedian_id = :id;
                 `,
                 {
                     replacements: {id},
@@ -76,7 +84,7 @@ class ComedianController {
                 return res.status(400).json({message: `there is not comedian with id = ${id}`})
             }
 
-            return res.status(200).json({user: users[0]});
+            return res.status(200).json({user: users});
     
    
         } catch {
@@ -91,10 +99,10 @@ class ComedianController {
             const comedians = await sequelize.query(
                 `
                 SELECT * FROM comedians
-                WHERE comedian_first_name LIKE :search
-                    OR comedian_last_name LIKE :search
-                    OR comedian_first_name_en LIKE :search
-                    OR comedian_last_name_en LIKE :search
+                WHERE comedian_first_name ILIKE :search 
+                    OR comedian_last_name ILIKE :search  
+                    OR comedian_first_name_en ILIKE :search  
+                    OR comedian_last_name_en ILIKE :search
                 ;
                 `,
                 {
