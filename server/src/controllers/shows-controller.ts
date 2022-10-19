@@ -6,8 +6,6 @@ const Order = {
     score: 'average_show_rating',
     dateAdded: 'show_date_added',
     dateWas: 'show_date'
-
-
 }
 
 class ShowsController {
@@ -17,21 +15,26 @@ class ShowsController {
                 const shows = await sequelize.query(
                     `
                     SELECT
-                    show_id, show_date, show_date_added, show_name, shows.description, average_show_rating, number_show_rating, show_poster, fk_show_status_id,
-                    comedian_id, comedian_first_name, comedian_last_name, comedian_first_name_en, comedian_last_name_en, comedian_avatar, average_comedian_rating,
-                    country_id, country_name, country_name_en,
+                    show_id, show_date, show_date_added, show_name, show_description, show_poster, show_status_id,
+                    comedian_id, comedian_first_name, comedian_last_name, comedian_first_name_en, comedian_last_name_en, comedian_avatar,
+                    countries.country_id, country_name, country_name_en,
                     place_id, place_name, place_name_en,
                     language_id, language_name, language_name_en,
-                    user_id, user_nik,
-                    show_video_id, show_videos_path, is_video_professional, minutes
+                    users.user_id, user_nik,
+                    show_video_id, show_video_path, show_video_professional, show_minutes,
+                    COUNT (show_view_id) as views
                     FROM shows
-                    LEFT JOIN comedians ON comedian_id = fk_comedian_id
-                    LEFT JOIN countries ON shows.fk_country_id = country_id
-                    LEFT JOIN languages ON shows.fk_language_id = language_id
-                    LEFT JOIN places ON shows.fk_place_id = place_id
-                    LEFT JOIN users ON shows.fk_user_added_id = user_id
-                    LEFT JOIN show_videos ON show_videos.fk_show_id = show_id
-                    WHERE show_id = :id;
+                    LEFT JOIN comedians USING (comedian_id)
+                    LEFT JOIN countries ON shows.country_id = countries.country_id
+                    LEFT JOIN languages USING (language_id)
+                    LEFT JOIN places USING (place_id)
+                    LEFT JOIN users ON shows.user_added_id = user_id
+                    LEFT JOIN show_videos USING (show_id)
+                    LEFT JOIN show_views USING (show_id)
+                    WHERE show_id = :id
+                    GROUP BY language_name, language_name_en, users.user_id, show_video_id,
+                    show_id, comedian_id, comedian_first_name, comedian_last_name, comedian_first_name_en, comedian_last_name_en, comedian_avatar, countries.country_id, place_name, place_name_en
+                    ;
                     `,
                     { 
                         replacements: {id},

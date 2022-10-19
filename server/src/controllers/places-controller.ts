@@ -1,10 +1,8 @@
 import { sequelize } from "../sequelize";
 import { Request, Response } from "express";
+import { OrderValues } from "../const";
 
-const Order = {
-    name: 'place_name',
-    pop: 'number_show_rating',
-}
+
 
 class PlacesController {
                 // remade! - pictures + resources
@@ -13,19 +11,33 @@ class PlacesController {
         try {
             const {id} = req.params
                 const place = await sequelize.query(
+                    // `
+                    // SELECT
+                    //     place_id, place_name, place_name_en, place_city, place_city_en, place_date_founded, date_place_added, place_description, place_promo_picture,   
+                    //     countries.country_id, country_name, country_name_en,
+                    //     users.user_id, user_nik,
+                    //     picture_path,
+                    //     resource_type_id, resource_href
+                    // FROM places
+                    // LEFT JOIN countries USING(country_id)
+                    // LEFT JOIN users ON user_id = user_added_id
+                    // LEFT JOIN pictures USING(place_id) 
+                    // LEFT JOIN resources USING(place_id)
+                    // WHERE place_id = :id;
+                    // `,
                     `
                     SELECT
-                        place_id, place_name, place_name_en, place_city, place_city_en, date_place_founded, date_place_added, places.description,    
-                        country_id, country_name, country_name_en,
-                        user_id, user_nik,
-                        picture_path,
-                        fk_resource_type_id, resource_href
+                        place_id, place_name, place_name_en, place_city, place_city_en, place_date_founded, date_place_added, place_description, place_promo_picture,   
+                        countries.country_id, country_name, country_name_en,
+                        users.user_id, user_nik,
+                        COUNT (place_view_id)
                     FROM places
-                    LEFT JOIN countries ON places.fk_country_id = country_id
-                    LEFT JOIN users ON places.fk_user_added_id = user_id
-                    LEFT JOIN pictures ON place_id = pictures.fk_place_id
-                    LEFT JOIN resources ON place_id = resources.fk_place_id 
-                    WHERE place_id = :id;
+                    LEFT JOIN countries USING(country_id)
+                    LEFT JOIN users ON user_id = user_added_id
+                    LEFT JOIN place_views USING(place_id)
+                    WHERE place_id = :id
+                    GROUP BY  place_id, countries.country_id, users.user_id 
+                    ;
                     `,
                     { 
                         replacements: {id},
@@ -44,19 +56,16 @@ class PlacesController {
         try {
             const {country_id = null, city = null, order = 'pop', limit = null, offset = null} = req.query;
 
-                // remade! - pictures + resources + ADDED main_pic to places
 
             const shows = await sequelize.query(
                 `
                 SELECT
-                    place_id, place_name, place_name_en, place_city, place_city_en,    
-                    country_id, country_name, country_name_en,
-                    picture_path
+                    place_id, place_name, place_name_en, place_city, place_city_en, place_promo_picture,
+                    country_id, country_name, country_name_en
                 FROM places
-                LEFT JOIN countries ON country_id = places.fk_country_id
-                LEFT JOIN pictures ON pictures.fk_place_id = place_id
+                LEFT JOIN countries USING (country_id)
                 
-                WHERE fk_country_id = ${country_id ? ':country_id' : 'fk_country_id'}
+                WHERE country_id = ${country_id ? ':country_id' : 'country_id'}
                 AND ( LOWER(place_city)  = LOWER(${city ? ':city' : 'place_city'})  OR LOWER(place_city_en) = LOWER(${city ? ':city' : 'place_city_en'}) )
                 LIMIT :limit
                 OFFSET :offset
@@ -78,33 +87,23 @@ class PlacesController {
             return res.status(500).json({message: 'error get shows by query'})
         }
     }
-    async searchPlacesByNames(req: Request, res: Response) {
+    async searchPlacesByName(req: Request, res: Response) {
         try {
-            const {search, limit = null, offset = null} = req.query;
-
+            const {search='', limit = null, offset = null, order='view'} = req.query;
 
             const shows = await sequelize.query(
                 `
-                SELECT
-                show_id, show_date, show_name, average_show_rating, number_show_rating, show_poster, fk_show_status_id,
-                comedian_id, comedian_first_name, comedian_last_name, comedian_first_name_en, comedian_last_name_en,
-                country_id, country_name, country_name_en,
-                place_id, place_name, place_name_en,
-                language_id
-                FROM shows
-                LEFT JOIN comedians ON comedian_id = fk_comedian_id
-                LEFT JOIN countries ON shows.fk_country_id = country_id
-                LEFT JOIN languages ON shows.fk_language_id = language_id
-                LEFT JOIN places ON shows.fk_place_id = place_id
-                WHERE comedian_first_name ILIKE :search 
-                    OR comedian_last_name ILIKE :search  
-                    OR comedian_first_name_en ILIKE :search  
-                    OR comedian_last_name_en ILIKE :search
-                    OR comedian_last_name ILIKE :search  
-                    OR show_name ILIKE :search
-                    ORDER BY number_show_rating
-                    LIMIT :limit
-                    OFFSET :offset
+                SELECT 
+                    place_id, place_name, place_name_en, place_city, place_city_en, place_promo_picture,
+                    COUNT(place_view_id) as view_num
+                FROM places
+                JOIN place_views USING (place_id) 
+                
+                WHERE place_name ILIKE :search OR place_name_en ILIKE :search
+                GROUP BY place_id
+                ORDER BY ${OrderValues[order as string] || OrderValues.views} DESC
+                LIMIT :limit
+                OFFSET :offset;
                 ;
                 `,
                 {

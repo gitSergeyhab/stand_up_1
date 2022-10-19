@@ -12,8 +12,9 @@ class CountriesController {
 
             const result = await sequelize.query(
                 `
-                SELECT COUNT(country_id), country_id, country_name, country_name_en FROM countries
-                INNER JOIN comedians ON fk_country_id = country_id
+                SELECT COUNT(country_id), country_id, country_name, country_name_en 
+				FROM countries
+                INNER JOIN comedians USING(country_id) 
                 GROUP BY country_id
                 ORDER BY count DESC
                 LIMIT :limit
