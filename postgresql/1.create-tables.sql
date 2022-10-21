@@ -99,7 +99,7 @@ CREATE TABLE shows (
     );
 
 CREATE TABLE show_videos (
-    show_video_id SMALLINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    show_video_id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     show_id BIGINT REFERENCES shows(show_id) NOT NULL,
     user_id INTEGER REFERENCES users(user_id),
 
@@ -165,6 +165,7 @@ CREATE TABLE pictures (
     user_id INTEGER REFERENCES users(user_id),
     comedian_id INTEGER REFERENCES comedians(comedian_id),
     place_id INTEGER REFERENCES places(place_id),
+    show_id BIGINT REFERENCES shows(show_id),
 
     picture_path VARCHAR(256) NOT NULL
 );
@@ -202,4 +203,5 @@ CREATE TABLE place_views (
 
     place_view_date TIMESTAMP without time zone DEFAULT CURRENT_TIMESTAMP
 );
+
 

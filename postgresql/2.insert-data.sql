@@ -82,7 +82,9 @@ INSERT INTO places(place_name, country_id, place_city, user_added_id, place_prom
 
 INSERT INTO resources(resource_type_id, user_id, resource_href) VALUES 
 (2, 2, 'https://vk.com/vk-1'),
-(3, 2, 'https://instagram.com/ig-1');
+(3, 2, 'https://instagram.com/ig-1'),
+(2, 3, 'https://vk.com/vk-3'),
+(3, 3, 'https://instagram.com/ig-3');
 
 INSERT INTO resources(resource_type_id, place_id, resource_href) VALUES 
 (2, 1, 'https://vk.com/vk-1'),
@@ -108,6 +110,14 @@ INSERT INTO pictures(place_id, picture_path) VALUES
 (1, '/pic/place/pl-122.jpg'),
 (1, '/pic/place/pl-1223.jpg'),
 (1, '/pic/place/pl-1223.jpg');
+
+INSERT INTO pictures(show_id, picture_path) VALUES
+(1, '/pic/show/show-122.jpg'),
+(1, '/pic/show/show-1223.jpg'),
+(1, '/pic/show/show-1223.jpg'),
+(2, '/pic/show/show-222.jpg'),
+(3, '/pic/show/show-31223.jpg'),
+(3, '/pic/show/show-31223.jpg');
 
 
 INSERT INTO comedian_views(user_id, comedian_id) VALUES
@@ -177,7 +187,10 @@ INSERT INTO shows(
 INSERT INTO show_videos(show_video_path, show_video_professional, show_minutes, show_id, user_id) VALUES 
 ('https://www.youtube.com/watch?v=vMK6_Wj7pl8', TRUE, 11, 1, 1),
 ('https://www.youtube.com/watch?v=8mfV4-e2KBk', TRUE, 22, 2, 1),
-('https://www.youtube.com/watch?v=xT-IxupQJyo', TRUE, 33, 3, 2);
+('https://www.youtube.com/watch?v=xT-IxupQJyo', TRUE, 33, 3, 2),
+('https://www.youtube.com/watch?v=vMK6_Wj7pl8', TRUE, 11, 1, 1),
+('https://www.youtube.com/watch?v=8mfV4-e2KBk', TRUE, 22, 1, 1),
+('https://www.youtube.com/watch?v=xT-IxupQJyo', TRUE, 33, 2, 2);
 
 INSERT INTO comedian_ratings (user_id, comedian_id, comedian_rate) VALUES 
 (1, 1, 10),
@@ -243,3 +256,51 @@ INSERT INTO reviews(user_id, show_id, review_title, review_text) VALUES
 (4, 2, 'first 14', '14 14 14 14'),
 (4, 3, 'first 15', 'review_text1 15'),
 (4, 4, 'first 16', 'review_text 16 16 1');
+
+INSERT INTO comedian_views(user_id, comedian_id, comedian_view_date) VALUES
+(2, 2, '2022-01-11'),
+(2, 3, '2022-01-21'),
+(2, 4, '2022-01-02'),
+(3, 2, '2022-01-21'),
+(3, 2, '2022-02-01'),
+(3, 2, '2022-02-11'),
+(4, 3, '2022-02-21'),
+(4, 1, '2022-03-01'),
+(1, 1, '2022-04-01'),
+(1, 1, '2022-04-03'),
+(1, 1, '2022-04-04'),
+(1, 1, '2022-05-06'),
+(2, 1, '2022-05-04'),
+(2, 1, '2022-07-07');
+
+INSERT INTO show_views(user_id, show_id, show_view_date) VALUES
+(2, 2, '2022-01-11'),
+(2, 3, '2022-01-21'),
+(2, 4, '2022-01-02'),
+(3, 2, '2022-01-21'),
+(3, 2, '2022-02-01'),
+(3, 2, '2022-02-11'),
+(4, 3, '2022-02-21'),
+(2, 2, '2022-01-11'),
+(2, 3, '2022-01-21'),
+(2, 4, '2022-01-02'),
+(3, 2, '2022-01-21'),
+(3, 2, '2022-02-01'),
+(3, 2, '2022-02-11'),
+(4, 3, '2022-02-21'),
+(4, 1, '2022-03-01'),
+(1, 1, '2022-04-01'),
+(1, 1, '2022-04-03'),
+(1, 1, '2022-04-04'),
+(1, 1, '2022-05-06'),
+(2, 1, '2022-05-04'),
+(2, 1, '2022-07-07');
+
+INSERT INTO place_views(user_id, place_id, place_view_date) VALUES
+(4, 1, '2022-03-01'),
+(1, 1, '2022-04-01'),
+(1, 1, '2022-04-03'),
+(1, 1, '2022-04-04'),
+(1, 1, '2022-05-06'),
+(2, 1, '2022-05-04'),
+(2, 1, '2022-07-07');
