@@ -75,52 +75,6 @@ class UserController {
             return res.status(500).json({message: 'error get users'})
         }
     }
-    // async createUser(req: Request, res: Response) {
-    //     try {
-
-    //         const {body} = req;
-
-
-    //         const result = await sequelize.query(
-    //             `
-    //             INSERT INTO users ( 
-    //                 user_email,
-    //                 user_password,
-    //                 user_nik,
-    //                 fk_status_id, 
-    //                 user_first_name,
-    //                 user_last_name,
-    //                 fk_country_id,
-    //                 user_city,
-    //                 user_avatar,
-    //                 user_date_birth,
-    //                 description
-    //                 ) VALUES (
-    //                 :email,
-    //                 :hash_password,
-    //                 :nik,
-    //                 :status,
-    //                 :first_name,
-    //                 :last_name,
-    //                 :country,
-    //                 :city,
-    //                 :avatar,
-    //                 :date_birth,
-    //                 :description
-    //                 );
-    //             `,
-    //             { 
-    //                 replacements: body,
-    //                 type: 'INSERT'
-    //             }
-    //         );
-
-    //         return res.status(201).json({result})
-    
-    //     } catch {
-    //         return res.status(500).json({message: 'err'})
-    //     }
-    // }
 }
 
 

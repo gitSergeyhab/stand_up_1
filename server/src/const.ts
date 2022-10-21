@@ -1,4 +1,4 @@
-export enum StatusCode {
+export const enum StatusCode {
     ServerError = 500,
     NotFoundError = 404,
     BadRequest = 400,
@@ -10,9 +10,18 @@ export enum StatusCode {
 
 
 export const OrderValues = {
-    dateAdded: 'show_date_added',
+    dateAdded: 'date_added',
     dateWas: 'show_date',
     rate: 'avg_rate',
     pop: 'number_of_rate',
-    views: 'view_num'
+    views: 'views',
+    totalViews: 'total_views'
+
+}
+
+
+export const enum SQLFunctionName {
+    InsertComedianView = 'insert_comedian_view',
+    InsertShowView = 'insert_show_view',
+    InsertPlaceView = 'insert_place_view'
 }

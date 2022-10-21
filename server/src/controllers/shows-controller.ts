@@ -1,39 +1,43 @@
 import { sequelize } from "../sequelize";
 import { Request, Response } from "express";
+import { OrderValues, SQLFunctionName, StatusCode } from "../const";
+import { insertView } from "../utils/sql-utils";
 
-const Order = {
-    pop: 'number_show_rating',
-    score: 'average_show_rating',
-    dateAdded: 'show_date_added',
-    dateWas: 'show_date'
-}
+
 
 class ShowsController {
     async getShowById(req: Request, res: Response) {
         try {
-            const {id} = req.params
+            const {id, user_id = '1'} = req.params
                 const shows = await sequelize.query(
                     `
                     SELECT
-                    show_id, show_date, show_date_added, show_name, show_description, show_poster, show_status_id,
-                    comedian_id, comedian_first_name, comedian_last_name, comedian_first_name_en, comedian_last_name_en, comedian_avatar,
-                    countries.country_id, country_name, country_name_en,
-                    place_id, place_name, place_name_en,
-                    language_id, language_name, language_name_en,
-                    users.user_id, user_nik,
-                    show_video_id, show_video_path, show_video_professional, show_minutes,
-                    COUNT (show_view_id) as views
+                        show_id, show_date, show_date_added, show_name, show_description, show_poster, show_status_id,
+                        comedian_id, comedian_first_name, comedian_last_name, comedian_first_name_en, comedian_last_name_en, comedian_avatar,
+                        countries.country_id, country_name, country_name_en,
+                        place_id, place_name, place_name_en,
+                        language_id, language_name, language_name_en,
+                        users.user_id AS user_show_added_id, user_nik AS user_show_added_nik,
+                        get_count_of_show_views(:id, 7) AS views,
+                        get_count_of_show_views(:id, 1000000) AS total_views,
+                        picture_paths,
+                        video_paths, is_pro, minutes, user_ids, user_niks,
+                        COUNT (show_rating_id) AS number_of_rate, AVG (show_rate) AS avg_rate
                     FROM shows
                     LEFT JOIN comedians USING (comedian_id)
                     LEFT JOIN countries ON shows.country_id = countries.country_id
                     LEFT JOIN languages USING (language_id)
                     LEFT JOIN places USING (place_id)
                     LEFT JOIN users ON shows.user_added_id = user_id
-                    LEFT JOIN show_videos USING (show_id)
-                    LEFT JOIN show_views USING (show_id)
+                    LEFT JOIN get_str_show_pictures() USING (show_id)
+                    LEFT JOIN get_str_show_videos() USING (show_id)
+                    LEFT JOIN show_ratings USING (show_id)
+                    
                     WHERE show_id = :id
-                    GROUP BY language_name, language_name_en, users.user_id, show_video_id,
-                    show_id, comedian_id, comedian_first_name, comedian_last_name, comedian_first_name_en, comedian_last_name_en, comedian_avatar, countries.country_id, place_name, place_name_en
+                    GROUP BY language_name, language_name_en, users.user_id, 
+                    show_id, comedian_id, comedian_first_name, comedian_last_name, comedian_first_name_en, comedian_last_name_en, comedian_avatar, countries.country_id, place_name, place_name_en,
+                    picture_paths,
+                    show_id, video_paths, is_pro, minutes, user_ids, user_niks
                     ;
                     `,
                     { 
@@ -41,39 +45,57 @@ class ShowsController {
                         type: 'SELECT'
                     }
                 );
+
+                if (!shows.length) {
+                    return res.status(StatusCode.NotFoundError).json({message: `where is not show with ID: ${id}`})
+                }
+
+                await insertView(id, user_id, SQLFunctionName.InsertShowView)
         
-                return res.status(200).json({show: shows[0]})
-            
-        
+                return res.status(StatusCode.Ok).json({show: shows[0]})
             
         } catch {
-            return res.status(500).json({message: 'error get show by id'})
+            return res.status(StatusCode.ServerError).json({message: 'error get show by id'})
         }
     }
 
 
     async getShowsByQuery(req: Request, res: Response) {
         try {
-            const {comedian_id = null, place_id = null, language_id = null, order = 'pop'} = req.query;
+            const {comedian_id = null, place_id = null, language_id = null, order = 'pop', direction = 'DESC'} = req.query;
 
 
             const shows = await sequelize.query(
                 `
                 SELECT
-                show_id, show_date, show_name, average_show_rating, number_show_rating, show_poster, fk_show_status_id,
-                comedian_id, comedian_first_name, comedian_last_name, comedian_first_name_en, comedian_last_name_en,
-                country_id, country_name, country_name_en,
-                place_id, place_name, place_name_en,
-                language_id
+                    show_id, show_date, show_date_added AS date_added, show_name, show_poster, show_status_id,
+                    comedian_id, comedian_first_name, comedian_last_name, comedian_first_name_en, comedian_last_name_en,
+                    countries.country_id, country_name, country_name_en,
+                    place_id, place_name, place_name_en,
+                    language_id, language_name, language_name_en,
+                    get_count_of_show_views(show_id, 7) AS views,
+                    get_count_of_show_views(show_id, 1000000) AS tital_views,
+                    COUNT (show_rating_id) AS number_of_rate, AVG (show_rate) AS avg_rate
                 FROM shows
-                LEFT JOIN comedians ON comedian_id = fk_comedian_id
-                LEFT JOIN countries ON shows.fk_country_id = country_id
-                LEFT JOIN languages ON shows.fk_language_id = language_id
-                LEFT JOIN places ON shows.fk_place_id = place_id
+
+                LEFT JOIN comedians USING (comedian_id)
+                LEFT JOIN countries ON shows.country_id = countries.country_id
+                LEFT JOIN languages USING (language_id)
+                LEFT JOIN places USING (place_id)
+                LEFT JOIN show_ratings USING (show_id)
+
                 WHERE language_id = ${language_id ? ':language_id' : 'language_id'} 
                 AND place_id = ${place_id ? ':place_id' : 'place_id'} 
                 AND comedian_id = ${comedian_id ? ':comedian_id' : 'comedian_id'} 
-                ORDER BY ${Order[order as string] || Order.pop}
+
+                GROUP BY 
+                language_name, language_name_en,
+                show_id, 
+                comedian_id, comedian_first_name, comedian_last_name, comedian_first_name_en, comedian_last_name_en, 
+                countries.country_id, 
+                place_name, place_name_en
+
+                ORDER BY ${OrderValues[order as string] || OrderValues.pop} ${direction}
                 ;
                 `,
                 {

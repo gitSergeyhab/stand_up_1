@@ -9,6 +9,4 @@ comedianRouter.get('/search', comedianController.searchComedianByNames);
 comedianRouter.get('/:id', comedianController.getComedianById);
 
 
-
-
 export { comedianRouter };

@@ -1,53 +1,50 @@
 import { sequelize } from "../sequelize";
 import { Request, Response } from "express";
-import { OrderValues } from "../const";
+import { OrderValues, StatusCode, SQLFunctionName } from "../const";
+import { insertView } from "../utils/sql-utils";
 
 
 
 class PlacesController {
-                // remade! - pictures + resources
 
     async getPlaceById(req: Request, res: Response) {
         try {
-            const {id} = req.params
-                const place = await sequelize.query(
-                    // `
-                    // SELECT
-                    //     place_id, place_name, place_name_en, place_city, place_city_en, place_date_founded, date_place_added, place_description, place_promo_picture,   
-                    //     countries.country_id, country_name, country_name_en,
-                    //     users.user_id, user_nik,
-                    //     picture_path,
-                    //     resource_type_id, resource_href
-                    // FROM places
-                    // LEFT JOIN countries USING(country_id)
-                    // LEFT JOIN users ON user_id = user_added_id
-                    // LEFT JOIN pictures USING(place_id) 
-                    // LEFT JOIN resources USING(place_id)
-                    // WHERE place_id = :id;
-                    // `,
+            const {id, user_id = '1'} = req.params
+                const places = await sequelize.query(
                     `
                     SELECT
                         place_id, place_name, place_name_en, place_city, place_city_en, place_date_founded, date_place_added, place_description, place_promo_picture,   
                         countries.country_id, country_name, country_name_en,
                         users.user_id, user_nik,
-                        COUNT (place_view_id)
+                        picture_paths,
+                        hrefs, types,
+                        get_count_of_place_views(:id, 7) as views,
+                        get_count_of_place_views(:id, 1000000) as total_views
                     FROM places
                     LEFT JOIN countries USING(country_id)
                     LEFT JOIN users ON user_id = user_added_id
-                    LEFT JOIN place_views USING(place_id)
+                    LEFT JOIN get_str_place_pictures() USING(place_id)
+                    LEFT JOIN get_str_place_resources() USING(place_id)
                     WHERE place_id = :id
-                    GROUP BY  place_id, countries.country_id, users.user_id 
-                    ;
+                    GROUP BY  place_id, countries.country_id, users.user_id, picture_paths, hrefs, types
+                ;
                     `,
                     { 
                         replacements: {id},
                         type: 'SELECT'
                     }
                 );
+
+                if (!places.length) {
+                    return res.status(StatusCode.NotFoundError).json({message: `not found place with ID: ${id}`})
+                }
+
+                await insertView(id, user_id, SQLFunctionName.InsertPlaceView)
+
         
-                return res.status(200).json({place})
+                return res.status(StatusCode.Ok).json({place: places[0]})
         } catch {
-            return res.status(500).json({message: 'error get place by id'})
+            return res.status(StatusCode.ServerError).json({message: 'error get place by id'})
         }
     }
 
@@ -61,7 +58,9 @@ class PlacesController {
                 `
                 SELECT
                     place_id, place_name, place_name_en, place_city, place_city_en, place_promo_picture,
-                    country_id, country_name, country_name_en
+                    country_id, country_name, country_name_en,
+                    get_count_of_place_views(place_id, 7) as views,
+                    get_count_of_place_views(place_id, 1000000) as total_views
                 FROM places
                 LEFT JOIN countries USING (country_id)
                 
@@ -77,14 +76,12 @@ class PlacesController {
                 }
             )
 
-
-
-            return res.status(200).json({shows});
+            return res.status(StatusCode.Ok).json({shows});
     
    
         } catch(err) {
             console.log(err)
-            return res.status(500).json({message: 'error get shows by query'})
+            return res.status(StatusCode.ServerError).json({message: 'error get shows by query'})
         }
     }
     async searchPlacesByName(req: Request, res: Response) {
