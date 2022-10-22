@@ -1,8 +1,23 @@
+CREATE OR REPLACE FUNCTION get_review_user_data(user_idx int, lim int)
+RETURNS TABLE (user_id int, review_ids bigint[],  show_ids int[], review_titles varchar[], review_texts text[], review_dates timestamp with time zone[]) AS $$
+	SELECT 
+		user_id, 
+		ARRAY_AGG(review_id) AS review_ids, 
+		ARRAY_AGG(show_id) AS show_ids, 
+		ARRAY_AGG(review_title) AS review_titles,
+		ARRAY_AGG(review_text) AS review_texts,
+		ARRAY_AGG(review_date_updated) AS review_dates
+	FROM (SELECT * FROM reviews WHERE user_id = user_idx ORDER BY review_date_updated DESC LIMIT lim) AS rvws
+	GROUP BY user_id
+$$ LANGUAGE SQL;
+
+
 -- STRING_AGG PICTURES AND RESOURCES
 
-CREATE OR REPLACE FUNCTION get_str_user_resources() RETURNS TABLE(user_id integer, hrefs text, types text) AS $$
+CREATE OR REPLACE FUNCTION get_user_resources() 
+RETURNS TABLE(user_id INT, hrefs VARCHAR(256)[], types VARCHAR(32)[]) AS $$
 	SELECT
-	user_id, STRING_AGG(resource_href, ' */* ') hrefs, STRING_AGG(resource_type_name, ' */* ') as types
+	user_id, ARRAY_AGG(resource_href) AS hrefs, ARRAY_AGG(resource_type_name) AS types
 	FROM resources
 	LEFT JOIN resource_types USING (resource_type_id)
 	WHERE user_id IS NOT NULL
@@ -10,10 +25,11 @@ CREATE OR REPLACE FUNCTION get_str_user_resources() RETURNS TABLE(user_id intege
     ORDER BY user_id
 $$ LANGUAGE SQL;
 
-
-CREATE OR REPLACE FUNCTION get_str_place_resources() RETURNS TABLE(place_id integer, hrefs text, types text) AS $$
+--
+CREATE OR REPLACE FUNCTION get_place_resources() 
+RETURNS TABLE(place_id INT, hrefs VARCHAR(256)[], types VARCHAR(32)[]) AS $$
 	SELECT
-	place_id, STRING_AGG(resource_href, ' */* ') hrefs, STRING_AGG(resource_type_name, ' */* ') as types
+	place_id, ARRAY_AGG(resource_href) AS hrefs, ARRAY_AGG(resource_type_name) AS types
 	FROM resources
 	LEFT JOIN resource_types USING (resource_type_id)
 	WHERE place_id IS NOT NULL
@@ -21,10 +37,13 @@ CREATE OR REPLACE FUNCTION get_str_place_resources() RETURNS TABLE(place_id inte
     ORDER BY place_id
 $$ LANGUAGE SQL;
 
+--
 
-CREATE OR REPLACE FUNCTION get_str_comedian_resources() RETURNS TABLE(comedian_id integer, hrefs text, types text) AS $$
+
+CREATE OR REPLACE FUNCTION get_comedian_resources() 
+RETURNS TABLE(comedian_id INT, hrefs VARCHAR(256)[], types VARCHAR(32)[]) AS $$
 	SELECT
-	comedian_id, STRING_AGG(resource_href, ' */* ') hrefs, STRING_AGG(resource_type_name, ' */* ') as types
+	comedian_id, ARRAY_AGG(resource_href) hrefs, ARRAY_AGG(resource_type_name) as types
 	FROM resources
 	LEFT JOIN resource_types USING (resource_type_id)
 	WHERE comedian_id IS NOT NULL
@@ -32,11 +51,14 @@ CREATE OR REPLACE FUNCTION get_str_comedian_resources() RETURNS TABLE(comedian_i
 	ORDER BY comedian_id
 $$ LANGUAGE SQL;
 
+--
 
 
-CREATE OR REPLACE FUNCTION get_str_comedian_pictures() RETURNS TABLE(comedian_id integer, picture_paths text) AS $$
+
+CREATE OR REPLACE FUNCTION get_comedian_pictures() 
+RETURNS TABLE(comedian_id INT, picture_paths VARCHAR(256)[]) AS $$
 	SELECT
-	comedian_id, STRING_AGG(picture_path, ' */* ') picture_paths
+	comedian_id, ARRAY_AGG(picture_path) AS picture_paths
 	FROM pictures
 	WHERE comedian_id IS NOT NULL
 	GROUP BY comedian_id
@@ -44,9 +66,10 @@ CREATE OR REPLACE FUNCTION get_str_comedian_pictures() RETURNS TABLE(comedian_id
 $$ LANGUAGE SQL;
 
 
-CREATE OR REPLACE FUNCTION get_str_show_pictures() RETURNS TABLE(show_id bigint, picture_paths text) AS $$
+CREATE OR REPLACE FUNCTION get_show_pictures() 
+RETURNS TABLE(show_id BIGINT, picture_paths VARCHAR(256)[]) AS $$
 	SELECT
-	show_id, STRING_AGG(picture_path, ' */* ') picture_paths
+	show_id, ARRAY_AGG(picture_path) AS picture_paths
 	FROM pictures
 	WHERE show_id IS NOT NULL
 	GROUP BY show_id
@@ -54,9 +77,10 @@ CREATE OR REPLACE FUNCTION get_str_show_pictures() RETURNS TABLE(show_id bigint,
 $$ LANGUAGE SQL;
 
 
-CREATE OR REPLACE FUNCTION get_str_user_pictures() RETURNS TABLE(user_id int, picture_paths text) AS $$
+CREATE OR REPLACE FUNCTION get_user_pictures() 
+RETURNS TABLE(user_id INT, picture_paths VARCHAR(256)[]) AS $$
 	SELECT
-	user_id, STRING_AGG(picture_path, ' */* ') picture_paths
+	user_id, ARRAY_AGG(picture_path) AS picture_paths
 	FROM pictures
 	WHERE user_id IS NOT NULL
 	GROUP BY user_id
@@ -64,9 +88,10 @@ CREATE OR REPLACE FUNCTION get_str_user_pictures() RETURNS TABLE(user_id int, pi
 $$ LANGUAGE SQL;
 
 
-CREATE OR REPLACE FUNCTION get_str_place_pictures() RETURNS TABLE(place_id int, picture_paths text) AS $$
+CREATE OR REPLACE FUNCTION get_place_pictures()
+RETURNS TABLE(place_id INT, picture_paths VARCHAR(256)[]) AS $$
 	SELECT
-	place_id, STRING_AGG(picture_path, ' */* ') picture_paths
+	place_id, ARRAY_AGG(picture_path) AS picture_paths
 	FROM pictures
 	WHERE place_id IS NOT NULL
 	GROUP BY place_id
@@ -75,15 +100,15 @@ $$ LANGUAGE SQL;
 
 
 -- ... and videos
-CREATE OR REPLACE FUNCTION get_str_show_videos() 
-RETURNS TABLE(show_id bigint, video_paths text, is_pro text, minutes text, user_ids text, user_niks text) AS $$
+CREATE OR REPLACE FUNCTION get_show_videos() 
+RETURNS TABLE(show_id bigint, video_paths VARCHAR(256)[], is_pro BOOLEAN[], minutes SMALLINT[], user_ids INTEGER[], user_niks VARCHAR(32)[]) AS $$
 	SELECT
 	show_id, 
-	STRING_AGG(show_video_path, ' */* ') video_paths, 
-	STRING_AGG(CASE  WHEN show_video_professional THEN '1' ELSE '0' END  || '', ' */* ') as is_pro, 
-	STRING_AGG(show_minutes || '' , ' */* ') as minutes,
-	STRING_AGG(users.user_id || '', ' */* ') AS user_ids, 
-	STRING_AGG(users.user_nik, ' */* ') AS user_niks
+	ARRAY_AGG(show_video_path) AS video_paths, 
+	ARRAY_AGG(show_video_professional ) AS is_pro, 
+	ARRAY_AGG(show_minutes) AS minutes,
+	ARRAY_AGG(users.user_id) AS user_ids, 
+	ARRAY_AGG(users.user_nik) AS user_niks
 	FROM show_videos
 	LEFT JOIN users USING (user_id)
 	GROUP BY show_id

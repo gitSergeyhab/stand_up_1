@@ -86,8 +86,8 @@ class ComedianController {
                 FROM comedians
                 LEFT JOIN countries USING (country_id)
                 LEFT JOIN users ON users.user_id = comedians.user_added_id
-                LEFT JOIN get_str_comedian_pictures() USING (comedian_id)
-                LEFT JOIN get_str_comedian_resources() USING (comedian_id)
+                LEFT JOIN get_comedian_pictures() USING (comedian_id)
+                LEFT JOIN get_comedian_resources() USING (comedian_id)
                 LEFT JOIN comedian_ratings USING (comedian_id)
                 
                 WHERE comedian_id = :id

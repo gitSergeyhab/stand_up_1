@@ -23,8 +23,8 @@ class PlacesController {
                     FROM places
                     LEFT JOIN countries USING(country_id)
                     LEFT JOIN users ON user_id = user_added_id
-                    LEFT JOIN get_str_place_pictures() USING(place_id)
-                    LEFT JOIN get_str_place_resources() USING(place_id)
+                    LEFT JOIN get_place_pictures() USING(place_id)
+                    LEFT JOIN get_place_resources() USING(place_id)
                     WHERE place_id = :id
                     GROUP BY  place_id, countries.country_id, users.user_id, picture_paths, hrefs, types
                 ;

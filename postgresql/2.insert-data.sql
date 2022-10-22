@@ -33,13 +33,13 @@ INSERT INTO languages(language_name, language_name_en) VALUES
     ('Украинский', 'Ukrainian'),
     ('другой', 'other');
 
-
 INSERT INTO countries (country_name, country_name_en) VALUES 
     ('Австралия', 'Australia'),
     ('Австрия', 'Austria'),
     ('Азербайджан', 'Azerbaijan'),
     ('Албания', 'Albania');
 
+INSERT INTO show_statuses(show_status_name) VALUES('completed'), ('planned'), ('cancelled');
 
 INSERT INTO statuses (status_name) VALUES ('ADMIN'), ('USER'), ('PRO_USER');
 
@@ -111,13 +111,6 @@ INSERT INTO pictures(place_id, picture_path) VALUES
 (1, '/pic/place/pl-1223.jpg'),
 (1, '/pic/place/pl-1223.jpg');
 
-INSERT INTO pictures(show_id, picture_path) VALUES
-(1, '/pic/show/show-122.jpg'),
-(1, '/pic/show/show-1223.jpg'),
-(1, '/pic/show/show-1223.jpg'),
-(2, '/pic/show/show-222.jpg'),
-(3, '/pic/show/show-31223.jpg'),
-(3, '/pic/show/show-31223.jpg');
 
 
 INSERT INTO comedian_views(user_id, comedian_id) VALUES
@@ -134,7 +127,7 @@ INSERT INTO comedian_views(user_id, comedian_id) VALUES
 (4, 1),
 (4, 2);
 
-INSERT INTO show_statuses(show_status_name) VALUES('completed'), ('planned'), ('cancelled');
+
 
 INSERT INTO shows(
 	comedian_id, country_id, language_id, place_id, show_date, user_added_id, 
@@ -183,6 +176,14 @@ INSERT INTO shows(
  'Скоро будет', 
  'или не будет', 
  '/pics/shows/posters/poster-4.jpeg',1);
+ 
+INSERT INTO pictures(show_id, picture_path) VALUES
+(1, '/pic/show/show-122.jpg'),
+(1, '/pic/show/show-1223.jpg'),
+(1, '/pic/show/show-1223.jpg'),
+(2, '/pic/show/show-222.jpg'),
+(3, '/pic/show/show-31223.jpg'),
+(3, '/pic/show/show-31223.jpg');
 
 INSERT INTO show_videos(show_video_path, show_video_professional, show_minutes, show_id, user_id) VALUES 
 ('https://www.youtube.com/watch?v=vMK6_Wj7pl8', TRUE, 11, 1, 1),

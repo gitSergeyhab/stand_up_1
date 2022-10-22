@@ -29,8 +29,8 @@ class ShowsController {
                     LEFT JOIN languages USING (language_id)
                     LEFT JOIN places USING (place_id)
                     LEFT JOIN users ON shows.user_added_id = user_id
-                    LEFT JOIN get_str_show_pictures() USING (show_id)
-                    LEFT JOIN get_str_show_videos() USING (show_id)
+                    LEFT JOIN get_show_pictures() USING (show_id)
+                    LEFT JOIN get_show_videos() USING (show_id)
                     LEFT JOIN show_ratings USING (show_id)
                     
                     WHERE show_id = :id
