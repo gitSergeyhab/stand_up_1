@@ -17,7 +17,7 @@ class PlacesController {
                         countries.country_id, country_name, country_name_en,
                         users.user_id, user_nik,
                         picture_paths,
-                        hrefs, types,
+                        get_place_resource(:id) AS resources,
                         get_count_of_place_views(:id, 7) as views,
                         get_count_of_place_views(:id, 1000000) as total_views
                     FROM places
@@ -26,7 +26,7 @@ class PlacesController {
                     LEFT JOIN get_place_pictures() USING(place_id)
                     LEFT JOIN get_place_resources() USING(place_id)
                     WHERE place_id = :id
-                    GROUP BY  place_id, countries.country_id, users.user_id, picture_paths, hrefs, types
+                    GROUP BY  place_id, countries.country_id, users.user_id, picture_paths
                 ;
                     `,
                     { 
@@ -53,8 +53,12 @@ class PlacesController {
         try {
             const {country_id = null, city = null, order = 'pop', limit = null, offset = null} = req.query;
 
+            const where = `
+                WHERE country_id = ${country_id ? ':country_id' : 'country_id'}
+                AND ( LOWER(place_city)  = LOWER(${city ? ':city' : 'place_city'})  OR LOWER(place_city_en) = LOWER(${city ? ':city' : 'place_city_en'}) )
+            `
 
-            const shows = await sequelize.query(
+            const data = await sequelize.query(
                 `
                 SELECT
                     place_id, place_name, place_name_en, place_city, place_city_en, place_promo_picture,
@@ -63,11 +67,17 @@ class PlacesController {
                     get_count_of_place_views(place_id, 1000000) as total_views
                 FROM places
                 LEFT JOIN countries USING (country_id)
-                
-                WHERE country_id = ${country_id ? ':country_id' : 'country_id'}
-                AND ( LOWER(place_city)  = LOWER(${city ? ':city' : 'place_city'})  OR LOWER(place_city_en) = LOWER(${city ? ':city' : 'place_city_en'}) )
+
+                ${where}
+
                 LIMIT :limit
                 OFFSET :offset
+                ;
+
+                SELECT COUNT (place_id) 
+                FROM places
+
+                ${where}
                 ;
                 `,
                 {
@@ -76,7 +86,7 @@ class PlacesController {
                 }
             )
 
-            return res.status(StatusCode.Ok).json({shows});
+            return res.status(StatusCode.Ok).json({data});
     
    
         } catch(err) {

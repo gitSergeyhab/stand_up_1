@@ -1,55 +1,45 @@
-CREATE OR REPLACE FUNCTION get_review_user_data(user_idx int, lim int)
-RETURNS TABLE (user_id int, review_ids bigint[],  show_ids int[], review_titles varchar[], review_texts text[], review_dates timestamp with time zone[]) AS $$
+CREATE OR REPLACE FUNCTION get_review_user_data(user_idx int, lim int) RETURNS JSON AS $$
 	SELECT 
-		user_id, 
-		ARRAY_AGG(review_id) AS review_ids, 
-		ARRAY_AGG(show_id) AS show_ids, 
-		ARRAY_AGG(review_title) AS review_titles,
-		ARRAY_AGG(review_text) AS review_texts,
-		ARRAY_AGG(review_date_updated) AS review_dates
+		JSON_AGG(JSON_BUILD_OBJECT(
+			'review_id', review_id,
+			'show_id', show_id,
+			'title', review_title,
+			'text', review_text,
+			'review_date', review_date_updated	
+		))
 	FROM (SELECT * FROM reviews WHERE user_id = user_idx ORDER BY review_date_updated DESC LIMIT lim) AS rvws
-	GROUP BY user_id
 $$ LANGUAGE SQL;
 
 
 -- STRING_AGG PICTURES AND RESOURCES
 
-CREATE OR REPLACE FUNCTION get_user_resources() 
-RETURNS TABLE(user_id INT, hrefs VARCHAR(256)[], types VARCHAR(32)[]) AS $$
-	SELECT
-	user_id, ARRAY_AGG(resource_href) AS hrefs, ARRAY_AGG(resource_type_name) AS types
-	FROM resources
-	LEFT JOIN resource_types USING (resource_type_id)
-	WHERE user_id IS NOT NULL
-	GROUP BY user_id
-    ORDER BY user_id
-$$ LANGUAGE SQL;
+CREATE OR REPLACE FUNCTION get_user_resource(user_idx INT) 
+RETURNS JSON AS $$
+	SELECT 
+	JSON_AGG(JSON_BUILD_OBJECT('type', resource_type_id, 'href', resource_href))
+	FROM resources 
+	WHERE user_id = user_idx
+$$ LANGUAGE SQL
 
 --
-CREATE OR REPLACE FUNCTION get_place_resources() 
-RETURNS TABLE(place_id INT, hrefs VARCHAR(256)[], types VARCHAR(32)[]) AS $$
-	SELECT
-	place_id, ARRAY_AGG(resource_href) AS hrefs, ARRAY_AGG(resource_type_name) AS types
-	FROM resources
-	LEFT JOIN resource_types USING (resource_type_id)
-	WHERE place_id IS NOT NULL
-	GROUP BY place_id
-    ORDER BY place_id
-$$ LANGUAGE SQL;
+CREATE OR REPLACE FUNCTION get_place_resource(place_idx INT) 
+RETURNS JSON AS $$
+	SELECT 
+	JSON_AGG(JSON_BUILD_OBJECT('type', resource_type_id, 'href', resource_href))
+	FROM resources 
+	WHERE place_id = place_idx
+$$ LANGUAGE SQL
 
 --
 
 
-CREATE OR REPLACE FUNCTION get_comedian_resources() 
-RETURNS TABLE(comedian_id INT, hrefs VARCHAR(256)[], types VARCHAR(32)[]) AS $$
-	SELECT
-	comedian_id, ARRAY_AGG(resource_href) hrefs, ARRAY_AGG(resource_type_name) as types
-	FROM resources
-	LEFT JOIN resource_types USING (resource_type_id)
-	WHERE comedian_id IS NOT NULL
-	GROUP BY comedian_id
-	ORDER BY comedian_id
-$$ LANGUAGE SQL;
+CREATE OR REPLACE FUNCTION get_comedian_resource(comedian_idx INT) 
+RETURNS JSON AS $$
+	SELECT 
+	JSON_AGG(JSON_BUILD_OBJECT('type', resource_type_id, 'href', resource_href))
+	FROM resources 
+	WHERE comedian_id = comedian_idx
+$$ LANGUAGE SQL
 
 --
 

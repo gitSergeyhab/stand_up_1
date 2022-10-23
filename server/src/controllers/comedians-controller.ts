@@ -10,6 +10,11 @@ class ComedianController {
         try {
 
             const {country_id, city, limit = null, offset = null, order='pop', direction='ASC'} = req.query;
+
+            const where = `
+                WHERE country_id = ${country_id ? ':country_id' : 'country_id'}
+                AND (comedian_city = ${city ? ':city' : 'comedian_city'} OR comedian_city_en = ${city ? ':city' : 'comedian_city_en'})
+            `
     
                 const data = await sequelize.query(
                     `
@@ -24,8 +29,7 @@ class ComedianController {
                     LEFT JOIN countries USING(country_id)
                     LEFT JOIN comedian_ratings USING(comedian_id)
                     
-                    WHERE country_id = ${country_id ? ':country_id' : 'country_id'}
-                        AND (comedian_city = ${city ? ':city' : 'comedian_city'} OR comedian_city_en = ${city ? ':city' : 'comedian_city_en'})
+                    ${where}
 
                     GROUP BY comedian_id, country_id, country_name, country_name_en
 
@@ -33,6 +37,9 @@ class ComedianController {
 
                     LIMIT :limit
                     OFFSET :offset
+                    ;
+                    SELECT COUNT(comedian_id) FROM comedians
+                    ${where}
                     ;
                     `,
                     { 
@@ -59,7 +66,7 @@ class ComedianController {
                 return res.status(400).json({message: 'there is not comedian_id'})
             }
 
-            const user = await sequelize.query(
+            const comedians = await sequelize.query(
                 `
                 SELECT 
                     comedian_id,
@@ -77,7 +84,7 @@ class ComedianController {
                     countries.country_id, country_name, country_name_en,
                     users.user_id, user_nik,
                     picture_paths,
-                    types, hrefs,
+                    get_comedian_resource(:id) AS resources,
                     AVG (comedian_rate) as avg_rate, COUNT(DISTINCT comedian_rate) as number_of_rate,
                     get_count_of_comedian_views(:id, 7) as views,
                     get_count_of_comedian_views(:id, 1000000) as total_views
@@ -91,7 +98,7 @@ class ComedianController {
                 LEFT JOIN comedian_ratings USING (comedian_id)
                 
                 WHERE comedian_id = :id
-                GROUP BY comedian_id, countries.country_id, users.user_id, types, hrefs, picture_paths;
+                GROUP BY comedian_id, countries.country_id, users.user_id, picture_paths;
                 `,
                 {
                     replacements: {id},
@@ -99,14 +106,14 @@ class ComedianController {
                 }
             );
 
-            if (!user.length) {
+            if (!comedians.length) {
                 return res.status(400).json({message: `there is not comedian with id = ${id}`})
             }
 
             await insertView(id, user_id, SQLFunctionName.InsertComedianView); // Добавляет 1 просмотр
 
 
-            return res.status(200).json({user: user[0]});
+            return res.status(200).json({comedian: comedians[0]});
     
    
         } catch {

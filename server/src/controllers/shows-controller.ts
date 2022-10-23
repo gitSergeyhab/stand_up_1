@@ -62,10 +62,15 @@ class ShowsController {
 
     async getShowsByQuery(req: Request, res: Response) {
         try {
-            const {comedian_id = null, place_id = null, language_id = null, order = 'pop', direction = 'DESC'} = req.query;
+            const {comedian_id = null, place_id = null, language_id = null, order = 'pop', direction = 'DESC', limit = null, offset = null } = req.query;
 
+            const where = `
+                WHERE language_id = ${language_id ? ':language_id' : 'language_id'} 
+                AND place_id = ${place_id ? ':place_id' : 'place_id'} 
+                AND comedian_id = ${comedian_id ? ':comedian_id' : 'comedian_id'} 
+            `;
 
-            const shows = await sequelize.query(
+            const data = await sequelize.query(
                 `
                 SELECT
                     show_id, show_date, show_date_added AS date_added, show_name, show_poster, show_status_id,
@@ -74,7 +79,7 @@ class ShowsController {
                     place_id, place_name, place_name_en,
                     language_id, language_name, language_name_en,
                     get_count_of_show_views(show_id, 7) AS views,
-                    get_count_of_show_views(show_id, 1000000) AS tital_views,
+                    get_count_of_show_views(show_id, 1000000) AS total_views,
                     COUNT (show_rating_id) AS number_of_rate, AVG (show_rate) AS avg_rate
                 FROM shows
 
@@ -84,9 +89,7 @@ class ShowsController {
                 LEFT JOIN places USING (place_id)
                 LEFT JOIN show_ratings USING (show_id)
 
-                WHERE language_id = ${language_id ? ':language_id' : 'language_id'} 
-                AND place_id = ${place_id ? ':place_id' : 'place_id'} 
-                AND comedian_id = ${comedian_id ? ':comedian_id' : 'comedian_id'} 
+                ${where}
 
                 GROUP BY 
                 language_name, language_name_en,
@@ -96,17 +99,26 @@ class ShowsController {
                 place_name, place_name_en
 
                 ORDER BY ${OrderValues[order as string] || OrderValues.pop} ${direction}
+                LIMIT :limit
+                OFFSET :offset
+                ;
+
+                SELECT
+                COUNT (show_id)
+                FROM shows
+
+                ${where}
                 ;
                 `,
                 {
-                    replacements: {comedian_id, place_id, language_id, order},
+                    replacements: {comedian_id, place_id, language_id, order, limit, offset},
                     type: 'SELECT'
                 }
             )
 
 
 
-            return res.status(200).json({shows});
+            return res.status(200).json({shows: data[0], count: (data[1] as {count: string}).count});
     
    
         } catch(err) {
