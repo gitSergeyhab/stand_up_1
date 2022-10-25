@@ -5,9 +5,76 @@ CREATE OR REPLACE FUNCTION get_review_user_data(user_idx int, lim int) RETURNS J
 			'show_id', show_id,
 			'title', review_title,
 			'text', review_text,
-			'review_date', review_date_updated	
+			'review_date', review_date_updated,
+			'show_name', show_name,
+			'comedian_first_name', comedian_first_name,
+			'comedian_first_name_en', comedian_first_name_en,
+			'comedian_last_name', comedian_last_name,
+			'comedian_last_name_en', comedian_last_name_en
 		))
-	FROM (SELECT * FROM reviews WHERE user_id = user_idx ORDER BY review_date_updated DESC LIMIT lim) AS rvws
+	FROM (
+		SELECT 
+		review_id, show_id, review_title, review_text, review_date_updated, 
+		show_name, 
+		comedian_first_name, comedian_first_name_en, comedian_last_name, comedian_last_name_en
+		FROM reviews 
+		LEFT JOIN shows USING (show_id)
+		LEFT JOIN comedians USING (comedian_id)
+		WHERE user_id = user_idx 
+		ORDER BY review_date_updated DESC 
+		LIMIT lim
+	) AS rvws
+$$ LANGUAGE SQL;
+
+
+CREATE OR REPLACE FUNCTION get_show_retings_user_data(user_idx int, lim int) RETURNS JSON AS $$
+	SELECT 
+		JSON_AGG(JSON_BUILD_OBJECT(
+			'show_id', show_id,
+			'show_rate', show_rate,
+			'date_rate', show_date_rate,
+			'show_name', show_name,
+			'comedian_first_name', comedian_first_name,
+			'comedian_first_name_en', comedian_first_name_en,
+			'comedian_last_name', comedian_last_name,
+			'comedian_last_name_en', comedian_last_name_en
+		))
+	FROM (
+		SELECT
+		show_id, show_rate, show_date_rate,
+		show_name, 
+		comedian_first_name, comedian_first_name_en, comedian_last_name, comedian_last_name_en
+		FROM show_ratings
+		LEFT JOIN shows USING (show_id)
+		LEFT JOIN comedians USING (comedian_id)
+		WHERE user_id = user_idx 
+		ORDER BY show_date_rate DESC 
+		LIMIT lim
+	) AS t
+$$ LANGUAGE SQL;
+
+
+CREATE OR REPLACE FUNCTION get_comedian_retings_user_data(user_idx int, lim int) RETURNS JSON AS $$
+	SELECT 
+		JSON_AGG(JSON_BUILD_OBJECT(
+			'comedian_id', comedian_id,
+			'comedian_rate', comedian_rate,
+			'date_rate', comedian_date_rate, 
+			'comedian_first_name', comedian_first_name,
+			'comedian_first_name_en', comedian_first_name_en,
+			'comedian_last_name', comedian_last_name,
+			'comedian_last_name_en', comedian_last_name_en
+		))
+	FROM (
+		SELECT
+		comedian_id, comedian_rate, comedian_date_rate,
+		comedian_first_name, comedian_first_name_en, comedian_last_name, comedian_last_name_en
+		FROM comedian_ratings 
+		LEFT JOIN comedians USING (comedian_id)
+		WHERE user_id = user_idx 
+		ORDER BY comedian_date_rate DESC 
+		LIMIT lim
+	) AS t
 $$ LANGUAGE SQL;
 
 

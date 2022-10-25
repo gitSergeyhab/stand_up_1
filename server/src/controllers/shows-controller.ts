@@ -1,8 +1,7 @@
 import { sequelize } from "../sequelize";
 import { Request, Response } from "express";
 import { OrderValues, SQLFunctionName, StatusCode } from "../const";
-import { insertView } from "../utils/sql-utils";
-
+import { getDataFromSQL, insertView } from "../utils/sql-utils";
 
 
 class ShowsController {
@@ -12,7 +11,7 @@ class ShowsController {
                 const shows = await sequelize.query(
                     `
                     SELECT
-                        show_id, show_date, show_date_added, show_name, show_description, show_poster, show_status_id,
+                        show_id, show_date, show_date_added, show_name, show_description, show_poster,
                         comedian_id, comedian_first_name, comedian_last_name, comedian_first_name_en, comedian_last_name_en, comedian_avatar,
                         countries.country_id, country_name, country_name_en,
                         place_id, place_name, place_name_en,
@@ -70,10 +69,10 @@ class ShowsController {
                 AND comedian_id = ${comedian_id ? ':comedian_id' : 'comedian_id'} 
             `;
 
-            const data = await sequelize.query(
+            const result = await sequelize.query(
                 `
                 SELECT
-                    show_id, show_date, show_date_added AS date_added, show_name, show_poster, show_status_id,
+                    show_id, show_date, show_date_added AS date_added, show_name, show_poster,
                     comedian_id, comedian_first_name, comedian_last_name, comedian_first_name_en, comedian_last_name_en,
                     countries.country_id, country_name, country_name_en,
                     place_id, place_name, place_name_en,
@@ -116,9 +115,11 @@ class ShowsController {
                 }
             )
 
+            
+            const data = getDataFromSQL(result, 'shows')
 
 
-            return res.status(200).json({shows: data[0], count: (data[1] as {count: string}).count});
+            return res.status(200).json({data});
     
    
         } catch(err) {
@@ -134,7 +135,7 @@ class ShowsController {
             const shows = await sequelize.query(
                 `
                 SELECT
-                show_id, show_date, show_name, average_show_rating, number_show_rating, show_poster, fk_show_status_id,
+                show_id, show_date, show_name, average_show_rating, number_show_rating, show_poster,
                 comedian_id, comedian_first_name, comedian_last_name, comedian_first_name_en, comedian_last_name_en,
                 country_id, country_name, country_name_en,
                 place_id, place_name, place_name_en,

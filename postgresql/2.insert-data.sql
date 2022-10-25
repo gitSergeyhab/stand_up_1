@@ -39,24 +39,20 @@ INSERT INTO countries (country_name, country_name_en) VALUES
     ('Азербайджан', 'Azerbaijan'),
     ('Албания', 'Albania');
 
-INSERT INTO show_statuses(show_status_name) VALUES('completed'), ('planned'), ('cancelled');
-
-INSERT INTO statuses (status_name) VALUES ('ADMIN'), ('USER'), ('PRO_USER');
-
 INSERT INTO resource_types(resource_type_name) VALUES ('WEB_SITE'), ('VK'), ('IG');
 
 
-INSERT INTO users (user_email, user_password, user_nik, status_id, country_id, user_city) VALUES
-    ('e@m.com', 'p1', 'admin', 1, 3, 'Mordor'),
-    ('em@m.com', 'p12', 'user1', 2, 1, 'City1'),
-    ('ejdj@m.com', 'p123', 'misha', 2, 3, 'City12'),
-    ('eslskj@m.com', 'p144', 'xuha', 2, 3, 'City123');
+INSERT INTO users (user_email, user_password, user_nik, user_status, country_id, user_city) VALUES
+    ('e@m.com', 'p1', 'admin', 'ADMIN', 3, 'Mordor'),
+    ('em@m.com', 'p12', 'user1', 'PRO-USER', 1, 'City1'),
+    ('ejdj@m.com', 'p123', 'misha', 'USER', 3, 'City12'),
+    ('eslskj@m.com', 'p144', 'xuha', 'USER', 3, 'City123');
 
 INSERT INTO users (
     user_email, user_password, user_nik, user_first_name, user_last_name, 
-    status_id, country_id, user_city, user_avatar, user_date_birth, user_description) VALUES
-    ('eqqwww@m.com', 'p1', 'full', 'full', '1111', 2, 1, 'New Mordor1', '/avatars/user_avatar1/', '1917-01-01', 'it is description'),
-    ('full@m.com', 'p123', 'full2', '2full', '222-last', 2, 1, 'New Mordor2', '/avatars/user_avatar2/', '1977-07-07', 'it is description1');
+    country_id, user_city, user_avatar, user_date_birth, user_description) VALUES
+    ('eqqwww@m.com', 'p1', 'full', 'full', '1111',  1, 'New Mordor1', '/avatars/user_avatar1/', '1917-01-01', 'it is description'),
+    ('full@m.com', 'p123', 'full2', '2full', '222-last',  1, 'New Mordor2', '/avatars/user_avatar2/', '1977-07-07', 'it is description1');
 
 
 INSERT INTO comedians(
@@ -128,20 +124,29 @@ INSERT INTO comedian_views(user_id, comedian_id) VALUES
 (4, 2);
 
 
+INSERT INTO events (place_id, user_id, event_name, event_discription, event_date, event_status, event_promo_picture ) VALUES
+(1,1, 'First Event', 'First Event event_discription', '01.01.2023', 'PLANNED', 'pics/events/ev-1.jpg'),
+(2,1, 'Second Event', 'Second Second Event event_discription', '01.02.2023', 'PLANNED', 'pics/events/ev-2.jpg'),
+(2,1, 'Third Event', 'Third Third Third Event event_discription', '01.01.2022', NULL, 'pics/events/ev-3.jpg'),
+(3,2, 'Event 4', '444444444 event_discription', '01.02.2022', 'PLANNED', 'pics/events/ev-444.jpg'),
+(3,3, 'Event 55', '55 55 55 55 event_discription', '01.03.2022', 'CANCELED', 'pics/events/ev-55.jpg'),
+(3,3, 'Event 666', '666 666 666', '04.01.2023', 'PLANNED', 'pics/events/ev-6.jpg');
+
+
 
 INSERT INTO shows(
 	comedian_id, country_id, language_id, place_id, show_date, user_added_id, 
-	show_name, show_description, show_poster, show_status_id
+	show_name, show_description, show_poster, event_id
 ) VALUES 
 (1, 1, 8, 1, '2022-01-01', 1, 
  'Спасибо, у меня всё #10', 
  'Десятый выпуск шоу «Спасибо, у меня всё» из Варшавы', 
- '/pics/shows/posters/poster-1.jpeg',1),
+ '/pics/shows/posters/poster-1.jpeg', 1),
 
 (1, 3, 8, 1, '2022-01-21', 2, 
  'Меня ищет КГБ', 
  'А у вас как дела, ребята ?) ', 
- '/pics/shows/posters/poster-2.jpeg',1),
+ '/pics/shows/posters/poster-2.jpeg', 2),
  
 (4, 3, 8, 1, '2021-06-06', 2, 
  'Дальше сам (Stand Up 2021)', 
@@ -170,12 +175,12 @@ INSERT INTO shows(
 Кажется, я достаточно раз упомянул слово «стендап» в описании ролика, чтобы алгоритмы поняли, в какую нишу ютуба я хочу заскочить. Надеюсь, это последний раз, когда я сажусь и пишу настоящий SEO-текст, чтобы достучаться до новой аудитории. Думаю, что Данила Поперечный таким не занимается. 
 
 С другой стороны — а на что ты жалуешься, Денис? Ты год занимался любимым делом, увидел очень красивую Россию в весенне-летний период, выступил в Украине, США и Австрии. На тебя приходили потрясающие умные, красивые и добрые люди. Да, их может быть меньше, чем у комиков с ТНТ, но они же классные. Хватит их обесценивать своими жалобами. Всё классно. И начни уже сочинять описания видео после приёма психотерапевта, а не до', 
- '/pics/shows/posters/poster-3.jpeg',1),
+ '/pics/shows/posters/poster-3.jpeg', NULL),
  
  (2, 2, 8, 1, '2022-01-23', 2, 
  'Скоро будет', 
  'или не будет', 
- '/pics/shows/posters/poster-4.jpeg',1);
+ '/pics/shows/posters/poster-4.jpeg', NULL);
  
 INSERT INTO pictures(show_id, picture_path) VALUES
 (1, '/pic/show/show-122.jpg'),
@@ -305,3 +310,19 @@ INSERT INTO place_views(user_id, place_id, place_view_date) VALUES
 (1, 1, '2022-05-06'),
 (2, 1, '2022-05-04'),
 (2, 1, '2022-07-07');
+
+
+
+
+INSERT INTO comedians_events VALUES
+(1,1), 
+(1,2), 
+(1,3), 
+(1,4), 
+(1,6), 
+(2,1), 
+(3,1), 
+(3,5), 
+(3,2), 
+(4,1), 
+(4,2); 

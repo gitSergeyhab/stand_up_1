@@ -1,7 +1,7 @@
 import { sequelize } from "../sequelize";
 import { Request, Response } from "express";
 import { OrderValues, SQLFunctionName } from "../const";
-import { insertView } from "../utils/sql-utils";
+import { getDataFromSQL, insertView } from "../utils/sql-utils";
 
 
 
@@ -13,13 +13,13 @@ class ComedianController {
 
             const where = `
                 WHERE country_id = ${country_id ? ':country_id' : 'country_id'}
-                AND (comedian_city = ${city ? ':city' : 'comedian_city'} OR comedian_city_en = ${city ? ':city' : 'comedian_city_en'})
+                AND (LOWER(comedian_city) = ${city ? 'LOWER(:city)' : 'LOWER(comedian_city)'} OR LOWER(comedian_city_en) = ${city ? 'LOWER(:city)' : 'LOWER(comedian_city_en)'})
             `
     
-                const data = await sequelize.query(
+                const result = await sequelize.query(
                     `
                     SELECT 
-                        comedian_id, comedian_first_name, comedian_last_name, comedian_first_name_en, comedian_last_name_en, 
+                        comedian_id, comedian_first_name, comedian_last_name, comedian_first_name_en, comedian_last_name_en, comedian_date_added AS date_added, comedian_city,
                         country_id, country_name, country_name_en,
                         AVG(comedian_rate) as ${OrderValues.pop},
                         get_count_of_comedian_views(comedian_id, 7) as views,
@@ -33,11 +33,12 @@ class ComedianController {
 
                     GROUP BY comedian_id, country_id, country_name, country_name_en
 
-                    ORDER BY ${OrderValues[order as string]} ${direction}
+                    ORDER BY ${OrderValues[order as string] || OrderValues.pop} ${direction}
 
                     LIMIT :limit
                     OFFSET :offset
                     ;
+
                     SELECT COUNT(comedian_id) FROM comedians
                     ${where}
                     ;
@@ -47,6 +48,8 @@ class ComedianController {
                         type: 'SELECT'
                     }
                 );
+
+                const data = getDataFromSQL(result, 'comedians')
         
                 return res.status(200).json({data})
                 
@@ -94,7 +97,6 @@ class ComedianController {
                 LEFT JOIN countries USING (country_id)
                 LEFT JOIN users ON users.user_id = comedians.user_added_id
                 LEFT JOIN get_comedian_pictures() USING (comedian_id)
-                LEFT JOIN get_comedian_resources() USING (comedian_id)
                 LEFT JOIN comedian_ratings USING (comedian_id)
                 
                 WHERE comedian_id = :id

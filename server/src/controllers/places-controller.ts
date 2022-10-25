@@ -1,7 +1,14 @@
 import { sequelize } from "../sequelize";
 import { Request, Response } from "express";
 import { OrderValues, StatusCode, SQLFunctionName } from "../const";
-import { insertView } from "../utils/sql-utils";
+import { getDataFromSQL, insertView } from "../utils/sql-utils";
+
+
+const PlaceOrder = {
+    views: 'views',
+    totalViews: 'total_views',
+    dateAdded: 'date_place_added'
+}
 
 
 
@@ -24,7 +31,6 @@ class PlacesController {
                     LEFT JOIN countries USING(country_id)
                     LEFT JOIN users ON user_id = user_added_id
                     LEFT JOIN get_place_pictures() USING(place_id)
-                    LEFT JOIN get_place_resources() USING(place_id)
                     WHERE place_id = :id
                     GROUP BY  place_id, countries.country_id, users.user_id, picture_paths
                 ;
@@ -51,14 +57,14 @@ class PlacesController {
 
     async getPlacesByQuery(req: Request, res: Response) {
         try {
-            const {country_id = null, city = null, order = 'pop', limit = null, offset = null} = req.query;
+            const {country_id = null, city = null, order = 'views', limit = null, offset = null, direction = 'DESC'} = req.query;
 
             const where = `
                 WHERE country_id = ${country_id ? ':country_id' : 'country_id'}
-                AND ( LOWER(place_city)  = LOWER(${city ? ':city' : 'place_city'})  OR LOWER(place_city_en) = LOWER(${city ? ':city' : 'place_city_en'}) )
+                AND ( LOWER(place_city)  = LOWER(${city ? ':city' : 'LOWER(place_city)'})  OR LOWER(place_city_en) = LOWER(${city ? ':city' : 'LOWER(place_city_en)'}) )
             `
 
-            const data = await sequelize.query(
+            const result = await sequelize.query(
                 `
                 SELECT
                     place_id, place_name, place_name_en, place_city, place_city_en, place_promo_picture,
@@ -69,6 +75,9 @@ class PlacesController {
                 LEFT JOIN countries USING (country_id)
 
                 ${where}
+
+                ORDER BY ${PlaceOrder[order as string] || PlaceOrder.views} 
+                ${direction}
 
                 LIMIT :limit
                 OFFSET :offset
@@ -85,6 +94,8 @@ class PlacesController {
                     type: 'SELECT'
                 }
             )
+
+            const data = getDataFromSQL(result, 'places')
 
             return res.status(StatusCode.Ok).json({data});
     

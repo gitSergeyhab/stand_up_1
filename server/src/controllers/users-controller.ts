@@ -8,7 +8,7 @@ class UserController {
             const offset = isNaN(+req.query.offset) ?  null : +req.query.offset;
             const status = req.query.status;
 
-            const where = status ? 'WHERE fk_status_id = :status' : '';
+            const where = status ? 'WHERE user_status = :status' : '';
     
             if (limit && offset !== null) {
                 const data = await sequelize.query(

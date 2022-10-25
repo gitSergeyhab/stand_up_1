@@ -1,8 +1,3 @@
-CREATE TABLE statuses (
-    status_id SMALLINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    status_name VARCHAR(32)
-);
-
 CREATE TABLE languages (
     language_id SMALLINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     language_name VARCHAR(64),
@@ -19,9 +14,8 @@ CREATE TABLE countries (
 
 CREATE TABLE users ( 
     user_id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    status_id SMALLINT REFERENCES statuses (status_id), 
+    user_status VARCHAR(32) DEFAULT 'USER',
     country_id INTEGER REFERENCES countries(country_id),
-
 
     user_email VARCHAR(128) UNIQUE,
     user_password VARCHAR(512) NOT NULL,
@@ -76,20 +70,39 @@ CREATE TABLE places (
     date_place_added DATE DEFAULT CURRENT_DATE
     );
 
-CREATE TABLE show_statuses (
-    show_status_id SMALLINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    show_status_name VARCHAR(32) DEFAULT 'completed'
+
+CREATE TABLE events (
+    event_id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    place_id INTEGER REFERENCES places(place_id),
+    user_id INTEGER REFERENCES users(user_id),
+
+    event_name VARCHAR(512) NOT NULL,
+    event_name_en VARCHAR(512),
+    event_discription TEXT,
+    event_date DATE,
+    event_date_added DATE DEFAULT CURRENT_DATE,
+    event_status VARCHAR(32) DEFAULT 'COMPLETED',
+    event_promo_picture VARCHAR(256)
 );
+
+
+CREATE TABLE comedians_events (
+    comedian_id INT REFERENCES comedians(comedian_id),
+    event_id INT REFERENCES events(event_id),
+
+    CONSTRAINT comedians_events_pkey PRIMARY KEY (comedian_id, event_id)
+);
+
 
 
 CREATE TABLE shows ( 
     show_id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    event_id INTEGER REFERENCES events(event_id),
     user_added_id INTEGER REFERENCES users(user_id),
     comedian_id INTEGER NOT NULL REFERENCES comedians(comedian_id),
     country_id INTEGER REFERENCES countries(country_id),
     language_id INTEGER NOT NULL REFERENCES languages(language_id),
     place_id INTEGER REFERENCES places(place_id),
-    show_status_id SMALLINT REFERENCES show_statuses(show_status_id) DEFAULT 1,
 
     show_date DATE,
     show_name VARCHAR(256),
