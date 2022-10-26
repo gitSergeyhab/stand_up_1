@@ -1,6 +1,6 @@
 import { sequelize } from "../sequelize";
 import { Request, Response } from "express";
-import { OrderValues, SQLFunctionName } from "../const";
+import { OrderValues, SQLFunctionName, StatusCode } from "../const";
 import { getDataFromSQL, insertView } from "../utils/sql-utils";
 
 
@@ -148,12 +148,51 @@ class ComedianController {
                 }
             )
 
-            return res.status(200).json({comedians});
+            return res.status(StatusCode.Ok).json({comedians});
     
    
         } catch {
             return res.status(500).json({message: 'error search comedian'})
         }
+    }
+
+    async getVotesByComedianId(req: Request, res: Response) {
+
+        try {
+            const {id} = req.params;
+            const {limit = null, offset = null, rate} = req.query;
+
+            const where = `WHERE comedian_id = :id AND comedian_rate = ${ rate ? ':rate' : 'comedian_rate'}`
+
+            const result = await sequelize.query(`
+            SELECT
+            user_id, user_nik, user_avatar, comedian_rate, comedian_date_rate
+            FROM users
+            JOIN comedian_ratings USING (user_id)
+            ${where}
+            ORDER BY comedian_date_rate DESC
+            LIMIT :limit
+            OFFSET :offset
+            ;
+
+            SELECT COUNT (comedian_rate) 
+            FROM comedian_ratings
+            ${where} 
+            ;
+            `,
+            {
+                replacements: {limit, offset, rate, id},
+                type: 'SELECT'
+            }
+            );
+
+            const data = getDataFromSQL(result, 'comedians')
+            return res.status(StatusCode.Ok).json(data);
+
+        } catch {
+            return res.status(StatusCode.ServerError).json({message: 'error get shows by query'})
+        }
+
     }
 
 }

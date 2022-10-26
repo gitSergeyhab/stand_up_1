@@ -23,5 +23,7 @@ export const OrderValues = {
 export const enum SQLFunctionName {
     InsertComedianView = 'insert_comedian_view',
     InsertShowView = 'insert_show_view',
-    InsertPlaceView = 'insert_place_view'
+    InsertPlaceView = 'insert_place_view',
+    InsertEventView = 'insert_event_view',
+
 }

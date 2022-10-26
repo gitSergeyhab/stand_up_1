@@ -91,6 +91,8 @@ INSERT INTO resources(resource_type_id, comedian_id, resource_href) VALUES
 (2, 2, 'https://vk.com/vk-1'),
 (3, 2, 'https://instagram.com/ig-1');
 
+
+
 INSERT INTO pictures(user_id, picture_path) VALUES 
 (2, '/pic/user/avatar/user-2.jpg'),
 (3, '/pic/user/avatar/user-3.jpg');
@@ -124,13 +126,13 @@ INSERT INTO comedian_views(user_id, comedian_id) VALUES
 (4, 2);
 
 
-INSERT INTO events (place_id, user_id, event_name, event_discription, event_date, event_status, event_promo_picture ) VALUES
-(1,1, 'First Event', 'First Event event_discription', '01.01.2023', 'PLANNED', 'pics/events/ev-1.jpg'),
-(2,1, 'Second Event', 'Second Second Event event_discription', '01.02.2023', 'PLANNED', 'pics/events/ev-2.jpg'),
-(2,1, 'Third Event', 'Third Third Third Event event_discription', '01.01.2022', NULL, 'pics/events/ev-3.jpg'),
-(3,2, 'Event 4', '444444444 event_discription', '01.02.2022', 'PLANNED', 'pics/events/ev-444.jpg'),
-(3,3, 'Event 55', '55 55 55 55 event_discription', '01.03.2022', 'CANCELED', 'pics/events/ev-55.jpg'),
-(3,3, 'Event 666', '666 666 666', '04.01.2023', 'PLANNED', 'pics/events/ev-6.jpg');
+INSERT INTO events (place_id, user_id, event_name, event_description, event_date, event_status, event_promo_picture ) VALUES
+(1,1, 'First Event', 'First Event event_discription', '01.01.2023', 'planned', 'pics/events/ev-1.jpg'),
+(2,1, 'Second Event', 'Second Second Event event_discription', '01.02.2023', 'planned', 'pics/events/ev-2.jpg'),
+(2,1, 'Third Event', 'Third Third Third Event event_discription', '01.01.2022', 'ended', 'pics/events/ev-3.jpg'),
+(3,2, 'Event 4', '444444444 event_discription', '01.02.2022', 'ended', 'pics/events/ev-444.jpg'),
+(3,3, 'Event 55', '55 55 55 55 event_discription', '01.03.2022', 'canceled', 'pics/events/ev-55.jpg'),
+(3,3, 'Event 666', '666 666 666', '04.01.2023', 'planned', 'pics/events/ev-6.jpg');
 
 
 
@@ -181,6 +183,12 @@ INSERT INTO shows(
  'Скоро будет', 
  'или не будет', 
  '/pics/shows/posters/poster-4.jpeg', NULL);
+
+INSERT INTO shows(event_id, user_added_id, comedian_id, language_id, show_date, show_name, show_description, show_poster) VALUES
+(1, 1, 2, 1, '2022-10-30', 'SHOW #5', 'show_description 5', '/pic/shows/poster-5'),
+(1, 2, 3, 1, '2022-11-03', 'SHOW #6', 'show_description 666', '/pic/shows/poster-6'),
+(1, 1, 4, 1, '2022-11-30', 'SHOW #7', 'show_description 577', '/pic/shows/poster-7'),
+(2, 2, 1, 1, '2022-11-13', 'SHOW #8', 'show_description 666 888', '/pic/shows/poster-8');
  
 INSERT INTO pictures(show_id, picture_path) VALUES
 (1, '/pic/show/show-122.jpg'),
@@ -326,3 +334,10 @@ INSERT INTO comedians_events VALUES
 (3,2), 
 (4,1), 
 (4,2); 
+
+INSERT INTO resources(resource_type_id, event_id, resource_href) VALUES 
+(2, 1, 'https://vk.com/vk-ev-1'),
+(3, 1, 'https://instagram.com/ig-ev-1'),
+(1, 1, 'https://site-event-1.com'),
+(1, 2, 'https://site-event-2.com'),
+(3, 2, 'https://instagram.com/ig-ev-2');

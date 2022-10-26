@@ -27,7 +27,7 @@ CREATE OR REPLACE FUNCTION get_review_user_data(user_idx int, lim int) RETURNS J
 $$ LANGUAGE SQL;
 
 
-CREATE OR REPLACE FUNCTION get_show_retings_user_data(user_idx int, lim int) RETURNS JSON AS $$
+CREATE OR REPLACE FUNCTION get_show_ratings_user_data(user_idx int, lim int) RETURNS JSON AS $$
 	SELECT 
 		JSON_AGG(JSON_BUILD_OBJECT(
 			'show_id', show_id,
@@ -54,7 +54,7 @@ CREATE OR REPLACE FUNCTION get_show_retings_user_data(user_idx int, lim int) RET
 $$ LANGUAGE SQL;
 
 
-CREATE OR REPLACE FUNCTION get_comedian_retings_user_data(user_idx int, lim int) RETURNS JSON AS $$
+CREATE OR REPLACE FUNCTION get_comedian_ratings_user_data(user_idx int, lim int) RETURNS JSON AS $$
 	SELECT 
 		JSON_AGG(JSON_BUILD_OBJECT(
 			'comedian_id', comedian_id,
@@ -75,6 +75,55 @@ CREATE OR REPLACE FUNCTION get_comedian_retings_user_data(user_idx int, lim int)
 		ORDER BY comedian_date_rate DESC 
 		LIMIT lim
 	) AS t
+$$ LANGUAGE SQL;
+
+CREATE OR REPLACE FUNCTION get_user_views_data(user_idx INT, lim INT) RETURNS JSON AS $$
+SELECT JSON_AGG(JSON_BUILD_OBJECT(
+	'view_id', view_id,
+	'view_date', view_date,
+	'picture', picture,
+	'type', type
+)) FROM (
+	SELECT * FROM (
+		(SELECT
+		DISTINCT ON (show_id) show_id AS id,
+		show_view_id AS view_id, 
+		show_view_date AS view_date,
+		user_id,
+		show_poster AS picture,
+		'shows' AS type
+		FROM show_views
+		LEFT JOIN shows USING(show_id)
+		WHERE user_id = user_idx
+		ORDER BY id, show_view_date DESC)
+		UNION
+		(SELECT
+		DISTINCT ON (comedian_id) comedian_id AS id,
+		comedian_view_id AS view_id, 
+		comedian_view_date AS view_date,
+		user_id,
+		comedian_avatar AS picture,
+		'comedians' AS type
+		FROM comedian_views
+		LEFT JOIN comedians USING (comedian_id)
+		WHERE user_id = user_idx
+		ORDER BY id, comedian_view_date DESC)
+		UNION
+		(SELECT 
+		DISTINCT ON (place_id) place_id AS id,
+		place_view_id AS view_id, 
+		place_view_date AS view_date,
+		user_id,
+		place_promo_picture AS picture,
+		'places' AS type
+		FROM place_views 
+		LEFT JOIN places USING (place_id)
+		WHERE user_id = user_idx
+		ORDER BY id, place_view_date DESC)
+	) AS views
+	ORDER BY view_date DESC
+	LIMIT lim
+) AS ten_views
 $$ LANGUAGE SQL;
 
 
@@ -109,6 +158,14 @@ RETURNS JSON AS $$
 $$ LANGUAGE SQL
 
 --
+
+CREATE OR REPLACE FUNCTION get_event_resource(event_idx INT) 
+RETURNS JSON AS $$
+	SELECT 
+	JSON_AGG(JSON_BUILD_OBJECT('type', resource_type_id, 'href', resource_href))
+	FROM resources 
+	WHERE event_id = event_idx
+$$ LANGUAGE SQL
 
 
 
@@ -189,6 +246,10 @@ CREATE OR REPLACE FUNCTION insert_place_view (place_idx int, user_idx int) RETUR
 	INSERT INTO place_views (place_id, user_id) VALUES (place_idx, user_idx);
 $$ LANGUAGE SQL;
 
+CREATE OR REPLACE FUNCTION insert_event_view (event_idx int, user_idx int) RETURNS void AS $$
+	INSERT INTO event_views (event_id, user_id) VALUES (event_idx, user_idx);
+$$ LANGUAGE SQL;
+
 
 
 -- number of views in the last x days
@@ -207,3 +268,59 @@ CREATE OR REPLACE FUNCTION get_count_of_place_views(place_idx int, days int) RET
 	SELECT COUNT (*) FROM place_views
 	WHERE EXTRACT( DAY FROM (NOW() - place_view_date) ) < days AND place_id = place_idx;
 $$ LANGUAGE SQL;
+
+CREATE OR REPLACE FUNCTION get_count_of_event_views(event_idx int, days int) RETURNS bigint AS $$
+	SELECT COUNT (*) FROM event_views
+	WHERE EXTRACT( DAY FROM (NOW() - event_view_date) ) < days AND event_id = event_idx;
+$$ LANGUAGE SQL;
+
+
+-- for event-page
+CREATE OR REPLACE FUNCTION get_event_comedians(event_idx INT) RETURNS JSON AS $$
+	SELECT 
+	JSON_AGG(JSON_BUILD_OBJECT(
+		'comedian_id', comedian_id,
+		'comedian_first_name', comedian_first_name,
+		'comedian_last_name', comedian_last_name,
+		'comedian_first_name_en', comedian_first_name_en,
+		'comedian_last_name_en', comedian_last_name_en,
+		'comedian_avatar', comedian_avatar,
+		'avg_comedian_rate', avg_comedian_rate
+	)) 
+	FROM (
+		SELECT 
+		comedian_id, comedian_first_name, comedian_last_name, comedian_first_name_en, comedian_last_name_en, comedian_avatar,
+		AVG (comedian_rate) as avg_comedian_rate, COUNT (comedian_rate) as num
+		FROM events
+		LEFT JOIN comedians_events USING (event_id)
+		LEFT JOIN comedians USING (comedian_id)
+		LEFT JOIN comedian_ratings USING (comedian_id)
+		WHERE event_id = event_idx
+		GROUP BY event_id, comedian_id, comedian_first_name, comedian_last_name, comedian_first_name_en, comedian_last_name_en, comedian_avatar
+		ORDER BY num DESC
+		LIMIT 10
+	) as e
+$$ LANGUAGE SQL
+
+
+CREATE OR REPLACE FUNCTION get_event_shows(event_idx INT) RETURNS JSON AS $$
+	SELECT 
+	JSON_AGG(JSON_BUILD_OBJECT(
+		'show_id', show_id,
+		'show_name', show_name,
+		'show_poster', show_poster,
+		'avg_show_rate', avg_show_rate
+	)) 
+	FROM (
+		SELECT 
+		show_id, show_name, show_poster,
+		AVG (show_rate) as avg_show_rate, COUNT (show_rate) as num
+		FROM events
+		JOIN shows USING (event_id)
+		LEFT JOIN show_ratings USING (show_id)
+		WHERE event_id = event_idx
+		GROUP BY show_id, show_name, show_poster
+		ORDER BY num DESC
+		LIMIT 10
+	) as e
+$$ LANGUAGE SQL

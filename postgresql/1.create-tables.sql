@@ -78,7 +78,7 @@ CREATE TABLE events (
 
     event_name VARCHAR(512) NOT NULL,
     event_name_en VARCHAR(512),
-    event_discription TEXT,
+    event_description TEXT,
     event_date DATE,
     event_date_added DATE DEFAULT CURRENT_DATE,
     event_status VARCHAR(32) DEFAULT 'COMPLETED',
@@ -156,7 +156,7 @@ CREATE TABLE comedian_ratings (
     comedian_id INTEGER NOT NULL REFERENCES comedians(comedian_id),
 
     comedian_rate SMALLINT CHECK (comedian_rate > 0 AND 11 > comedian_rate),
-    comedian_date_rate DATE DEFAULT CURRENT_DATE
+    comedian_date_rate DATE DEFAULT CURRENT_TIMESTAMP
     );
 
 CREATE TABLE show_ratings ( 
@@ -165,7 +165,7 @@ CREATE TABLE show_ratings (
     show_id INTEGER NOT NULL REFERENCES shows(show_id),
 
     show_rate SMALLINT CHECK (show_rate > 0 AND 11 > show_rate),
-    show_date_rate DATE DEFAULT CURRENT_DATE
+    show_date_rate DATE DEFAULT CURRENT_TIMESTAMP
     );
 
 CREATE TABLE resource_types (
@@ -189,6 +189,7 @@ CREATE TABLE resources (
     user_id INTEGER REFERENCES users(user_id),
     comedian_id  INTEGER REFERENCES comedians(comedian_id),
     place_id INTEGER REFERENCES places(place_id),
+    event_id INTEGER REFERENCES events(event_id),
 
     resource_href VARCHAR(256) NOT NULL
 );
@@ -217,5 +218,12 @@ CREATE TABLE place_views (
     place_view_date TIMESTAMP without time zone DEFAULT CURRENT_TIMESTAMP
 );
 
+CREATE TABLE event_views (
+    event_view_id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    user_id INTEGER REFERENCES users(user_id),
+    event_id INTEGER NOT NULL REFERENCES events(event_id),
+
+    event_view_date TIMESTAMP without time zone DEFAULT CURRENT_TIMESTAMP
+);
 
 
