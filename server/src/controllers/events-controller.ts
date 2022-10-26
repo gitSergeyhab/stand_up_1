@@ -89,7 +89,7 @@ class EventsController {
                 ;
 
                 SELECT
-                COUNT (event_id)
+                COUNT (event_id)::int
                 FROM events
                 LEFT JOIN places USING (place_id)
                 LEFT JOIN countries USING (country_id)

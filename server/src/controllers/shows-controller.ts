@@ -21,7 +21,7 @@ class ShowsController {
                         get_count_of_show_views(:id, 1000000) AS total_views,
                         picture_paths,
                         video_paths, is_pro, minutes, user_ids, user_niks,
-                        COUNT (show_rating_id) AS number_of_rate, AVG (show_rate) AS avg_rate
+                        COUNT (show_rating_id)::int AS number_of_rate, AVG (show_rate)::real AS avg_rate
                     FROM shows
                     LEFT JOIN comedians USING (comedian_id)
                     LEFT JOIN countries ON shows.country_id = countries.country_id
@@ -79,7 +79,7 @@ class ShowsController {
                     language_id, language_name, language_name_en,
                     get_count_of_show_views(show_id, 7) AS views,
                     get_count_of_show_views(show_id, 1000000) AS total_views,
-                    COUNT (show_rating_id) AS number_of_rate, AVG (show_rate) AS avg_rate
+                    COUNT (show_rating_id) AS number_of_rate, AVG (show_rate)::real AS avg_rate
                 FROM shows
 
                 LEFT JOIN comedians USING (comedian_id)
@@ -103,7 +103,7 @@ class ShowsController {
                 ;
 
                 SELECT
-                COUNT (show_id)
+                COUNT (show_id)::int
                 FROM shows
 
                 ${where}
@@ -147,7 +147,7 @@ class ShowsController {
             OFFSET :offset
             ;
 
-            SELECT COUNT (show_rate) 
+            SELECT COUNT (show_rate)::int
             FROM show_ratings
             ${where} 
             ;

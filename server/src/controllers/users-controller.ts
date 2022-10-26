@@ -62,7 +62,7 @@ class UserController {
                     user_id, 
                     user_email, user_password, user_nik, user_first_name, user_last_name, user_city, user_avatar, user_date_birth, user_description, user_date_registration,
                     country_id, country_name, country_name_en,
-                    AVG(show_rate) AS avg_rate,
+                    AVG(show_rate)::real AS avg_rate,
                     get_review_user_data(:id, 3) AS reviews,
                     get_user_views_data(:id, 10) AS latest_views,
                     picture_path,

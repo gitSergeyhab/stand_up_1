@@ -83,7 +83,7 @@ class PlacesController {
                 OFFSET :offset
                 ;
 
-                SELECT COUNT (place_id) 
+                SELECT COUNT (place_id)::int 
                 FROM places
 
                 ${where}

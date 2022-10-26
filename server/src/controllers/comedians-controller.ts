@@ -9,7 +9,7 @@ class ComedianController {
     async getComedianByLocation(req: Request, res: Response) {
         try {
 
-            const {country_id, city, limit = null, offset = null, order='pop', direction='ASC'} = req.query;
+            const {country_id, city, limit = null, offset = null, order='pop', direction=null} = req.query;
 
             const where = `
                 WHERE country_id = ${country_id ? ':country_id' : 'country_id'}
@@ -19,11 +19,11 @@ class ComedianController {
                 const result = await sequelize.query(
                     `
                     SELECT 
-                        comedian_id, comedian_first_name, comedian_last_name, comedian_first_name_en, comedian_last_name_en, comedian_date_added AS date_added, comedian_city,
+                        comedian_id, comedian_first_name, comedian_last_name, comedian_first_name_en, comedian_last_name_en, comedian_date_added AS date_added, comedian_city, comedian_avatar,
                         country_id, country_name, country_name_en,
-                        AVG(comedian_rate) as ${OrderValues.pop},
-                        get_count_of_comedian_views(comedian_id, 7) as views,
-                        get_count_of_comedian_views(comedian_id, 1000000) as total_views
+                        AVG(comedian_rate)::real AS avg_rate, COUNT (comedian_id) AS number_of_rate,
+                        get_count_of_comedian_views(comedian_id, 7) AS views,
+                        get_count_of_comedian_views(comedian_id, 1000000) AS total_views
                     FROM comedians
 
                     LEFT JOIN countries USING(country_id)
@@ -33,13 +33,13 @@ class ComedianController {
 
                     GROUP BY comedian_id, country_id, country_name, country_name_en
 
-                    ORDER BY ${OrderValues[order as string] || OrderValues.pop} ${direction}
+                    ORDER BY ${OrderValues[order as string] || OrderValues.pop} ${direction === 'asc' ? 'ASC' : 'DESC'}
 
                     LIMIT :limit
                     OFFSET :offset
                     ;
 
-                    SELECT COUNT(comedian_id) FROM comedians
+                    SELECT COUNT(comedian_id)::int FROM comedians
                     ${where}
                     ;
                     `,
@@ -51,7 +51,7 @@ class ComedianController {
 
                 const data = getDataFromSQL(result, 'comedians')
         
-                return res.status(200).json({data})
+                return res.status(200).json({...data})
                 
 
         } catch(e) {
@@ -88,7 +88,7 @@ class ComedianController {
                     users.user_id, user_nik,
                     picture_paths,
                     get_comedian_resource(:id) AS resources,
-                    AVG (comedian_rate) as avg_rate, COUNT(DISTINCT comedian_rate) as number_of_rate,
+                    AVG (comedian_rate)::real as avg_rate, COUNT(DISTINCT comedian_rate) as number_of_rate,
                     get_count_of_comedian_views(:id, 7) as views,
                     get_count_of_comedian_views(:id, 1000000) as total_views
 
@@ -131,7 +131,7 @@ class ComedianController {
                 `SELECT 
                     comedian_id, comedian_first_name, comedian_last_name, 
                     country_id, country_name, country_name_en,
-                AVG(comedian_rate) 
+                AVG(comedian_rate)::real AS avg_rate 
                 FROM comedians
                 LEFT JOIN countries USING(country_id)
                 LEFT JOIN comedian_ratings USING(comedian_id)
