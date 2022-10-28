@@ -16,7 +16,6 @@ export const OrderValues = {
     pop: 'number_of_rate',
     views: 'views',
     totalViews: 'total_views'
-
 }
 
 

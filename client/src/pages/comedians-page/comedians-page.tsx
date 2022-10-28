@@ -1,7 +1,8 @@
 import axios from 'axios';
 import {useState, useEffect} from 'react';
+import { Link } from 'react-router-dom';
 import { ComedianTypeCC, ComedianTypeSC } from '../../types/types';
-import { adaptComediansClient } from '../../utils/adapters';
+import { adaptComediansToClient } from '../../utils/adapters';
 
 // import { Link } from 'react-router-dom';
 
@@ -17,14 +18,14 @@ const ComedianCard = ({comedian} : {comedian : ComedianTypeCC}) => {
 
   return (
 
-    <a href={`/comedians/${comedianId}`}>
+    <Link to={`/comedians/${comedianId}`}>
       <h3>{comedianFirstName} {comedianLastName}</h3>
       {/* {comedian_avatar && <img src={comedian_avatar} alt={comedian_first_name} width='400' height='300'/>} */}
       <img src={comedianAvatar || '/no-avatar'} alt={comedianFirstName} width='400' height='300'/>
       <p>{countryName} {comedianCity ? `: ${comedianCity}` : null}</p>
       <p>оценка: {avgRate} ({numberOfRate}); просмотров: {totalViews}</p>
 
-    </a>
+    </Link>
 
   );
 };
@@ -38,7 +39,7 @@ export const ComediansPage = () => {
     const fetchComedians = async() => {
       try {
         const {data} = await axios.get<ResultType>(BASE_URL);
-        const comediansCC = data.comedians.map((item) => adaptComediansClient(item));
+        const comediansCC = data.comedians.map((item) => adaptComediansToClient(item));
         // console.log(data);
         setComedians(comediansCC);
       } catch (err) {

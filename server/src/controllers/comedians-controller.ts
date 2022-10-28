@@ -1,7 +1,16 @@
 import { sequelize } from "../sequelize";
 import { Request, Response } from "express";
-import { OrderValues, SQLFunctionName, StatusCode } from "../const";
+import {  SQLFunctionName, StatusCode } from "../const";
 import { getDataFromSQL, insertView } from "../utils/sql-utils";
+
+export const ComedianOrder = {
+    dateAdded: 'comedian_date_added',
+    dateWas: 'show_date',
+    rate: 'avg_rate',
+    pop: 'number_of_rate',
+    views: 'views',
+    totalViews: 'total_views'
+}
 
 
 
@@ -19,7 +28,7 @@ class ComedianController {
                 const result = await sequelize.query(
                     `
                     SELECT 
-                        comedian_id, comedian_first_name, comedian_last_name, comedian_first_name_en, comedian_last_name_en, comedian_date_added AS date_added, comedian_city, comedian_avatar,
+                        comedian_id, comedian_first_name, comedian_last_name, comedian_first_name_en, comedian_last_name_en, comedian_date_added, comedian_city, comedian_avatar,
                         country_id, country_name, country_name_en,
                         AVG(comedian_rate)::real AS avg_rate, COUNT (comedian_id) AS number_of_rate,
                         get_count_of_comedian_views(comedian_id, 7) AS views,
@@ -33,7 +42,7 @@ class ComedianController {
 
                     GROUP BY comedian_id, country_id, country_name, country_name_en
 
-                    ORDER BY ${OrderValues[order as string] || OrderValues.pop} ${direction === 'asc' ? 'ASC' : 'DESC'}
+                    ORDER BY ${ComedianOrder[order as string] || ComedianOrder.pop} ${direction === 'asc' ? 'ASC' : 'DESC'}
 
                     LIMIT :limit
                     OFFSET :offset

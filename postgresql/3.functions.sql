@@ -132,19 +132,19 @@ $$ LANGUAGE SQL;
 CREATE OR REPLACE FUNCTION get_user_resource(user_idx INT) 
 RETURNS JSON AS $$
 	SELECT 
-	JSON_AGG(JSON_BUILD_OBJECT('type', resource_type_id, 'href', resource_href))
+	JSON_AGG(JSON_BUILD_OBJECT('id', resource_id,  'type', resource_type_id, 'href', resource_href))
 	FROM resources 
 	WHERE user_id = user_idx
-$$ LANGUAGE SQL
+$$ LANGUAGE SQL;
 
 --
 CREATE OR REPLACE FUNCTION get_place_resource(place_idx INT) 
 RETURNS JSON AS $$
 	SELECT 
-	JSON_AGG(JSON_BUILD_OBJECT('type', resource_type_id, 'href', resource_href))
+	JSON_AGG(JSON_BUILD_OBJECT('id', resource_id, 'type', resource_type_id, 'href', resource_href))
 	FROM resources 
 	WHERE place_id = place_idx
-$$ LANGUAGE SQL
+$$ LANGUAGE SQL;
 
 --
 
@@ -152,20 +152,20 @@ $$ LANGUAGE SQL
 CREATE OR REPLACE FUNCTION get_comedian_resource(comedian_idx INT) 
 RETURNS JSON AS $$
 	SELECT 
-	JSON_AGG(JSON_BUILD_OBJECT('type', resource_type_id, 'href', resource_href))
+	JSON_AGG(JSON_BUILD_OBJECT('id', resource_id, 'type', resource_type_id, 'href', resource_href))
 	FROM resources 
 	WHERE comedian_id = comedian_idx
-$$ LANGUAGE SQL
+$$ LANGUAGE SQL;
 
 --
 
 CREATE OR REPLACE FUNCTION get_event_resource(event_idx INT) 
 RETURNS JSON AS $$
 	SELECT 
-	JSON_AGG(JSON_BUILD_OBJECT('type', resource_type_id, 'href', resource_href))
+	JSON_AGG(JSON_BUILD_OBJECT('id', resource_id, 'type', resource_type_id, 'href', resource_href))
 	FROM resources 
 	WHERE event_id = event_idx
-$$ LANGUAGE SQL
+$$ LANGUAGE SQL;
 
 
 
