@@ -1,6 +1,6 @@
 import { sequelize } from "../sequelize";
 import { Request, Response } from "express";
-import {  SQLFunctionName, StatusCode } from "../const";
+import {  Column, SQLFunctionName, StatusCode } from "../const";
 import { getDataFromSQL, insertView } from "../utils/sql-utils";
 
 export const ComedianOrder = {
@@ -31,8 +31,8 @@ class ComedianController {
                         comedian_id, comedian_first_name, comedian_last_name, comedian_first_name_en, comedian_last_name_en, comedian_date_added, comedian_city, comedian_avatar,
                         country_id, country_name, country_name_en,
                         AVG(comedian_rate)::real AS avg_rate, COUNT (comedian_id) AS number_of_rate,
-                        get_count_of_comedian_views(comedian_id, 7) AS views,
-                        get_count_of_comedian_views(comedian_id, 1000000) AS total_views
+                        get_views_count('comedian_id', comedian_id, 7) AS views,
+                        get_views_count('comedian_id', comedian_id, 1000000) AS total_views
                     FROM comedians
 
                     LEFT JOIN countries USING(country_id)
@@ -95,21 +95,20 @@ class ComedianController {
                     comedian_description,
                     countries.country_id, country_name, country_name_en,
                     users.user_id, user_nik,
-                    picture_paths,
-                    get_comedian_resource(:id) AS resources,
+                    get_resources('comedian_id', :id) AS resources,
                     AVG (comedian_rate)::real as avg_rate, COUNT(DISTINCT comedian_rate) as number_of_rate,
-                    get_count_of_comedian_views(:id, 7) as views,
-                    get_count_of_comedian_views(:id, 1000000) as total_views
+                    get_pictures('comedian_id', :id) AS pictures,
 
-                    
+                    get_views_count('comedian_id', :id, 7) AS views,
+                    get_views_count('comedian_id', :id, 1000000) AS total_views
+
                 FROM comedians
                 LEFT JOIN countries USING (country_id)
                 LEFT JOIN users ON users.user_id = comedians.user_added_id
-                LEFT JOIN get_comedian_pictures() USING (comedian_id)
                 LEFT JOIN comedian_ratings USING (comedian_id)
                 
                 WHERE comedian_id = :id
-                GROUP BY comedian_id, countries.country_id, users.user_id, picture_paths;
+                GROUP BY comedian_id, countries.country_id, users.user_id;
                 `,
                 {
                     replacements: {id},
@@ -121,13 +120,14 @@ class ComedianController {
                 return res.status(400).json({message: `there is not comedian with id = ${id}`})
             }
 
-            await insertView(id, user_id, SQLFunctionName.InsertComedianView); // Добавляет 1 просмотр
+            await insertView(id, user_id, Column.Comedian); // Добавляет 1 просмотр
 
 
             return res.status(200).json({comedian: comedians[0]});
     
    
-        } catch {
+        } catch (err) {
+            console.log(err)
             return res.status(500).json({message: 'error get comedian by id'})
         }
     }

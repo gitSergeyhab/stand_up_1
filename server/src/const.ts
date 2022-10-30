@@ -24,5 +24,20 @@ export const enum SQLFunctionName {
     InsertShowView = 'insert_show_view',
     InsertPlaceView = 'insert_place_view',
     InsertEventView = 'insert_event_view',
+}
 
+export const enum Column {
+    Comedian = 'comedian_id',
+    Show = 'show_id',
+    Place = 'place_id',
+    Event = 'event_id',
+    User = 'user_id'
+}
+
+export const enum Table {
+    Comedian = 'comedians',
+    Show = 'shows',
+    Place = 'places',
+    Event = 'events',
+    User = 'users'
 }

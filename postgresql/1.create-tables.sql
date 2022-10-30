@@ -13,7 +13,7 @@ CREATE TABLE countries (
 
 
 CREATE TABLE users ( 
-    user_id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    user_id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     user_status VARCHAR(32) DEFAULT 'USER',
     country_id INTEGER REFERENCES countries(country_id),
 
@@ -29,18 +29,18 @@ CREATE TABLE users (
     user_date_registration DATE DEFAULT CURRENT_DATE
     );
 
-CREATE TABLE user_stats ( 
-    user_stat_id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    user_id INTEGER NOT NULL REFERENCES users(user_id),
+-- CREATE TABLE user_stats ( 
+--     user_stat_id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+--     user_id INTEGER NOT NULL REFERENCES users(user_id),
 
-    user_comedian_stats REAL,
-    user_show_stats REAL
-    );
+--     user_comedian_stats REAL,
+--     user_show_stats REAL
+--     );
 
 CREATE TABLE comedians ( 
-    comedian_id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    comedian_id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     country_id INTEGER REFERENCES countries(country_id),
-    user_added_id INTEGER REFERENCES users(user_id),
+    user_added_id BIGINT REFERENCES users(user_id),
 
     comedian_first_name VARCHAR(64) NOT NULL,
     comedian_last_name VARCHAR(64) NOT NULL,
@@ -56,9 +56,9 @@ CREATE TABLE comedians (
     );
 
 CREATE TABLE places ( 
-    place_id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    place_id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     country_id INTEGER REFERENCES countries(country_id),
-    user_added_id INTEGER REFERENCES users(user_id),
+    user_added_id BIGINT REFERENCES users(user_id),
 
     place_name VARCHAR(256),
     place_name_en VARCHAR(256),
@@ -72,9 +72,9 @@ CREATE TABLE places (
 
 
 CREATE TABLE events (
-    event_id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    place_id INTEGER REFERENCES places(place_id),
-    user_id INTEGER REFERENCES users(user_id),
+    event_id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    place_id BIGINT REFERENCES places(place_id),
+    user_id BIGINT REFERENCES users(user_id),
 
     event_name VARCHAR(512) NOT NULL,
     event_name_en VARCHAR(512),
@@ -87,8 +87,8 @@ CREATE TABLE events (
 
 
 CREATE TABLE comedians_events (
-    comedian_id INT REFERENCES comedians(comedian_id),
-    event_id INT REFERENCES events(event_id),
+    comedian_id BIGINT REFERENCES comedians(comedian_id),
+    event_id BIGINT REFERENCES events(event_id),
 
     CONSTRAINT comedians_events_pkey PRIMARY KEY (comedian_id, event_id)
 );
@@ -97,12 +97,12 @@ CREATE TABLE comedians_events (
 
 CREATE TABLE shows ( 
     show_id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    event_id INTEGER REFERENCES events(event_id),
-    user_added_id INTEGER REFERENCES users(user_id),
-    comedian_id INTEGER NOT NULL REFERENCES comedians(comedian_id),
+    event_id BIGINT REFERENCES events(event_id),
+    user_added_id BIGINT REFERENCES users(user_id),
+    comedian_id BIGINT NOT NULL REFERENCES comedians(comedian_id),
     country_id INTEGER REFERENCES countries(country_id),
     language_id INTEGER NOT NULL REFERENCES languages(language_id),
-    place_id INTEGER REFERENCES places(place_id),
+    place_id BIGINT REFERENCES places(place_id),
 
     show_date DATE,
     show_name VARCHAR(256),
@@ -114,7 +114,7 @@ CREATE TABLE shows (
 CREATE TABLE show_videos (
     show_video_id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     show_id BIGINT REFERENCES shows(show_id) NOT NULL,
-    user_id INTEGER REFERENCES users(user_id),
+    user_id BIGINT REFERENCES users(user_id),
 
     show_video_path VARCHAR(256),
     show_video_professional BOOLEAN DEFAULT FALSE,
@@ -125,8 +125,8 @@ CREATE TABLE show_videos (
 
 CREATE TABLE reviews ( 
     review_id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY, 
-    user_id INTEGER NOT NULL REFERENCES users(user_id),
-    show_id INTEGER NOT NULL REFERENCES shows(show_id),
+    user_id BIGINT NOT NULL REFERENCES users(user_id),
+    show_id BIGINT NOT NULL REFERENCES shows(show_id),
 
     review_title VARCHAR(256),
     review_text TEXT,
@@ -135,8 +135,8 @@ CREATE TABLE reviews (
     );
 
 CREATE TABLE tag_names (
-    tag_name_id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    user_id INTEGER REFERENCES users(user_id),
+    tag_name_id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    user_id BIGINT REFERENCES users(user_id),
 
     tag_name VARCHAR(32) NOT NULL,
     tag_name_date DATE DEFAULT CURRENT_DATE
@@ -144,16 +144,16 @@ CREATE TABLE tag_names (
 
 CREATE TABLE tags ( 
     tag_id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    tag_name_id INTEGER NOT NULL REFERENCES tag_names(tag_name_id),
-    tag_user_id INTEGER REFERENCES users(user_id),
+    tag_name_id BIGINT NOT NULL REFERENCES tag_names(tag_name_id),
+    tag_user_id BIGINT REFERENCES users(user_id),
 
     tag_date DATE DEFAULT CURRENT_DATE
     );
 
 CREATE TABLE comedian_ratings ( 
     comedian_rating_id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    user_id INTEGER NOT NULL REFERENCES users(user_id),
-    comedian_id INTEGER NOT NULL REFERENCES comedians(comedian_id),
+    user_id BIGINT NOT NULL REFERENCES users(user_id),
+    comedian_id BIGINT NOT NULL REFERENCES comedians(comedian_id),
 
     comedian_rate SMALLINT CHECK (comedian_rate > 0 AND 11 > comedian_rate),
     comedian_date_rate DATE DEFAULT CURRENT_TIMESTAMP
@@ -161,8 +161,8 @@ CREATE TABLE comedian_ratings (
 
 CREATE TABLE show_ratings ( 
     show_rating_id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    user_id INTEGER NOT NULL REFERENCES users(user_id),
-    show_id INTEGER NOT NULL REFERENCES shows(show_id),
+    user_id BIGINT NOT NULL REFERENCES users(user_id),
+    show_id BIGINT NOT NULL REFERENCES shows(show_id),
 
     show_rate SMALLINT CHECK (show_rate > 0 AND 11 > show_rate),
     show_date_rate DATE DEFAULT CURRENT_TIMESTAMP
@@ -174,56 +174,67 @@ CREATE TABLE resource_types (
 );
 
 CREATE TABLE pictures (
-    picture_id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    user_id INTEGER REFERENCES users(user_id),
-    comedian_id INTEGER REFERENCES comedians(comedian_id),
-    place_id INTEGER REFERENCES places(place_id),
+    picture_id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    user_id BIGINT REFERENCES users(user_id),
+    comedian_id BIGINT REFERENCES comedians(comedian_id),
+    place_id BIGINT REFERENCES places(place_id),
     show_id BIGINT REFERENCES shows(show_id),
 
     picture_path VARCHAR(256) NOT NULL
 );
 
 CREATE TABLE resources (
-    resource_id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    resource_type_id INTEGER NOT NULL REFERENCES resource_types(resource_type_id),
-    user_id INTEGER REFERENCES users(user_id),
-    comedian_id  INTEGER REFERENCES comedians(comedian_id),
-    place_id INTEGER REFERENCES places(place_id),
-    event_id INTEGER REFERENCES events(event_id),
+    resource_id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    resource_type_id SMALLINT NOT NULL REFERENCES resource_types(resource_type_id),
+    user_id BIGINT REFERENCES users(user_id),
+    comedian_id  BIGINT REFERENCES comedians(comedian_id),
+    place_id BIGINT REFERENCES places(place_id),
+    event_id BIGINT REFERENCES events(event_id),
 
     resource_href VARCHAR(256) NOT NULL
 );
 
-CREATE TABLE comedian_views (
-    comedian_view_id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    user_id INTEGER REFERENCES users(user_id),
-    comedian_id INTEGER NOT NULL REFERENCES comedians(comedian_id),
+-- CREATE TABLE comedian_views (
+--     comedian_view_id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+--     user_id BIGINT REFERENCES users(user_id),
+--     comedian_id BIGINT NOT NULL REFERENCES comedians(comedian_id),
 
-    comedian_view_date TIMESTAMP without time zone DEFAULT CURRENT_TIMESTAMP
-);
+--     comedian_view_date TIMESTAMP without time zone DEFAULT CURRENT_TIMESTAMP
+-- );
 
-CREATE TABLE show_views (
-    show_view_id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    user_id INTEGER REFERENCES users(user_id),
-    show_id INTEGER NOT NULL REFERENCES shows(show_id),
+-- CREATE TABLE show_views (
+--     show_view_id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+--     user_id BIGINT REFERENCES users(user_id),
+--     show_id BIGINT NOT NULL REFERENCES shows(show_id),
 
-    show_view_date TIMESTAMP without time zone DEFAULT CURRENT_TIMESTAMP
-);
+--     show_view_date TIMESTAMP without time zone DEFAULT CURRENT_TIMESTAMP
+-- );
 
-CREATE TABLE place_views (
-    place_view_id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    user_id INTEGER REFERENCES users(user_id),
-    place_id INTEGER NOT NULL REFERENCES places(place_id),
+-- CREATE TABLE place_views (
+--     place_view_id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+--     user_id BIGINT REFERENCES users(user_id),
+--     place_id BIGINT NOT NULL REFERENCES places(place_id),
 
-    place_view_date TIMESTAMP without time zone DEFAULT CURRENT_TIMESTAMP
-);
+--     place_view_date TIMESTAMP without time zone DEFAULT CURRENT_TIMESTAMP
+-- );
 
-CREATE TABLE event_views (
-    event_view_id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    user_id INTEGER REFERENCES users(user_id),
-    event_id INTEGER NOT NULL REFERENCES events(event_id),
+-- CREATE TABLE event_views (
+--     event_view_id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+--     user_id BIGINT REFERENCES users(user_id),
+--     event_id BIGINT NOT NULL REFERENCES events(event_id),
 
-    event_view_date TIMESTAMP without time zone DEFAULT CURRENT_TIMESTAMP
-);
+--     event_view_date TIMESTAMP without time zone DEFAULT CURRENT_TIMESTAMP
+-- );
 
+CREATE TABLE views (
+    view_id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    user_id BIGINT REFERENCES users(user_id),
+    show_id BIGINT REFERENCES shows(show_id),
+    place_id BIGINT REFERENCES places(place_id),
+    comedian_id BIGINT REFERENCES comedians(comedian_id),
+    event_id BIGINT REFERENCES events(event_id),
+    user_watched_id BIGINT REFERENCES users(user_id),
+
+    view_date TIMESTAMP without time zone DEFAULT CURRENT_TIMESTAMP
+)
 

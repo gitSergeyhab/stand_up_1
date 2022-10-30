@@ -1,6 +1,6 @@
 import { sequelize } from "../sequelize";
 import { Request, Response } from "express";
-import { OrderValues, SQLFunctionName, StatusCode } from "../const";
+import { Column, OrderValues, SQLFunctionName, StatusCode } from "../const";
 import { getDataFromSQL, insertView } from "../utils/sql-utils";
 
 const EventOrder = {
@@ -18,15 +18,16 @@ class EventsController {
                 const events = await sequelize.query(
                     `
                     SELECT 
-                        event_id, event_name, event_name_en,    event_discription, event_date, event_date_added, event_status, event_promo_picture AS event_picture,
+                        event_id, event_name, event_name_en, event_description, event_date, event_date_added, event_status, event_promo_picture AS event_picture,
                         places.place_id, place_name, place_name_en, places.place_promo_picture AS place_picture,
                         user_id, user_nik, user_avatar,
                         countries.country_id, country_name, country_name_en, 
                         get_event_comedians(:id) as event_comedians,
                         get_event_shows(:id) AS event_shows,
-                        get_event_resource(:id) AS event_resources,
-                        get_count_of_event_views(:id, 7) as views,
-                        get_count_of_event_views(:id, 1000000) as total_views
+                        get_resources('event_id', :id)  AS event_resources,
+
+                        get_views_count('event_id', :id, 7) AS views,
+                        get_views_count('event_id', :id, 1000000) AS total_views
                     
                     FROM events
                     LEFT JOIN places USING (place_id)
@@ -45,7 +46,7 @@ class EventsController {
                     return res.status(StatusCode.NotFoundError).json({message: `where is not event with ID: ${id}`})
                 }
 
-                await insertView(id, user_id, SQLFunctionName.InsertEventView)
+                await insertView(id, user_id, Column.Event)
         
                 return res.status(StatusCode.Ok).json({event: events[0]})
             
@@ -72,8 +73,10 @@ class EventsController {
                     event_id, event_name, event_name_en, event_date, event_date_added, event_status, event_promo_picture AS event_picture,
                     countries.country_id, country_name, country_name_en, 
                     place_city, place_city_en,
-                    get_count_of_event_views(event_id, 7) AS views,
-                    get_count_of_event_views(event_id, 1000000) AS total_views,
+
+                    get_views_count('event_id', event_id, 7) AS views,
+                    get_views_count('event_id', event_id, 1000000) AS total_views,
+
                     ABS(EXTRACT (DAY FROM ( NOW() - event_date )))  AS upcoming
 
                 FROM events

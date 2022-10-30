@@ -1,6 +1,6 @@
 import { sequelize } from "../sequelize";
 import { Request, Response } from "express";
-import { OrderValues, StatusCode, SQLFunctionName } from "../const";
+import { OrderValues, StatusCode, SQLFunctionName, Column } from "../const";
 import { getDataFromSQL, insertView } from "../utils/sql-utils";
 
 
@@ -23,16 +23,16 @@ class PlacesController {
                         place_id, place_name, place_name_en, place_city, place_city_en, place_date_founded, date_place_added, place_description, place_promo_picture,   
                         countries.country_id, country_name, country_name_en,
                         users.user_id, user_nik,
-                        picture_paths,
-                        get_place_resource(:id) AS resources,
-                        get_count_of_place_views(:id, 7) as views,
-                        get_count_of_place_views(:id, 1000000) as total_views
+                        get_resources('place_id', :id) AS resources,
+                        get_pictures('place_id', :id) AS pictures,
+
+                        get_views_count('place_id', :id, 7) AS views,
+                        get_views_count('place_id', :id, 1000000) AS total_views
                     FROM places
                     LEFT JOIN countries USING(country_id)
                     LEFT JOIN users ON user_id = user_added_id
-                    LEFT JOIN get_place_pictures() USING(place_id)
                     WHERE place_id = :id
-                    GROUP BY  place_id, countries.country_id, users.user_id, picture_paths
+                    GROUP BY  place_id, countries.country_id, users.user_id
                 ;
                     `,
                     { 
@@ -45,7 +45,7 @@ class PlacesController {
                     return res.status(StatusCode.NotFoundError).json({message: `not found place with ID: ${id}`})
                 }
 
-                await insertView(id, user_id, SQLFunctionName.InsertPlaceView)
+                await insertView(id, user_id, Column.Place)
 
         
                 return res.status(StatusCode.Ok).json({place: places[0]})
@@ -69,8 +69,10 @@ class PlacesController {
                 SELECT
                     place_id, place_name, place_name_en, place_city, place_city_en, place_promo_picture,
                     country_id, country_name, country_name_en,
-                    get_count_of_place_views(place_id, 7) as views,
-                    get_count_of_place_views(place_id, 1000000) as total_views
+
+                    get_views_count('place_id', place_id, 7) AS views,
+                    get_views_count('place_id', place_id, 1000000) AS total_views
+
                 FROM places
                 LEFT JOIN countries USING (country_id)
 
