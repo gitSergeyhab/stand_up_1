@@ -39,7 +39,8 @@ INSERT INTO countries (country_name, country_name_en) VALUES
     ('Азербайджан', 'Azerbaijan'),
     ('Албания', 'Albania');
 
-INSERT INTO resource_types(resource_type_name) VALUES ('WEB_SITE'), ('VK'), ('IG');
+INSERT INTO resource_types(resource_type_name) VALUES 
+('Site'), ('Facebook'), ('YouTube'), ('WhatsApp'), ('Instagram'), ('VKontakte'), ('Telegram');
 
 
 INSERT INTO users (user_email, user_password, user_nik, user_status, country_id, user_city) VALUES
@@ -87,9 +88,18 @@ INSERT INTO resources(resource_type_id, place_id, resource_href) VALUES
 (3, 1, 'https://instagram.com/ig-1');
 
 INSERT INTO resources(resource_type_id, comedian_id, resource_href) VALUES 
-(2, 1, 'https://vk.com/vk-1'),
-(2, 2, 'https://vk.com/vk-1'),
-(3, 2, 'https://instagram.com/ig-1');
+(1, 1, 'https://site-1.com'),
+(2, 1, 'https://Facebook.com/fb-1'),
+(3, 1, 'https://YouTube.com/yt-1'),
+(4, 1, 'https://wa.me/79051155011'),
+(5, 1, 'https://instagram.com/ig-1'),
+(6, 1, 'https://vk.com/ig-1'),
+(7, 1, 'https://t.me/+79274238608'),
+(1, 2, 'https://site-2.com'),
+(2, 2, 'https://Facebook.com/fb-2'),
+(3, 2, 'https://YouTube.com/yt-2'),
+(2, 3, 'https://Facebook.com/fb-3'),
+(3, 3, 'https://YouTube.com/yt-3');
 
 
 

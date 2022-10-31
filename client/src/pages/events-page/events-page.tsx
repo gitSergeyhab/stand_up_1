@@ -4,17 +4,15 @@ import { Link } from 'react-router-dom';
 import { ComedianTypeCC, ComedianTypeSC } from '../../types/comedian-types';
 import { adaptComediansToClient } from '../../utils/adapters/comedian-adapters';
 
-// import { Link } from 'react-router-dom';
-
 
 type ResultType = { comedians: ComedianTypeSC[]; count: number };
 
-const BASE_URL = 'http://localhost:5000/api/comedians';
+const BASE_URL = 'http://localhost:5000/api/users/2';
 
 
-const ComedianCard = ({comedian} : {comedian : ComedianTypeCC}) => {
+const EventCard = ({event} : {event : ComedianTypeCC}) => {
 
-  const { avgRate, comedianCity, comedianFirstName, comedianLastName, comedianId, countryName, numberOfRate, totalViews, comedianAvatar } = comedian;
+  const { avgRate, comedianCity, comedianFirstName, comedianLastName, comedianId, countryName, numberOfRate, totalViews, comedianAvatar } = event;
 
   return (
 
@@ -30,31 +28,31 @@ const ComedianCard = ({comedian} : {comedian : ComedianTypeCC}) => {
   );
 };
 
-export const ComediansPage = () => {
+export const EventsPage = () => {
 
-  const [comedians, setComedians] = useState<ComedianTypeCC[]>([]);
+  const [events, setEvents] = useState<ComedianTypeCC[]>([]);
 
 
   useEffect(() => {
-    const fetchComedians = async() => {
+    const fetchEvents = async() => {
       try {
         const {data} = await axios.get<ResultType>(BASE_URL);
-        const comediansCC = data.comedians.map((item) => adaptComediansToClient(item));
-        // console.log(data);
-        setComedians(comediansCC);
+        // const comediansCC = data.comedians.map((item) => adaptComediansToClient(item));
+        console.log(data);
+        // setEvents(comediansCC);
       } catch (err) {
-        // console.log(err);
+        console.log(err);
       }
     };
-    fetchComedians();
+    fetchEvents();
   }, []);
 
 
-  const comedianElements = comedians.length ? comedians.map((item) => <li key={item.comedianId}><ComedianCard comedian={item}/></li>) : null;
+  const comedianElements = events.length ? events.map((item) => <li key={item.comedianId}><EventCard event={item}/></li>) : null;
 
   return (
     <main>
-      <h2>Main</h2>
+      <h2>Events</h2>
       <ul>{comedianElements}</ul>
     </main>
   );

@@ -1,10 +1,15 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { OneComedianTypeCC, OneComedianTypeSC } from '../../types/types';
-import { adaptOneComedianToClient } from '../../utils/adapters';
+import { Picture } from '../../components/picture/picture';
+import { ResourceName, SocialLink } from '../../components/social-link/social-link';
+import { OneComedianTypeCC, OneComedianTypeSC } from '../../types/comedian-types';
+import { adaptOneComedianToClient } from '../../utils/adapters/comedian-adapters';
+
 
 // import { Link } from 'react-router-dom';
+
+export type SimpleDict = {[key: string] : string}
 
 
 const BASE_URL = 'http://localhost:5000/api/comedians';
@@ -20,14 +25,10 @@ export const OneComedianPage = () => {
   useEffect(() => {
     const fetchComedian = async() => {
       if (id) {
-        // console.log('fetchComedian');
         try {
           const {data} = await axios.get<{comedian: OneComedianTypeSC}>(`${BASE_URL}/${id}`);
           const comediansCC = adaptOneComedianToClient(data.comedian);
           setComedian(comediansCC);
-          // console.log(data, comediansCC);
-
-          // console.log(comediansCC, data);
         } catch (err) {
           // console.log(err);
         }
@@ -38,19 +39,6 @@ export const OneComedianPage = () => {
     fetchComedian();
   }, [id]);
 
-  // useEffect(() => {
-  //   const fetchComedians = async() => {
-  //     try {
-  //       const {data} = await axios.get<ComedianTypeSC>(`${BASE_URL}/2`);
-  //       console.log(data);
-  //     } catch (err) {
-  //       console.log(err);
-  //     }
-  //   };
-  //   fetchComedians();
-  // }, []);
-
-  // console.log(comedians);
 
   if (!comedian) {return (<h1>Еще нет ...</h1>);}
 
@@ -63,11 +51,15 @@ export const OneComedianPage = () => {
     comedianDateAdded, comedianDateBirth, comedianDateDeath,
     comedianDescription,
     comedianFirstName, comedianFirstNameEn, comedianLastName, comedianLastNameEn,
-    picturePaths, resources, comedianAvatar,
+    pictures, resources, comedianAvatar,
   } = comedian;
 
   // console.log(comedian);
-  const picturePathsElement = picturePaths ? picturePaths.map((item) => <li key={item}>{item}</li>) : null;
+  const pictureElement = pictures ? pictures.map((item) => <li key={item.id}><Picture item={item} name={`${comedianFirstName} ${comedianLastName || ''}`} /></li>) : null;
+  const pictureElementList = pictures ? <ul>{pictureElement}</ul> : null;
+
+  const resourceElement = resources ? resources.filter((item) => item.type !== ResourceName.Site).map((item) => <li key={item.id}><SocialLink item={item} /></li>) : null;
+  const resourceElementList = resources ? <ul>{resourceElement}</ul> : null;
 
 
   return (
@@ -75,7 +67,9 @@ export const OneComedianPage = () => {
       <h2>Comedian</h2>
       <div>
         <h1>{userNik} {comedianFirstName} {comedianFirstNameEn} {comedianLastName} {comedianLastNameEn}</h1>
-        <img src={comedianAvatar || '/comedian-no-avatar'} alt={comedianFirstName}/>
+        {/* <img src={comedianAvatar || '/comedian-no-avatar'} alt={comedianFirstName}/> */}
+        <img src={'/img/default/any.jpg' || comedianAvatar} alt={comedianFirstName} width={'50%'}/>
+
         <div>
           {comedianId}, {countryId}, {userId},
           {userNik},
@@ -85,6 +79,12 @@ export const OneComedianPage = () => {
           {comedianDescription},
           {comedianFirstName}, {comedianFirstNameEn}, {comedianLastName}, {comedianLastNameEn},
           {comedianAvatar},
+            --
+          {pictureElementList}
+
+          --
+
+          {resourceElementList}
 
         </div>
 

@@ -17,10 +17,10 @@ class ShowsController {
                         place_id, place_name, place_name_en,
                         language_id, language_name, language_name_en,
                         users.user_id AS user_show_added_id, user_nik AS user_show_added_nik,
-                        get_pictures('show_id', :id),
+                        get_pictures('show_id', :id) AS pictures,
                         get_views_count('show_id', :id, 7) AS views,
                         get_views_count('show_id', :id, 1000000) AS total_views,
-                        video_paths, is_pro, minutes, user_ids, user_niks,
+                        get_videos_by_show(:id) AS videos,
                         COUNT (show_rating_id)::int AS number_of_rate, AVG (show_rate)::real AS avg_rate
                     FROM shows
                     LEFT JOIN comedians USING (comedian_id)
@@ -28,13 +28,11 @@ class ShowsController {
                     LEFT JOIN languages USING (language_id)
                     LEFT JOIN places USING (place_id)
                     LEFT JOIN users ON shows.user_added_id = user_id
-                    LEFT JOIN get_show_videos() USING (show_id)
                     LEFT JOIN show_ratings USING (show_id)
                     
                     WHERE show_id = :id
                     GROUP BY language_name, language_name_en, users.user_id, 
-                    show_id, comedian_id, comedian_first_name, comedian_last_name, comedian_first_name_en, comedian_last_name_en, comedian_avatar, countries.country_id, place_name, place_name_en,
-                    show_id, video_paths, is_pro, minutes, user_ids, user_niks
+                    show_id, comedian_id, comedian_first_name, comedian_last_name, comedian_first_name_en, comedian_last_name_en, comedian_avatar, countries.country_id, place_name, place_name_en
                     ;
                     `,
                     { 

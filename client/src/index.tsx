@@ -1,6 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { App } from './components/app/app';
+import { App } from './app/app';
+
+import 'bootstrap-icons/font/bootstrap-icons.css';
+import '@fortawesome/fontawesome-svg-core/styles.css';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement,

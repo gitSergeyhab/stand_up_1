@@ -66,7 +66,7 @@ class UserController {
                     get_review_user_data(:id, 3) AS reviews,
                     get_user_views_data(:id, 10) AS latest_views,
                     picture_path,
-                    get_user_resource(:id) AS resources,
+                    get_resources('user_id', 1) AS resources,
                     get_show_ratings_user_data(:id, 3) AS show_ratings,
                     get_comedian_ratings_user_data(:id, 3) AS comedian_ratings
 

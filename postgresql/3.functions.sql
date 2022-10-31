@@ -1,16 +1,16 @@
 CREATE OR REPLACE FUNCTION get_review_user_data(user_idx bigint, lim int) RETURNS JSON AS $$
 	SELECT 
 		JSON_AGG(JSON_BUILD_OBJECT(
-			'review_id', review_id,
-			'show_id', show_id,
+			'reviewId', review_id,
+			'showId', show_id,
 			'title', review_title,
 			'text', review_text,
-			'review_date', review_date_updated,
-			'show_name', show_name,
-			'comedian_first_name', comedian_first_name,
-			'comedian_first_name_en', comedian_first_name_en,
-			'comedian_last_name', comedian_last_name,
-			'comedian_last_name_en', comedian_last_name_en
+			'reviewDate', review_date_updated,
+			'showName', show_name,
+			'comedianFirstName', comedian_first_name,
+			'comedianFirstNameEn', comedian_first_name_en,
+			'comedianLastName', comedian_last_name,
+			'comedianLastNameEn', comedian_last_name_en
 		))
 	FROM (
 		SELECT 
@@ -30,14 +30,14 @@ $$ LANGUAGE SQL;
 CREATE OR REPLACE FUNCTION get_show_ratings_user_data(user_idx bigint, lim int) RETURNS JSON AS $$
 	SELECT 
 		JSON_AGG(JSON_BUILD_OBJECT(
-			'show_id', show_id,
-			'show_rate', show_rate,
-			'date_rate', show_date_rate,
-			'show_name', show_name,
-			'comedian_first_name', comedian_first_name,
-			'comedian_first_name_en', comedian_first_name_en,
-			'comedian_last_name', comedian_last_name,
-			'comedian_last_name_en', comedian_last_name_en
+			'showId', show_id,
+			'showRate', show_rate,
+			'dateRate', show_date_rate,
+			'showName', show_name,
+			'comedianFirstName', comedian_first_name,
+			'comedianFirstNameEn', comedian_first_name_en,
+			'comedianLastName', comedian_last_name,
+			'comedianLastNameEn', comedian_last_name_en
 		))
 	FROM (
 		SELECT
@@ -57,13 +57,13 @@ $$ LANGUAGE SQL;
 CREATE OR REPLACE FUNCTION get_comedian_ratings_user_data(user_idx bigint, lim int) RETURNS JSON AS $$
 	SELECT 
 		JSON_AGG(JSON_BUILD_OBJECT(
-			'comedian_id', comedian_id,
-			'comedian_rate', comedian_rate,
-			'date_rate', comedian_date_rate, 
-			'comedian_first_name', comedian_first_name,
-			'comedian_first_name_en', comedian_first_name_en,
-			'comedian_last_name', comedian_last_name,
-			'comedian_last_name_en', comedian_last_name_en
+			'comedianId', comedian_id,
+			'comedianRate', comedian_rate,
+			'dateRate', comedian_date_rate, 
+			'comedianFirstName', comedian_first_name,
+			'comedianFirstNameEn', comedian_first_name_en,
+			'comedianLastName', comedian_last_name,
+			'comedianLastNameEn', comedian_last_name_en
 		))
 	FROM (
 		SELECT
@@ -127,7 +127,7 @@ $$ LANGUAGE SQL;
 -- $$ LANGUAGE SQL;
 
 CREATE OR REPLACE FUNCTION get_latest_views_by_user(user_idx BIGINT)
-RETURNS TABLE(view_id BIGINT, view_date TIMESTAMP, type VARCHAR, date_id BIGINT, dist VARCHAR, picture VARCHAR) AS $$
+RETURNS TABLE(view_id BIGINT, view_date TIMESTAMP, type VARCHAR, data_id BIGINT, picture VARCHAR, dist VARCHAR) AS $$
 	SELECT view_id, view_date,
 	CASE
 	   WHEN views.show_id IS NOT NULL THEN 'shows'
@@ -140,7 +140,7 @@ RETURNS TABLE(view_id BIGINT, view_date TIMESTAMP, type VARCHAR, date_id BIGINT,
 	   WHEN views.comedian_id IS NOT NULL THEN views.comedian_id
 	   WHEN views.event_id IS NOT NULL THEN views.event_id
 	   WHEN views.place_id IS NOT NULL THEN views.place_id
-	END AS date_id,
+	END AS data_id,
 	CASE
 	   WHEN show_poster IS NOT NULL THEN show_poster
 	   WHEN comedian_avatar IS NOT NULL THEN comedian_avatar
@@ -162,14 +162,14 @@ CREATE OR REPLACE FUNCTION get_user_views_data(user_idx bigint, lim int)
 RETURNS JSON AS $$
 SELECT JSON_AGG(JSON_BUILD_OBJECT(
 	'id', view_id,
-	'date_id', date_id,
-	'view_date', view_date,
+	'dataId', data_id,
+	'viewDate', view_date,
 	'picture', picture,
 	'type', type
 )) FROM (
 	SELECT * FROM (
-		SELECT DISTINCT ON (dist) dist, view_id, type, date_id, view_date, picture
-		from get_latest_views_by_user(user_idx) 
+		SELECT DISTINCT ON (dist) dist, view_id, type, data_id, view_date, picture
+		FROM get_latest_views_by_user(user_idx) 
 		ORDER BY dist, view_date DESC
 	) AS d
 ORDER BY view_date DESC
@@ -223,8 +223,9 @@ RETURNS SETOF JSON AS $$
 BEGIN
 	RETURN QUERY EXECUTE '
 	SELECT
-	JSON_AGG(JSON_BUILD_OBJECT(''id'', resource_id, ''type'', resource_type_id, ''href'', resource_href))
+	JSON_AGG(JSON_BUILD_OBJECT(''id'', resource_id, ''type'', resource_type_name, ''href'', resource_href))
 	FROM resources 
+	LEFT JOIN resource_types USING(resource_type_id)
 	WHERE ' || quote_ident(_col) || ' = ' || idx ||'
 	';
 END     
@@ -416,4 +417,17 @@ CREATE OR REPLACE FUNCTION get_event_shows(event_idx INT) RETURNS JSON AS $$
 		ORDER BY num DESC
 		LIMIT 10
 	) as e
-$$ LANGUAGE SQL
+$$ LANGUAGE SQL;
+
+
+CREATE OR REPLACE FUNCTION get_videos_by_show(idx BIGINT) RETURNS JSON AS $$
+	SELECT
+	JSON_AGG(JSON_BUILD_OBJECT('id', show_video_id, 'pro', show_video_professional, 'minutes', show_minutes, 'userId', user_id, 'userNik', user_nik, 'path', show_video_path))
+	FROM (
+		SELECT * 
+		FROM show_videos 
+		WHERE show_id = 2
+		ORDER BY show_video_id DESC
+	) AS sv
+	LEFT JOIN users USING(user_id);
+$$ LANGUAGE SQL;
