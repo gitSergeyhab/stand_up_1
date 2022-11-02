@@ -29,13 +29,6 @@ CREATE TABLE users (
     user_date_registration DATE DEFAULT CURRENT_DATE
     );
 
--- CREATE TABLE user_stats ( 
---     user_stat_id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
---     user_id INTEGER NOT NULL REFERENCES users(user_id),
-
---     user_comedian_stats REAL,
---     user_show_stats REAL
---     );
 
 CREATE TABLE comedians ( 
     comedian_id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
@@ -92,7 +85,6 @@ CREATE TABLE comedians_events (
 
     CONSTRAINT comedians_events_pkey PRIMARY KEY (comedian_id, event_id)
 );
-
 
 
 CREATE TABLE shows ( 
@@ -194,37 +186,6 @@ CREATE TABLE resources (
     resource_href VARCHAR(256) NOT NULL
 );
 
--- CREATE TABLE comedian_views (
---     comedian_view_id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
---     user_id BIGINT REFERENCES users(user_id),
---     comedian_id BIGINT NOT NULL REFERENCES comedians(comedian_id),
-
---     comedian_view_date TIMESTAMP without time zone DEFAULT CURRENT_TIMESTAMP
--- );
-
--- CREATE TABLE show_views (
---     show_view_id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
---     user_id BIGINT REFERENCES users(user_id),
---     show_id BIGINT NOT NULL REFERENCES shows(show_id),
-
---     show_view_date TIMESTAMP without time zone DEFAULT CURRENT_TIMESTAMP
--- );
-
--- CREATE TABLE place_views (
---     place_view_id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
---     user_id BIGINT REFERENCES users(user_id),
---     place_id BIGINT NOT NULL REFERENCES places(place_id),
-
---     place_view_date TIMESTAMP without time zone DEFAULT CURRENT_TIMESTAMP
--- );
-
--- CREATE TABLE event_views (
---     event_view_id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
---     user_id BIGINT REFERENCES users(user_id),
---     event_id BIGINT NOT NULL REFERENCES events(event_id),
-
---     event_view_date TIMESTAMP without time zone DEFAULT CURRENT_TIMESTAMP
--- );
 
 CREATE TABLE views (
     view_id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
@@ -236,5 +197,5 @@ CREATE TABLE views (
     user_watched_id BIGINT REFERENCES users(user_id),
 
     view_date TIMESTAMP without time zone DEFAULT CURRENT_TIMESTAMP
-)
+);
 

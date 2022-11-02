@@ -2,7 +2,8 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Picture } from '../../components/picture/picture';
-import { ResourceName, SocialLink } from '../../components/social-link/social-link';
+import { SocialLink } from '../../components/social-link/social-link';
+import { DefaultPath, ResourceName } from '../../const';
 import { OneComedianTypeCC, OneComedianTypeSC } from '../../types/comedian-types';
 import { adaptOneComedianToClient } from '../../utils/adapters/comedian-adapters';
 
@@ -59,16 +60,18 @@ export const OneComedianPage = () => {
   const pictureElementList = pictures ? <ul>{pictureElement}</ul> : null;
 
   const resourceElement = resources ? resources.filter((item) => item.type !== ResourceName.Site).map((item) => <li key={item.id}><SocialLink item={item} /></li>) : null;
-  const resourceElementList = resources ? <ul>{resourceElement}</ul> : null;
+  const site = resources ? resources.find((item) => item.type === ResourceName.Site) : null;
+  const siteElement = site ? <a href={site.href}>на сайт</a> : null;
+  const resourceElementList = <ul>{resourceElement}</ul>;
 
 
   return (
-    <main>
+    <main style={{ height: '100%' }}>
       <h2>Comedian</h2>
       <div>
         <h1>{userNik} {comedianFirstName} {comedianFirstNameEn} {comedianLastName} {comedianLastNameEn}</h1>
-        {/* <img src={comedianAvatar || '/comedian-no-avatar'} alt={comedianFirstName}/> */}
-        <img src={'/img/default/any.jpg' || comedianAvatar} alt={comedianFirstName} width={'50%'}/>
+        {/* <img src={comedianAvatar || DefaultPath.ComedianAvatar} alt={comedianFirstName}/> */}
+        <img src={DefaultPath.ComedianAvatar} alt={comedianFirstName} width={'50%'}/>
 
         <div>
           {comedianId}, {countryId}, {userId},
@@ -85,6 +88,7 @@ export const OneComedianPage = () => {
           --
 
           {resourceElementList}
+          {siteElement}
 
         </div>
 

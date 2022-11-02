@@ -1,6 +1,7 @@
 import axios from 'axios';
 import {useState, useEffect} from 'react';
 import { Link } from 'react-router-dom';
+import { DefaultPath } from '../../const';
 import { ComedianTypeCC, ComedianTypeSC } from '../../types/comedian-types';
 import { adaptComediansToClient } from '../../utils/adapters/comedian-adapters';
 
@@ -21,7 +22,10 @@ const ComedianCard = ({comedian} : {comedian : ComedianTypeCC}) => {
     <Link to={`/comedians/${comedianId}`}>
       <h3>{comedianFirstName} {comedianLastName}</h3>
       {/* {comedian_avatar && <img src={comedian_avatar} alt={comedian_first_name} width='400' height='300'/>} */}
-      <img src={comedianAvatar || '/no-avatar'} alt={comedianFirstName} width='400' height='300'/>
+      {/* <img src={comedianAvatar || DefaultPath.ComedianAvatar} alt={comedianFirstName} width='400' height='300'/> */}
+      {comedianAvatar}
+
+      <img src={DefaultPath.ComedianAvatar} alt={comedianFirstName} width='300'/>
       <p>{countryName} {comedianCity ? `: ${comedianCity}` : null}</p>
       <p>оценка: {avgRate} ({numberOfRate}); просмотров: {totalViews}</p>
 

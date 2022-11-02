@@ -7,7 +7,7 @@ import { adaptComediansToClient } from '../../utils/adapters/comedian-adapters';
 
 type ResultType = { comedians: ComedianTypeSC[]; count: number };
 
-const BASE_URL = 'http://localhost:5000/api/users/2';
+const BASE_URL = 'http://localhost:5000/api/place/2';
 
 
 const EventCard = ({event} : {event : ComedianTypeCC}) => {
