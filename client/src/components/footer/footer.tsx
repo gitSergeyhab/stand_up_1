@@ -1,5 +1,5 @@
 import { Container, Typography, Paper, Box } from '@mui/material';
-
+import { Color } from '../../const';
 
 export default function Footer() {
   return (
@@ -12,30 +12,17 @@ export default function Footer() {
       color: 'white'
     }} component="footer" square variant="outlined"
     >
-      <Container maxWidth="lg">
-        <Box
-          sx={{
-            flexGrow: 1,
-            justifyContent: 'center',
-            display: 'flex',
-            my:1,
-            color: 'white'
-          }}
-        >
-          <div>
-            {/* <Image priority src="/Logo.svg" width={75} height={30} alt="Logo" /> */}
-          </div>
-        </Box>
+      <Container maxWidth="lg" component={'footer'}>
 
         <Box
           sx={{
             flexGrow: 1,
             justifyContent: 'center',
             display: 'flex',
-            mb: 2,
+          // mb: 2,
           }}
         >
-          <Typography variant="caption">
+          <Typography variant="caption" color={Color.Gold}>
               Copyright ©2022. [] Limited
           </Typography>
         </Box>
