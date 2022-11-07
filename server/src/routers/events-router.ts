@@ -6,6 +6,7 @@ const eventsRouter =  Router();
 eventsRouter.get('/:id', eventsController.getEventById);
 eventsRouter.get('/', eventsController.getEventsByQuery);
 
+
 // comedianRouter.get('/:id', comedianController.getComedianById);
 // comedianRouter.get('/:id/votes', comedianController.getVotesByComedianId);
 

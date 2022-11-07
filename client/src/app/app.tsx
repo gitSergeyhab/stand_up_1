@@ -14,7 +14,13 @@ export const App = () => {
 
   const AppRoute = {
     Main: '/',
-    Comedian: '/comedians/:id',
+
+    Comedian: '/comedians/:id/info',
+    ComedianShow: '/comedians/:id/show',
+    ComedianEvent: '/comedians/:id/event',
+    ComedianPhoto: '/comedians/:id/photo',
+    ComedianRatings: '/comedians/:id/ratings',
+
     Comedians: '/comedians',
     Show: '/shows/:id',
     Shows: '/shows',

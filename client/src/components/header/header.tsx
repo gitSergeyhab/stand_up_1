@@ -3,6 +3,7 @@ import AdbIcon from '@mui/icons-material/Adb';
 import { Container, AppBar, Box, Toolbar, IconButton, Typography, Avatar, Button, MenuItem, Tooltip, Menu } from '@mui/material';
 
 import { useState } from 'react';
+import { LogoSvg } from '../logo-svg/logo-svg';
 
 const pages = ['Products', 'Pricing', 'Blog'];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
@@ -38,7 +39,8 @@ export const Header = () => {
     >
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
+          <LogoSvg width={24}/>
+          {/* <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} /> */}
           <Typography
             variant="h6"
             noWrap
@@ -94,7 +96,8 @@ export const Header = () => {
             </Menu>
           </Box>
 
-          <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
+          {/* <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} /> */}
+          <LogoSvg width={30}/>
 
 
           <Typography

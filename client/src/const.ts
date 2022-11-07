@@ -8,6 +8,14 @@ export const enum ResourceName {
     Telegram = 'Telegram',
   }
 
+export const enum ContentName {
+  Users = 'users',
+  Comedians = 'comedians',
+  Events = 'events',
+  Shows = 'shows',
+  Places = 'places'
+}
+
 export const DefaultPath = {
   UserAvatar: '/img/default/user.jpg',
   ComedianAvatar: '/img/default/comedian.jpg',
@@ -24,5 +32,4 @@ export const Color = {
   Gold: '#ff9b05',
   GoldD: '#ee7b27',
   BrownMain: '#300606'
-
 };

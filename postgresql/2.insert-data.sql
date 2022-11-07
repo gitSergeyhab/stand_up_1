@@ -130,6 +130,14 @@ INSERT INTO events (place_id, user_id, event_name, event_description, event_date
 (3,3, 'Event 55', '55 55 55 55 event_discription', '01.03.2022', 'canceled', 'pics/events/ev-55.jpg'),
 (3,3, 'Event 666', '666 666 666', '04.01.2023', 'planned', 'pics/events/ev-6.jpg');
 
+INSERT INTO events (place_id, user_id, event_name, event_description, event_date, event_status, event_promo_picture ) VALUES
+(1,1, 'First Event1', 'First Event event_discription', '01.01.2021', 'ended', 'pics/events/ev-1.jpg'),
+(2,1, 'Second Event1', 'Second Second Event event_discription', '01.02.2021', 'endedended', 'pics/events/ev-2.jpg'),
+(2,1, 'Third Event1', 'Third Third Third Event event_discription', '01.01.2020', 'ended', 'pics/events/ev-3.jpg'),
+(3,2, 'Event 41', '444444444 event_discription', '01.02.2020', 'ended', 'pics/events/ev-444.jpg'),
+(3,3, 'Event 551', '55 55 55 55 event_discription', '01.03.2019', 'ended', 'pics/events/ev-55.jpg'),
+(3,3, 'Event 6661', '666 666 666', '04.01.2018', 'ended', 'pics/events/ev-6.jpg');
+
 
 
 INSERT INTO shows(
@@ -273,6 +281,19 @@ INSERT INTO comedians_events VALUES
 (3,2), 
 (4,1), 
 (4,2); 
+
+INSERT INTO comedians_events VALUES
+(1,7), 
+(1,8), 
+(1,9), 
+(1,10), 
+(1,11), 
+(2,12), 
+(3,7), 
+(3,10), 
+(3,9), 
+(4,8), 
+(4,7); 
 
 INSERT INTO resources(resource_type_id, event_id, resource_href) VALUES 
 (2, 1, 'https://vk.com/vk-ev-1'),

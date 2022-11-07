@@ -199,9 +199,53 @@ class ComedianController {
             return res.status(StatusCode.Ok).json(data);
 
         } catch {
-            return res.status(StatusCode.ServerError).json({message: 'error get shows by query'})
+            return res.status(StatusCode.ServerError).json({message: 'error getVotesByComedianId'})
         }
 
+    }
+
+    async getEventsByComedianId(req: Request, res: Response) {
+        try {
+            const {id} = req.params;
+            const {year = null, status = 'planned'} = req.query;
+
+            const where = `
+                WHERE comedian_id = :id'
+                ${year ? 'AND EXTRACT( YEAR FROM event_date) = :year' : '' }  
+                AND event_status = :status 
+            `;
+
+            const result = await sequelize.query(
+                `
+                SELECT
+                event_id, event_name, event_name_en, event_date, event_status, event_promo_picture, place_id, place_name, comedian_name AS title_name
+                FROM events
+                LEFT JOIN comedians_events USING (event_id)
+                LEFT JOIN comedians USING (comedian_id)
+                LEFT JOIN places USING (place_id)
+
+                ${where}
+
+                ORDER BY ABS(EXTRACT( DAY FROM (NOW() - event_date))) ASC
+                ;
+                `,
+                {
+                    replacements: { id, year, status },
+                    type: 'SELECT'
+                }
+            )
+
+            
+            const data = getDataFromSQL(result, 'events')
+
+
+            return res.status(200).json({data});
+    
+   
+        } catch(err) {
+            console.log(err)
+            return res.status(500).json({message: 'error get shows by query'})
+        }
     }
 
 }

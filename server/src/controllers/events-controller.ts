@@ -118,6 +118,8 @@ class EventsController {
             return res.status(500).json({message: 'error get shows by query'})
         }
     }
+
+
 }
 
 
