@@ -8,6 +8,7 @@ import { Header } from '../components/header/header';
 import Footer from '../components/footer/footer';
 import { Box } from '@mui/joy';
 import CssBaseline from '@mui/material/CssBaseline';
+import { OneComedianPageEvents } from '../pages/one-comedian-page-events/one-comedian-page-events';
 
 
 export const App = () => {
@@ -16,9 +17,9 @@ export const App = () => {
     Main: '/',
 
     Comedian: '/comedians/:id/info',
-    ComedianShow: '/comedians/:id/show',
-    ComedianEvent: '/comedians/:id/event',
-    ComedianPhoto: '/comedians/:id/photo',
+    ComedianShows: '/comedians/:id/shows',
+    ComedianEvents: '/comedians/:id/events',
+    ComedianPhotos: '/comedians/:id/photos',
     ComedianRatings: '/comedians/:id/ratings',
 
     Comedians: '/comedians',
@@ -46,6 +47,9 @@ export const App = () => {
 
               <Route path={AppRoute.Comedians} element={<ComediansPage/>}/>
               <Route path={AppRoute.Comedian} element={<OneComedianPage/>}/>
+              <Route path={AppRoute.ComedianEvents} element={<OneComedianPageEvents/>}/>
+
+
               <Route path={AppRoute.Events} element={<EventsPage/>}/>
 
 

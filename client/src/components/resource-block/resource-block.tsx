@@ -3,7 +3,7 @@ import { ResourceType } from '../../types/types';
 
 import { List } from '@mui/material';
 import { SocialSVG } from '../social-svg/social-svg';
-import { ResourceName } from '../../const';
+import { ResourceName } from '../../const/const';
 
 import './x.css';
 
@@ -32,7 +32,7 @@ export const ResourceBlock = ({resources} : {resources: ResourceType[] | null}) 
   return (
     <Box >
 
-      <List sx={{ display: 'flex', justifyContent:'start', minWidth: '320px' }} >
+      <List sx={{ display: 'flex', justifyContent:'start' }} >
         {resourceElements}
         {site ? <ResourceItem item={site}/> : null }
       </List>

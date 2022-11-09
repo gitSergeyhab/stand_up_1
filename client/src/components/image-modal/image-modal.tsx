@@ -5,7 +5,7 @@ import ModalDialog from '@mui/joy/ModalDialog';
 import {Box, ImageList, ImageListItem} from '@mui/material';
 
 import {PictureType} from '../../types/types';
-import { KeyNext, KeyPrev } from '../../const';
+import { KeyNext, KeyPrev } from '../../const/const';
 
 
 const getImageNumbers = (images: PictureType[]) => {

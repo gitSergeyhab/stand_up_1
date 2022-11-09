@@ -1,9 +1,9 @@
-import { Box, List, ListItem, Typography } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 
 
-import { Link, useParams, useLocation } from 'react-router-dom';
+import { useParams, useLocation } from 'react-router-dom';
 import { AboutBlock } from '../../components/about-block/about-block';
 import { ImageModal } from '../../components/image-modal/image-modal';
 import { ImgList } from '../../components/img-list/img-list';
@@ -14,10 +14,12 @@ import { OneComedianTypeCC, OneComedianTypeSC } from '../../types/comedian-types
 import { PictureType } from '../../types/types';
 import { adaptOneComedianToClient } from '../../utils/adapters/comedian-adapters';
 
-import VisibilityIcon from '@mui/icons-material/Visibility';
 
-import './tabs.css';
 import { Titles } from '../../components/titles/titles';
+import { TopTabs } from '../../components/top-tabs/top-tabs';
+import { ContentName } from '../../const/const';
+import { ViewsBlock } from '../../components/views-block/views-block';
+import { TabData } from '../../const/data';
 
 
 const pictures = [
@@ -32,39 +34,13 @@ const pictures = [
 ];
 
 
-const TABS = [
-  {name: 'Информация', path: 'info' },
-  {name: 'Выступления', path: 'shows' },
-  {name: 'События', path: 'events' },
-  {name: 'Фото', path: 'photos' },
-  {name: 'Оценки', path: 'ratings' },
-];
-
-const getTabs = (tabs: {name: string; path: string}[], type: string, id: string) => tabs.map(({name, path}) => ({name, path, loc: `/${type}/${id}/${path}`}));
-
-export type SimpleDict = {[key: string] : string}
-
-
 const BASE_URL = 'http://localhost:5000/api/comedians';
-
-type TabType = {name: string; path: string; loc: string}
-
-const Tab = ({tab, pathName} : {tab: TabType; pathName: string }) => {
-
-  const className = tab.loc === pathName ? 'active' : '';
-
-  return (
-    <ListItem sx={{ display: 'flex', justifyContent:'center', pb: '16px', pt: '16px'}} className={className}>
-      <Link to={tab.loc}>{tab.name}</Link>
-    </ListItem>
-  );
-};
 
 
 export const OneComedianPage = () => {
 
-  const {id} = useParams();
-  const location = useLocation();
+  const { id } = useParams();
+  const { pathname } = useLocation();
 
 
   const [comedian, setComedian] = useState<OneComedianTypeCC | null>(null);
@@ -98,16 +74,12 @@ export const OneComedianPage = () => {
     return (<h1>Еще нет ...</h1>);
   }
 
-  const tabs = id ? getTabs(TABS, 'comedians', id) : getTabs(TABS, 'comedians', 'id');
-
-  const tabsElements = tabs.map((item) => <Tab key={item.path} tab={item} pathName={location.pathname}/>);
 
   const {
-    comedianId, countryId, userId,
-    userNik,
+
     avgRate, numberOfRate, views, totalViews,
-    comedianCity, comedianCityEn, countryName, countryNameEn,
-    comedianDateAdded, comedianDateBirth, comedianDateDeath,
+    comedianCity, countryName,
+    comedianDateBirth, comedianDateDeath,
     comedianDescription,
     comedianFirstName, comedianFirstNameEn, comedianLastName, comedianLastNameEn,
     // pictures,
@@ -126,12 +98,14 @@ export const OneComedianPage = () => {
 
   const goodAbout = about.filter((item) => item.point);
 
-  // const
+
+  const tabProps = {id, type: ContentName.Comedians, pathname, tabData: TabData[ContentName.Comedians]};
 
 
   return (
     <Box component={'section'} sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'start', alignItems: 'center', pt: '70px', background: '#0d0101' }} >
-      <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'start', alignItems: 'center', background: '#ffffff'}}>
+      {/* <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'start', alignItems: 'center', background: '#ffffff'}}> */}
+      <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'start', alignItems: 'center', background: '#ffffff', width: '60%'}}>
 
 
         <Titles
@@ -139,22 +113,18 @@ export const OneComedianPage = () => {
           second={`${comedianFirstNameEn || ''} ${comedianLastNameEn || ''}`}
         />
 
-        <List className={'tab-panel'} sx={{ mb: '30px', pb: 0, pt: 0 }}>
-          {tabsElements}
-        </List>
+        <TopTabs tabProps={tabProps}/>
+
         <MainPic src={comedianAvatar} alt={`${comedianFirstName} ${comedianLastName || ''}`}/>
 
-        <Rating defaultValue={Math.round((avgRate || 0) * 10) / 10 } num={numberOfRate || '0'}/>
+        <Rating avgRate={avgRate} numberOfRate={numberOfRate}/>
 
-        <Box sx={{ display: 'flex' }}>
-
-          <VisibilityIcon/>
-          <Typography component={'p'} fontSize={13} fontWeight={'400'}>
-            {views} (за неделю);   {totalViews} (за вме время)
-          </Typography>
-        </Box>
+        <ViewsBlock totalViews={totalViews} views={views}/>
 
         <AboutBlock about={goodAbout}/>
+        <Typography my={2} variant='body1'>
+          {comedianDescription}
+        </Typography>
 
         <ResourceBlock resources={resources}/>
 

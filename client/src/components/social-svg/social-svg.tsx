@@ -1,4 +1,4 @@
-import { ResourceName } from '../../const';
+import { ResourceName } from '../../const/const';
 
 
 export const SocialSVG = ({name} : {name: ResourceName}) => {

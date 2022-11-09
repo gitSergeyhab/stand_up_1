@@ -1,0 +1,16 @@
+.grid-card__content {
+  background-color: #300606;
+  color: white;
+}
+
+
+.grid-card:hover {
+  scale: 1.02;
+  transition: 0.5s;
+}
+
+.grid-card:hover .grid-card__content{
+  background-color: #1b0202;
+
+  transition: 0.5s;
+}

@@ -1,5 +1,5 @@
 import { Container, Typography, Paper, Box } from '@mui/material';
-import { Color } from '../../const';
+import { Color } from '../../const/const';
 
 export default function Footer() {
   return (

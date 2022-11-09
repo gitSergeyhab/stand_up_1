@@ -210,15 +210,17 @@ class ComedianController {
             const {year = null, status = 'planned'} = req.query;
 
             const where = `
-                WHERE comedian_id = :id'
+                WHERE comedian_id = :id
                 ${year ? 'AND EXTRACT( YEAR FROM event_date) = :year' : '' }  
                 AND event_status = :status 
             `;
 
-            const result = await sequelize.query(
+            const data = await sequelize.query(
                 `
                 SELECT
-                event_id, event_name, event_name_en, event_date, event_status, event_promo_picture, place_id, place_name, comedian_name AS title_name
+                event_id, event_name, event_name_en, event_date, event_status, event_promo_picture, place_id, place_name, 
+                comedian_first_name, comedian_first_name_en, comedian_last_name, comedian_last_name_en
+
                 FROM events
                 LEFT JOIN comedians_events USING (event_id)
                 LEFT JOIN comedians USING (comedian_id)
@@ -236,15 +238,15 @@ class ComedianController {
             )
 
             
-            const data = getDataFromSQL(result, 'events')
+            // const data = getDataFromSQL(result, 'events')
 
 
-            return res.status(200).json({data});
+            return res.status(200).json(data);
     
    
         } catch(err) {
             console.log(err)
-            return res.status(500).json({message: 'error get shows by query'})
+            return res.status(500).json({message: 'error getEventsByComedianId'})
         }
     }
 

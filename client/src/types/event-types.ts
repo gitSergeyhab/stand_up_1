@@ -112,3 +112,36 @@ export type OneEventTypeCC = {
   userNik: string | null;
   views: string | null;
 };
+
+
+export type EventsOfComedianSC = {
+  event_id: string;
+  event_name: string;
+
+  event_name_en: string | null;
+  event_date: string | null;
+  event_status: EventStatus;
+  event_promo_picture: string | null;
+  place_id: string | null;
+  place_name: string | null;
+  comedian_first_name:string | null;
+  comedian_first_name_en: string | null;
+  comedian_last_name: string | null;
+  comedian_last_name_en: string | null;
+}
+
+export type EventsOfComedianCC = {
+  eventId: string;
+  eventName: string;
+
+  eventNameEn: string | null;
+  eventDate: string | null;
+  eventStatus: EventStatus;
+  eventPromoPicture: string | null;
+  placeId: string | null;
+  placeName: string | null;
+  comedianFirstName:string | null;
+  comedianFirstNameEn: string | null;
+  comedianLastName: string | null;
+  comedianLastNameEn: string | null;
+}

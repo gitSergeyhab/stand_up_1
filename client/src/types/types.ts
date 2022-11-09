@@ -1,4 +1,4 @@
-import { ContentName } from '../const';
+import { ContentName } from '../const/const';
 
 export type ResourceType = {
   id: number;
@@ -13,12 +13,14 @@ export type PictureType = {
 
 export type GridCardType = {
   type: ContentName;
+  extType: ContentName;
   id: string;
   name: string;
   date: string;
   status: string | null;
   picture: string | null;
-  titleName: string;
   extName: string | null;
   extId: string | null;
 }
+
+export type SimpleDict = {[key: string] : string}

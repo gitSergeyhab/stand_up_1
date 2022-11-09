@@ -1,4 +1,6 @@
-import { EventTypeCC, EventTypeSC, OneEventTypeCC, OneEventTypeSC } from '../../types/event-types';
+import { ContentName } from '../../const/const';
+import { EventsOfComedianCC, EventsOfComedianSC, EventTypeCC, EventTypeSC, OneEventTypeCC, OneEventTypeSC } from '../../types/event-types';
+import { GridCardType } from '../../types/types';
 
 export const adaptEventsToClient = (event: EventTypeSC): EventTypeCC => (
   {
@@ -48,3 +50,32 @@ export const adaptOneEventToClient = (event: OneEventTypeSC): OneEventTypeCC => 
     views: event['views']
   }
 );
+
+export const adaptEventsOfComedianToClient = (event: EventsOfComedianSC): EventsOfComedianCC => (
+  {
+    comedianFirstName: event['comedian_first_name'],
+    comedianFirstNameEn: event['comedian_first_name_en'],
+    comedianLastName: event['comedian_last_name'],
+    comedianLastNameEn: event['comedian_last_name_en'],
+    eventDate: event['event_date'],
+    eventId: event['event_id'],
+    eventName: event['event_name'],
+    eventNameEn: event['event_name_en'],
+    eventPromoPicture: event['event_promo_picture'],
+    eventStatus: event['event_status'],
+    placeId: event['place_id'],
+    placeName: event['place_name']
+  }
+);
+
+export const adaptEventToCard = (event: EventsOfComedianCC): GridCardType => ({
+  date: event.eventDate || '',
+  extId: event.placeId,
+  extName: event.placeName,
+  id: event.eventId,
+  name: event.eventName,
+  picture: event.eventPromoPicture,
+  status: event.eventStatus,
+  type: ContentName.Events,
+  extType: ContentName.Places
+});

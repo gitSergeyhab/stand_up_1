@@ -1,6 +1,5 @@
-import { ResourceName } from '../../const';
-import { SimpleDict } from '../../pages/one-comedian-page/one-comedian-page';
-import { ResourceType } from '../../types/types';
+import { ResourceName } from '../../const/const';
+import { ResourceType, SimpleDict } from '../../types/types';
 import { SocialSVG } from '../social-svg/social-svg';
 
 
