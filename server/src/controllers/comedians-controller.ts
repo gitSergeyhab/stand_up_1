@@ -123,7 +123,7 @@ class ComedianController {
             await insertView(id, user_id, Column.Comedian); // Добавляет 1 просмотр
 
 
-            return res.status(200).json({comedian: comedians[0]});
+            return res.status(200).json(comedians[0]);
     
    
         } catch (err) {
@@ -237,6 +237,9 @@ class ComedianController {
                 }
             )
 
+            if (!data.length) {
+                return res.status(StatusCode.NotFoundError).json({message: `there is not comedian with id = ${id}`})
+            }
             
             // const data = getDataFromSQL(result, 'events')
 

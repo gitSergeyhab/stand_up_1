@@ -1,22 +1,13 @@
-.tab-panel {
-    display: flex;
-    justify-content: center;
-    min-width: 320px;
-    background-color: #300606; 
-    width: 100%;
-}
+
 
 .tab-panel a {
-    text-decoration: none;
-    color: #ff9b05;
+
 }
 
 
 
-.tab-panel li.active {
-    background: radial-gradient(circle, rgba(255,255,255,1) 0%, rgba(48,6,6,1) 100%);
-}
+
 
 .tab-panel a:hover {
-    color: #f57215;
+    
 }

@@ -1,6 +1,5 @@
 import { Box, Typography } from '@mui/material';
-import axios from 'axios';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 
 import { useParams, useLocation } from 'react-router-dom';
@@ -10,9 +9,7 @@ import { ImgList } from '../../components/img-list/img-list';
 import { MainPic } from '../../components/main-pic/main-pic';
 import { Rating } from '../../components/rating/rating';
 import { ResourceBlock } from '../../components/resource-block/resource-block';
-import { OneComedianTypeCC, OneComedianTypeSC } from '../../types/comedian-types';
 import { PictureType } from '../../types/types';
-import { adaptOneComedianToClient } from '../../utils/adapters/comedian-adapters';
 
 
 import { Titles } from '../../components/titles/titles';
@@ -20,6 +17,7 @@ import { TopTabs } from '../../components/top-tabs/top-tabs';
 import { ContentName } from '../../const/const';
 import { ViewsBlock } from '../../components/views-block/views-block';
 import { TabData } from '../../const/data';
+import { useGetComedianByIdQuery } from '../../store/comedians-api';
 
 
 const pictures = [
@@ -34,16 +32,14 @@ const pictures = [
 ];
 
 
-const BASE_URL = 'http://localhost:5000/api/comedians';
-
-
 export const OneComedianPage = () => {
 
   const { id } = useParams();
   const { pathname } = useLocation();
 
 
-  const [comedian, setComedian] = useState<OneComedianTypeCC | null>(null);
+  const {isError, isLoading, data: comedian} = useGetComedianByIdQuery(id as string);
+
 
   const [open, setOpen] = useState< 'center' | 'fullscreen' | undefined>(undefined);
   const [currentPic, setPic] = useState<PictureType | null>(null);
@@ -54,24 +50,33 @@ export const OneComedianPage = () => {
   };
 
 
-  useEffect(() => {
-    const fetchComedian = async() => {
-      if (id) {
-        try {
-          const {data} = await axios.get<{comedian: OneComedianTypeSC}>(`${BASE_URL}/${id}`);
-          const comediansCC = adaptOneComedianToClient(data.comedian);
-          setComedian(comediansCC);
-        } catch (err) {
-          // console.log(err);
-        }
-      }
-    };
-    fetchComedian();
-  }, [id]);
+  if (isError) {
+    return (
+      <Box component={'section'} sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'start', alignItems: 'center', pt: '70px', background: '#0d0101' }} >
+        <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'start', alignItems: 'center', background: '#ffffff', width: '60%'}}>
+          <Typography sx={{ minWidth: 100, fontSize:'51px', textAlign: 'center' }}>
+          Error !
+          </Typography>
+        </Box>
+      </Box>
 
+    );
+  }
 
-  if (!comedian) {
-    return (<h1>Еще нет ...</h1>);
+  if (isLoading || !comedian) {
+
+    return (
+
+      <Box component={'section'} sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'start', alignItems: 'center', pt: '70px', background: '#0d0101' }} >
+        <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'start', alignItems: 'center', background: '#ffffff', width: '60%'}}>
+          <Typography sx={{ minWidth: 100, fontSize:'51px', textAlign: 'center' }}>
+          Loading ...
+          </Typography>
+        </Box>
+      </Box>
+
+    // {/* <ScaleLoader color='black' loading height={300} width={40} radius={5} margin={20} /> */}
+    );
   }
 
 

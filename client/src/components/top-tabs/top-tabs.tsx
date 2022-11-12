@@ -1,8 +1,5 @@
-import { List, ListItem } from '@mui/material';
-import { Link } from 'react-router-dom';
 import { ContentName } from '../../const/const';
-
-import './tabs.css';
+import { TabLi, TabLink, TabPanelUl } from './top-tab-styles';
 
 
 type DataTabType = {name: string; path: string}
@@ -13,12 +10,12 @@ const getTabs = (tabs: DataTabType[], type: ContentName, id: string) => tabs.map
 
 const Tab = ({tab, pathName} : {tab: TabType; pathName: string }) => {
 
-  const className = tab.loc === pathName ? 'active' : '';
+  const active = tab.loc === pathName;
 
   return (
-    <ListItem sx={{ display: 'flex', justifyContent:'center', pb: '16px', pt: '16px', width: '100%'}} className={className}>
-      <Link to={tab.loc}>{tab.name}</Link>
-    </ListItem>
+    <TabLi active={active}>
+      <TabLink to={tab.loc}>{tab.name}</TabLink>
+    </TabLi>
   );
 };
 
@@ -30,6 +27,7 @@ type TopTabsProps = {
   tabData: DataTabType[];
 }
 
+
 export const TopTabs = ({tabProps} : {tabProps : TopTabsProps}) => {
 
   const { id = '1', type, pathname, tabData } = tabProps;
@@ -38,8 +36,8 @@ export const TopTabs = ({tabProps} : {tabProps : TopTabsProps}) => {
 
   const tabsElements = tabs.map((item) => <Tab key={item.path} tab={item} pathName={pathname}/>);
   return (
-    <List className={'tab-panel'} sx={{ mb: '30px', pb: 0, pt: 0 }}>
+    <TabPanelUl>
       {tabsElements}
-    </List>
+    </TabPanelUl>
   );
 };

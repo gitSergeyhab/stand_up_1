@@ -13,13 +13,13 @@ export const GridCard = ( {card}: {card: GridCardType} ) => {
   const to = `/${type}/${id}/info`;
   const toExt = `/${extType}/${extId || ''}/info`;
 
-  const extLink = extId ? <Link to={toExt}><Typography variant="body1">{extName}</Typography></Link> : null;
+  const extLink = extId ? <Link className='grid-card__link' to={toExt}><Typography variant="body1">{extName}</Typography></Link> : null;
   return (
     // <Link to={to}>
     <Grid item xs={12} sm={6} md={4}>
 
       <Card className='grid-card'>
-        <Link to={to}>
+        <Link to={to} className='grid-card__link'>
           <CardMedia
           // image={image}
             component="img"

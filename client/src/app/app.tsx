@@ -3,7 +3,6 @@ import { ComediansPage } from '../pages/comedians-page/comedians-page';
 import { EventsPage } from '../pages/events-page/events-page';
 import { MainPage } from '../pages/main-page/main-page';
 import { OneComedianPage } from '../pages/one-comedian-page/one-comedian-page';
-import { Container } from '@mui/material';
 import { Header } from '../components/header/header';
 import Footer from '../components/footer/footer';
 import { Box } from '@mui/joy';

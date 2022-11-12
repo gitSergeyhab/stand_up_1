@@ -24,3 +24,6 @@ export type GridCardType = {
 }
 
 export type SimpleDict = {[key: string] : string}
+
+export type EventComedianQueryType = {id: string; search: string}
+
