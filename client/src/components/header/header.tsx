@@ -4,11 +4,10 @@ import { Container, AppBar, Box, Toolbar, IconButton, Typography, Avatar, Button
 
 import { useState } from 'react';
 import { LogoSvg } from '../logo-svg/logo-svg';
-import { Nav, Icon, IconSpan, MenuMobile } from './header-style';
+import { Nav, Icon, IconSpan, MenuMobile, MenuLi, MenuLink, MenuDesktop, UserAvatarBtn , UserAvatarImg } from './header-style';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
-// import './x.css';
 import { ContentName } from '../../const/const';
 
 const pages = ['Products', 'Pricing', 'Blog'];
@@ -24,39 +23,16 @@ const MENU_DATA = [
 ];
 
 
-export const MenuDesktop = styled.ul`
-margin: 0;
-list-style: none;
-display: none;
-display: flex;
-flex-flow: row wrap;
-justify-content: space-between;
+type LogoContainerProp = {
+  width: number;
+}
 
-@media (max-width: 900px) {
-    display: none;
-};
-`;
-
-export const MenuLink = styled(Link)`
-    cursor: pointer;
-    display: block;
-    /* line-height: 2; */
-    /* padding: 25px 0;  */
-    /* width: 100px; */
-    color: gold;
-    text-decoration: none;
-    text-transform: uppercase;
-
-    /* @media (max-width: 900px) {
-        display: none;
-    }; */
-`;
-
-export const MenuLi = styled.li`
-flex-grow: 1;
-text-align: center;
-height: 100%;
-
+export const LogoContainer = styled.div<LogoContainerProp>`
+color: gold;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: ${({ width }) => `${width}px`};
 `;
 
 
@@ -66,12 +42,6 @@ export const Header = () => {
   const [open, setOpen] = useState(true);
 
   const handleClickMenu = () => {setShown((val) => !val); };
-  // const handleClickToggle = () => {
-  //   setOpen((val) => !val);
-  //   console.log('open', open);
-  // };
-
-  // console.log(active, open);
 
 
   const navItems = MENU_DATA.map((item) => (
@@ -85,11 +55,25 @@ export const Header = () => {
 
     <Nav>
       <MenuDesktop>
+        <LogoContainer width={120}>
+          Stand
+          <LogoSvg width={20}/>
+          Up
+        </LogoContainer>
         {navItems}
+
+        <LogoContainer width={120}>
+          <UserAvatarBtn radius={40}>
+            <UserAvatarImg src='/img/test/black.jpg'/>
+          </UserAvatarBtn>
+        </LogoContainer>
       </MenuDesktop>
       <Icon shown={shown} onClick={handleClickMenu}>
         <IconSpan shown={shown}/>
       </Icon>
+      <UserAvatarBtn small radius={40}>
+        <UserAvatarImg src='/img/test/black.jpg'/>
+      </UserAvatarBtn>
       <MenuMobile shown={shown}>
         {navItems}
         {/* <li><MenuLink to={'/'}>Listings</MenuLink></li>

@@ -4,63 +4,119 @@ import styled from 'styled-components';
 
 type NavProps = { shown: boolean }
 
+
+type UserAvatarProps = {
+  radius: number;
+  small?: boolean;
+}
+
+export const UserAvatarBtn = styled.button.attrs({ type: 'button' })<UserAvatarProps>`
+  width: ${({ radius }) => radius}px;
+  height: ${({ radius }) => radius}px;
+  overflow: hidden;
+  background-color: #000000;
+  border-radius: 50%;
+  cursor: pointer;
+
+  outline: goldenrod solid 2px;
+
+  &:hover, &:focus {
+    outline: gold solid 2px;
+  }
+
+  @media (max-width: 900px) {
+
+    margin: 3%;
+    position: absolute;
+    top: 10px;
+    right: 3%;
+    z-index: 20;
+
+    display: inline-block;
+    vertical-align: middle;
+  };
+
+  @media (min-width: 900px) {
+    display: ${({ small }) => small ? 'none' : ''}
+  }
+
+
+`;
+
+export const UserAvatarImg = styled.img.attrs({ width: 40, height: 40 })`
+  width: 100%;
+  height: 100%;
+`;
+
+
 export const Nav = styled.nav`
-position: fixed;
-width: 100%;
-top: 0;
+  position: fixed;
+  width: 100%;
+  top: 0;
     @media (min-width: 900px) {
-        /* padding: 3% 6%; */
-        background: #300606;
+      background: #300606;
     };
 `;
 
 export const MenuDesktop = styled.ul`
-    list-style: none;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: none;
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-between;
+  height: 50px;
+
+  @media (max-width: 900px) {
     display: none;
-    display: flex;
-    flex-flow: row wrap;
-    justify-content: space-between;
-    
-    @media (max-width: 900px) {
-        display: none;
-    };
+  };
 `;
 
 export const MenuMobile = styled.ul<NavProps>`
-margin: 0;
+  margin: 0;
 
-    list-style: none;   
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    /* min-height: 100vh; */
-    text-align: center;
-    /* padding-top: 112px; */
-    padding: 10px 0;
-    background: #300606;
-    z-index: 10;
-    transition: all .4s ease-in-out;
-    transform: translateY(-200%);
+  list-style: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  text-align: center;
+  padding: 10px 0;
+  background: #300606;
+  z-index: 10;
+  transition: all .4s ease-in-out;
+  transform: translateY(-200%);
+  border-bottom: #0d0101 2px solid;
 
-    ${({ shown }) => shown ? 'transform: translateY(0);' : '' };
+  ${({ shown }) => shown ? 'transform: translateY(0);' : '' };
 
-    @media (min-width: 900px) {
-        display: none;
-    };
+  @media (min-width: 900px) {
+      display: none;
+  };
+`;
 
+
+export const MenuLi = styled.li`
+  flex-grow: 1;
+  text-align: center;
+  vertical-align: middle;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;
 
 
 export const MenuLink = styled(Link)`
     cursor: pointer;
     display: block;
-    line-height: 2;
-    padding: 25px 0;
-
-    @media (min-width: 900px) {
-        display: none;
-    };
+    color: gold;
+    text-decoration: none;
+    text-transform: uppercase;
+    &:hover, &:focus {
+      background-color: #0d0101;
+    }
 `;
 
 export const Icon = styled.a<NavProps>`
@@ -69,7 +125,7 @@ export const Icon = styled.a<NavProps>`
     margin: 3%;
     position: absolute;
     top: 10px;
-    right: 3%;
+    left: 3%;
     display: inline-block;
     vertical-align: middle;
     z-index: 20;
@@ -80,11 +136,12 @@ export const Icon = styled.a<NavProps>`
     @media (min-width: 900px) {
         display: none;
     };
-    
+
     &::before, &::after {
         content: "";
         display: block;
-        background: rgb(255, 238, 0);;
+        /* background: rgb(255, 238, 0); */
+        background: goldenrod;
         width: 100%;
         height: 4px;
         position: absolute;
@@ -92,23 +149,26 @@ export const Icon = styled.a<NavProps>`
         transform-origin: center center;
         transform: rotate(0deg);
         transition: all 0.3s ease;
+        /* &:hover, &:focus {
+          background: rgb(255, 238, 0);
+        } */
     }
     &::before {
         top: 2px;
         margin-top: -2px;
-        ${({ shown }) => shown ? '  top: 50%;transform: rotate(45deg);' : '' }
+        ${({ shown }) => shown ? 'top: 50%;transform: rotate(45deg); background: rgb(255, 238, 0);' : '' }
     }
 
     &::after  {
         bottom: 2px;
         margin-bottom: -2px;
-        ${({ shown }) => shown ? '  bottom: 50%;transform: rotate(-45deg);' : '' }
+        ${({ shown }) => shown ? 'bottom: 50%; transform: rotate(-45deg); background: rgb(255, 238, 0);' : '' }
     }
 `;
 
 export const IconSpan = styled.span<NavProps>`
     display: block;
-    background: rgb(255, 238, 0);
+    background: goldenrod;
     width: 100%;
     height: 4px;
     margin-top: -2px;
@@ -116,5 +176,5 @@ export const IconSpan = styled.span<NavProps>`
     left: 0;
     top: 50%;
 
-  background: ${({ shown }) => shown ? 'transparent;' : ''}; 
+  background: ${({ shown }) => shown ? 'transparent;' : ''};
 `;
