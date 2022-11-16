@@ -71,11 +71,11 @@ INSERT INTO comedians(
 
 
 INSERT INTO places(place_name, country_id, place_city, user_added_id, place_promo_picture, place_description) VALUES
-('SUPER-CLUB', 1, 'Tula', 2, '/pics/place/promo/tula.jpeg', 'very nice');
+('SUPER-CLUB', 1, 'Tula', 2, '/img/test/xz.jpg', 'very nice');
 INSERT INTO places(place_name, country_id, place_city, user_added_id, place_promo_picture, place_description) VALUES
-('SUPER-Moskow-CLUB', 1, 'Moskow', 3, '/pics/place/promo/Moskow.jpeg', 'burn this place'),
-('SPB-CLUB', 1, 'St Peterburg', 3, '/pics/place/promo/SPB.jpeg', 'hate this place'),
-('LONDON-CLUB', 2, 'London', 1, '/pics/place/promo/LONDON.jpeg', 'fuck this place');
+('SUPER-Moskow-CLUB', 1, 'Moskow', 3, '/img/test/girl.webp', 'burn this place'),
+('SPB-CLUB', 1, 'St Peterburg', 3, '/img/test/kom.jpg', 'hate this place'),
+('LONDON-CLUB', 2, 'London', 1, '/img/test/white.jpg', 'fuck this place');
 
 INSERT INTO resources(resource_type_id, user_id, resource_href) VALUES 
 (2, 2, 'https://vk.com/vk-1'),
@@ -104,39 +104,39 @@ INSERT INTO resources(resource_type_id, comedian_id, resource_href) VALUES
 
 
 INSERT INTO pictures(user_id, picture_path) VALUES 
-(2, '/pic/user/avatar/user-2.jpg'),
-(3, '/pic/user/avatar/user-3.jpg');
+(2, '/img/test/xz-2.jpg'),
+(3, '/img/test/black.jpg');
 
 INSERT INTO pictures(comedian_id, picture_path) VALUES 
-(2, '/pic/comedian/avatar/ca1-2.jpg'),
-(3, '/pic/comedian/pictures/ca2-3.jpg'),
-(2, '/pic/comedian/avatar/com-22.jpg'),
-(2, '/pic/comedian/avatar/com-223.jpg'),
-(1, '/pic/comedian/avatar/com-223.jpg');
+(2, '/img/test/xz-2.jpg'),
+(3, '/img/test/black.jpg'),
+(2, '/img/test/abr.jpg'),
+(2, '/img/test/d-r.jpeg'),
+(1, '/img/test/girl.webp');
 
 INSERT INTO pictures(place_id, picture_path) VALUES
-(1, '/pic/place/pl-122.jpg'),
-(1, '/pic/place/pl-1223.jpg'),
-(1, '/pic/place/pl-1223.jpg');
+(1, '/img/test/xz-2.jpg'),
+(1, '/img/test/abr.jpg'),
+(1, '/img/test/black.jpg');
 
 
 
 
 INSERT INTO events (place_id, user_id, event_name, event_description, event_date, event_status, event_promo_picture ) VALUES
-(1,1, 'First Event', 'First Event event_discription', '01.01.2023', 'planned', 'pics/events/ev-1.jpg'),
-(2,1, 'Second Event', 'Second Second Event event_discription', '01.02.2023', 'planned', 'pics/events/ev-2.jpg'),
-(2,1, 'Third Event', 'Third Third Third Event event_discription', '01.01.2022', 'ended', 'pics/events/ev-3.jpg'),
-(3,2, 'Event 4', '444444444 event_discription', '01.02.2022', 'ended', 'pics/events/ev-444.jpg'),
-(3,3, 'Event 55', '55 55 55 55 event_discription', '01.03.2022', 'canceled', 'pics/events/ev-55.jpg'),
-(3,3, 'Event 666', '666 666 666', '04.01.2023', 'planned', 'pics/events/ev-6.jpg');
+(1,1, 'First Event', 'First Event event_discription', '01.01.2023', 'planned', '/img/test/girl.webp'),
+(2,1, 'Second Event', 'Second Second Event event_discription', '01.02.2023', 'planned', '/img/test/kom.jpg'),
+(2,1, 'Third Event', 'Third Third Third Event event_discription', '01.01.2022', 'ended', '/img/test/d-r.jpeg'),
+(3,2, 'Event 4', '444444444 event_discription', '01.02.2022', 'ended', '/img/test/abr.jpg'),
+(3,3, 'Event 55', '55 55 55 55 event_discription', '01.03.2022', 'canceled', '/img/test/d-r.jpeg'),
+(3,3, 'Event 666', '666 666 666', '04.01.2023', 'planned', '/img/test/kom.jpg');
 
 INSERT INTO events (place_id, user_id, event_name, event_description, event_date, event_status, event_promo_picture ) VALUES
-(1,1, 'First Event1', 'First Event event_discription', '01.01.2021', 'ended', 'pics/events/ev-1.jpg'),
-(2,1, 'Second Event1', 'Second Second Event event_discription', '01.02.2021', 'endedended', 'pics/events/ev-2.jpg'),
-(2,1, 'Third Event1', 'Third Third Third Event event_discription', '01.01.2020', 'ended', 'pics/events/ev-3.jpg'),
-(3,2, 'Event 41', '444444444 event_discription', '01.02.2020', 'ended', 'pics/events/ev-444.jpg'),
-(3,3, 'Event 551', '55 55 55 55 event_discription', '01.03.2019', 'ended', 'pics/events/ev-55.jpg'),
-(3,3, 'Event 6661', '666 666 666', '04.01.2018', 'ended', 'pics/events/ev-6.jpg');
+(1,1, 'First Event1', 'First Event event_discription', '01.01.2021', 'ended', '/img/test/abr.jpg'),
+(2,1, 'Second Event1', 'Second Second Event event_discription', '01.02.2021', 'endedended', '/img/test/black.jpg'),
+(2,1, 'Third Event1', 'Third Third Third Event event_discription', '01.01.2020', 'ended', '/img/test/white.jpg'),
+(3,2, 'Event 41', '444444444 event_discription', '01.02.2020', 'ended', '/img/test/white.jpg'),
+(3,3, 'Event 551', '55 55 55 55 event_discription', '01.03.2019', 'ended', '/img/test/black.jpg'),
+(3,3, 'Event 6661', '666 666 666', '04.01.2018', 'ended', '/img/test/abr.jpg');
 
 
 
@@ -147,12 +147,12 @@ INSERT INTO shows(
 (1, 1, 8, 1, '2022-01-01', 1, 
  'Спасибо, у меня всё #10', 
  'Десятый выпуск шоу «Спасибо, у меня всё» из Варшавы', 
- '/pics/shows/posters/poster-1.jpeg', 1),
+ '/img/test/kom.jpg', 1),
 
 (1, 3, 8, 1, '2022-01-21', 2, 
  'Меня ищет КГБ', 
  'А у вас как дела, ребята ?) ', 
- '/pics/shows/posters/poster-2.jpeg', 2),
+ '/img/test/kom.jpg', 2),
  
 (4, 3, 8, 1, '2021-06-06', 2, 
  'Дальше сам (Stand Up 2021)', 
@@ -181,26 +181,26 @@ INSERT INTO shows(
 Кажется, я достаточно раз упомянул слово «стендап» в описании ролика, чтобы алгоритмы поняли, в какую нишу ютуба я хочу заскочить. Надеюсь, это последний раз, когда я сажусь и пишу настоящий SEO-текст, чтобы достучаться до новой аудитории. Думаю, что Данила Поперечный таким не занимается. 
 
 С другой стороны — а на что ты жалуешься, Денис? Ты год занимался любимым делом, увидел очень красивую Россию в весенне-летний период, выступил в Украине, США и Австрии. На тебя приходили потрясающие умные, красивые и добрые люди. Да, их может быть меньше, чем у комиков с ТНТ, но они же классные. Хватит их обесценивать своими жалобами. Всё классно. И начни уже сочинять описания видео после приёма психотерапевта, а не до', 
- '/pics/shows/posters/poster-3.jpeg', NULL),
+ '/img/test/d-r.jpeg', NULL),
  
  (2, 2, 8, 1, '2022-01-23', 2, 
  'Скоро будет', 
  'или не будет', 
- '/pics/shows/posters/poster-4.jpeg', NULL);
+ '/img/test/girl.webp', NULL);
 
 INSERT INTO shows(event_id, user_added_id, comedian_id, language_id, show_date, show_name, show_description, show_poster) VALUES
-(1, 1, 2, 1, '2022-10-30', 'SHOW #5', 'show_description 5', '/pic/shows/poster-5'),
-(1, 2, 3, 1, '2022-11-03', 'SHOW #6', 'show_description 666', '/pic/shows/poster-6'),
-(1, 1, 4, 1, '2022-11-30', 'SHOW #7', 'show_description 577', '/pic/shows/poster-7'),
-(2, 2, 1, 1, '2022-11-13', 'SHOW #8', 'show_description 666 888', '/pic/shows/poster-8');
+(1, 1, 2, 1, '2022-10-30', 'SHOW #5', 'show_description 5', '/img/test/black.jpg'),
+(1, 2, 3, 1, '2022-11-03', 'SHOW #6', 'show_description 666', '/img/test/xz.jpg'),
+(1, 1, 4, 1, '2022-11-30', 'SHOW #7', 'show_description 577', '/img/test/girl.webp'),
+(2, 2, 1, 1, '2022-11-13', 'SHOW #8', 'show_description 666 888', '/img/test/d-r.jpeg');
  
 INSERT INTO pictures(show_id, picture_path) VALUES
-(1, '/pic/show/show-122.jpg'),
-(1, '/pic/show/show-1223.jpg'),
-(1, '/pic/show/show-1223.jpg'),
-(2, '/pic/show/show-222.jpg'),
-(3, '/pic/show/show-31223.jpg'),
-(3, '/pic/show/show-31223.jpg');
+(1, '/img/test/black.jpg'),
+(1, '/img/test/xz.jpg'),
+(1, '/img/test/girl.webp'),
+(2, '/img/test/d-r.jpeg'),
+(3, '/img/test/black.jpg'),
+(3, '/img/test/white.jpg');
 
 INSERT INTO show_videos(show_video_path, show_video_professional, show_minutes, show_id, user_id) VALUES 
 ('https://www.youtube.com/watch?v=vMK6_Wj7pl8', TRUE, 11, 1, 1),

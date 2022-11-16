@@ -41,11 +41,15 @@ export const OneComedianPage = () => {
   const {isError, isLoading, data: comedian} = useGetComedianByIdQuery(id as string);
 
 
-  const [open, setOpen] = useState< 'center' | 'fullscreen' | undefined>(undefined);
   const [currentPic, setPic] = useState<PictureType | null>(null);
 
-  const handleClick = (pic: PictureType) => {
-    setOpen('fullscreen');
+
+  const [shownModal, setShownModal] = useState(false);
+
+  const onCloseModal = () => setShownModal(false);
+
+  const handleClickImg = (pic: PictureType) => {
+    setShownModal(true);
     setPic(pic);
   };
 
@@ -75,7 +79,6 @@ export const OneComedianPage = () => {
         </Box>
       </Box>
 
-    // {/* <ScaleLoader color='black' loading height={300} width={40} radius={5} margin={20} /> */}
     );
   }
 
@@ -107,41 +110,39 @@ export const OneComedianPage = () => {
   const tabProps = {id, type: ContentName.Comedians, pathname, tabData: TabData[ContentName.Comedians]};
 
 
+  const imageModal = shownModal ? (
+    <ImageModal
+      pictures={pictures}
+      onClose={onCloseModal}
+      currentImg={currentPic || pictures[0]}
+      setImg={setPic}
+    />
+  ) : null;
+
   return (
-    <Box component={'section'} sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'start', alignItems: 'center', pt: '70px', background: '#0d0101' }} >
-      {/* <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'start', alignItems: 'center', background: '#ffffff'}}> */}
-      <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'start', alignItems: 'center', background: '#ffffff', width: '60%'}}>
+    <>
+      <Titles
+        first={`${comedianFirstName} ${comedianLastName || ''}`}
+        second={`${comedianFirstNameEn || ''} ${comedianLastNameEn || ''}`}
+      />
 
+      <TopTabs tabProps={tabProps}/>
 
-        <Titles
-          first={`${comedianFirstName} ${comedianLastName || ''}`}
-          second={`${comedianFirstNameEn || ''} ${comedianLastNameEn || ''}`}
-        />
+      <MainPic src={comedianAvatar} alt={`${comedianFirstName} ${comedianLastName || ''}`}/>
 
-        <TopTabs tabProps={tabProps}/>
+      <Rating avgRate={avgRate} numberOfRate={numberOfRate}/>
 
-        <MainPic src={comedianAvatar} alt={`${comedianFirstName} ${comedianLastName || ''}`}/>
+      <ViewsBlock totalViews={totalViews} views={views}/>
 
-        <Rating avgRate={avgRate} numberOfRate={numberOfRate}/>
+      <AboutBlock about={goodAbout}/>
+      <Typography my={2} variant='body1'>
+        {comedianDescription}
+      </Typography>
 
-        <ViewsBlock totalViews={totalViews} views={views}/>
+      <ResourceBlock resources={resources}/>
 
-        <AboutBlock about={goodAbout}/>
-        <Typography my={2} variant='body1'>
-          {comedianDescription}
-        </Typography>
-
-        <ResourceBlock resources={resources}/>
-
-        <ImgList handleImgClick={handleClick} pictures={pictures.slice(0,3)}/>
-        <ImageModal
-          pictures={pictures}
-          open={open}
-          onClose={() => setOpen(undefined)}
-          currentImg={currentPic || pictures[0]}
-          setImg={setPic}
-        />
-      </Box>
-    </Box>
+      <ImgList handleImgClick={handleClickImg} pictures={pictures.slice(0,3)}/>
+      {imageModal}
+    </>
   );
 };

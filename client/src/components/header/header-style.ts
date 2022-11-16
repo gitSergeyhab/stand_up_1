@@ -17,30 +17,15 @@ export const UserAvatarBtn = styled.button.attrs({ type: 'button' })<UserAvatarP
   background-color: #000000;
   border-radius: 50%;
   cursor: pointer;
-
   outline: goldenrod solid 2px;
 
   &:hover, &:focus {
     outline: gold solid 2px;
   }
 
-  @media (max-width: 900px) {
-
-    margin: 3%;
-    position: absolute;
-    top: 10px;
-    right: 3%;
-    z-index: 20;
-
-    display: inline-block;
-    vertical-align: middle;
-  };
-
   @media (min-width: 900px) {
     display: ${({ small }) => small ? 'none' : ''}
   }
-
-
 `;
 
 export const UserAvatarImg = styled.img.attrs({ width: 40, height: 40 })`
@@ -58,18 +43,19 @@ export const Nav = styled.nav`
     };
 `;
 
-export const MenuDesktop = styled.ul`
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  display: none;
-  display: flex;
-  flex-flow: row wrap;
-  justify-content: space-between;
-  height: 50px;
 
-  @media (max-width: 900px) {
-    display: none;
+export const MenuDesktop = styled.ul`
+  display: none;
+
+
+  @media (min-width: 900px) {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-between;
+    height: 50px;
   };
 `;
 
@@ -114,6 +100,7 @@ export const MenuLink = styled(Link)`
     color: gold;
     text-decoration: none;
     text-transform: uppercase;
+    width: 100%;
     &:hover, &:focus {
       background-color: #0d0101;
     }
@@ -140,7 +127,6 @@ export const Icon = styled.a<NavProps>`
     &::before, &::after {
         content: "";
         display: block;
-        /* background: rgb(255, 238, 0); */
         background: goldenrod;
         width: 100%;
         height: 4px;
@@ -149,9 +135,7 @@ export const Icon = styled.a<NavProps>`
         transform-origin: center center;
         transform: rotate(0deg);
         transition: all 0.3s ease;
-        /* &:hover, &:focus {
-          background: rgb(255, 238, 0);
-        } */
+
     }
     &::before {
         top: 2px;
@@ -177,4 +161,86 @@ export const IconSpan = styled.span<NavProps>`
     top: 50%;
 
   background: ${({ shown }) => shown ? 'transparent;' : ''};
+`;
+
+
+export const UserMenu = styled.ul`
+  position: absolute;
+  top: 50px;
+  right: 22px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: space-between;
+  z-index: 40;
+  background-color: grey;
+  border-radius: 3px;
+  padding: 4px;
+  outline: 2px solid #000000;
+`;
+
+export const UserMenuLi = styled.li`
+  flex-grow: 1;
+  text-align: left;
+  vertical-align: middle;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+`;
+
+export const UserMenuLink = styled(Link)`
+    cursor: pointer;
+    display: block;
+    color: gold;
+    text-decoration: none;
+    text-transform: uppercase;
+    width: 100%;
+    font-size: 10px;
+
+    &:hover, &:focus {
+      background-color: #0d0101;
+    }
+`;
+type LogoContainerProp = {
+  width: number;
+  small?: boolean;
+}
+
+export const LogoContainer = styled.div<LogoContainerProp>`
+  color: gold;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: ${({ width }) => `${width}px`};
+`;
+
+
+export const UserContainer = styled.div<LogoContainerProp>`
+  color: gold;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 3%;
+  position: absolute;
+  top: 10px;
+  right: 0;
+  z-index: 20;
+  display: inline-block;
+  vertical-align: middle;
+  width: ${({ width }) => `${width}px`};
+  
+  @media (min-width: 900px) {
+    margin: 0;
+    position: static;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: ${({ width }) => `${width}px`};
+    display: ${({ small }) => small ? 'none' : ''}
+  }
 `;

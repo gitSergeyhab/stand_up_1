@@ -8,6 +8,7 @@ import Footer from '../components/footer/footer';
 import { Box } from '@mui/joy';
 import CssBaseline from '@mui/material/CssBaseline';
 import { OneComedianPageEvents } from '../pages/one-comedian-page-events/one-comedian-page-events';
+import { MainContainer, MainWrapper } from './app-style';
 
 
 export const App = () => {
@@ -40,19 +41,24 @@ export const App = () => {
           {/* <div style={{ background: '#0d0101', minHeight: '100vh', paddingBottom: '30px' }} > */}
           <Header/>
           <Box sx={{ background: 'white', paddingLeft: 0, paddingRight: 0}}>
-            <Routes>
-
-              <Route path={AppRoute.Main} element={<MainPage/>}/>
-
-              <Route path={AppRoute.Comedians} element={<ComediansPage/>}/>
-              <Route path={AppRoute.Comedian} element={<OneComedianPage/>}/>
-              <Route path={AppRoute.ComedianEvents} element={<OneComedianPageEvents/>}/>
+            <MainWrapper>
+              <MainContainer>
+                <Routes>
 
 
-              <Route path={AppRoute.Events} element={<EventsPage/>}/>
+                  <Route path={AppRoute.Main} element={<MainPage/>}/>
+
+                  <Route path={AppRoute.Comedians} element={<ComediansPage/>}/>
+                  <Route path={AppRoute.Comedian} element={<OneComedianPage/>}/>
+                  <Route path={AppRoute.ComedianEvents} element={<OneComedianPageEvents/>}/>
 
 
-            </Routes>
+                  <Route path={AppRoute.Events} element={<EventsPage/>}/>
+
+
+                </Routes>
+              </MainContainer>
+            </MainWrapper>
           </Box>
 
           <Footer/>

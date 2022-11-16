@@ -31,6 +31,8 @@ export const TabLi = styled.li<TabProps>`
 
 export const TabLink = styled(Link)`
     text-decoration: none;
+    text-align: center;
+    width: 100%;
     color: #ff9b05;
     &:hover {
       color: #f57215;

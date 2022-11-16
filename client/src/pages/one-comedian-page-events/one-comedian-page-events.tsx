@@ -47,7 +47,6 @@ export const OneComedianPageEvents = () => {
         </Box>
       </Box>
 
-    // {/* <ScaleLoader color='black' loading height={300} width={40} radius={5} margin={20} /> */}
     );
   }
 
@@ -63,6 +62,7 @@ export const OneComedianPageEvents = () => {
     );
   }
 
+  console.log(events);
 
   const cardData = events.map(adaptEventToCard);
 
@@ -72,23 +72,17 @@ export const OneComedianPageEvents = () => {
 
 
   return (
-    <Box component={'section'} sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'start', alignItems: 'center', pt: '70px', background: '#0d0101' }} >
-      <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'start', alignItems: 'center', background: '#ffffff', width: '60%'}}>
+    <>
+      <Titles
+        first={`${comedianFirstName || ''} ${comedianLastName || ''}`}
+        second={`${comedianFirstNameEn || ''} ${comedianLastNameEn || ''}`}
+      />
+
+      <TopTabs tabProps={tabProps}/>
 
 
-        <Titles
-          first={`${comedianFirstName || ''} ${comedianLastName || ''}`}
-          second={`${comedianFirstNameEn || ''} ${comedianLastNameEn || ''}`}
-        />
-
-        <TopTabs tabProps={tabProps}/>
-
-
-        <CardContainer cards={cardData} />
-
-
-      </Box>
-    </Box>
+      <CardContainer cards={cardData} />
+    </>
   );
 };
 

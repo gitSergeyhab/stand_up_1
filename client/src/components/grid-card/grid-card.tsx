@@ -1,9 +1,11 @@
-import { Card, CardContent, CardMedia, Grid, Typography } from '@mui/material';
+import {
+  // Card,
+  // CardContent,
+  CardMedia, Grid, Typography } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { DefaultPath } from '../../const/const';
 import { GridCardType } from '../../types/types';
-
-import './grid-card.css';
+import { Card, CardContent, CardLink, Img } from './grid-card-style';
 
 
 export const GridCard = ( {card}: {card: GridCardType} ) => {
@@ -15,36 +17,40 @@ export const GridCard = ( {card}: {card: GridCardType} ) => {
 
   const extLink = extId ? <Link className='grid-card__link' to={toExt}><Typography variant="body1">{extName}</Typography></Link> : null;
   return (
-    // <Link to={to}>
-    <Grid item xs={12} sm={6} md={4}>
+  // <Link to={to}>
+  // <Grid item xs={12} sm={6} md={4}>
 
-      <Card className='grid-card'>
-        <Link to={to} className='grid-card__link'>
-          <CardMedia
+    <Card className='grid-card'>
+      <CardLink to={to} className='grid-card__link'>
+        <Img
+          // src='/img/test/abr.jpg'
+          src={image}
+        />
+        {/* <CardMedia
           // image={image}
-            component="img"
-            height="140"
-            image={'/img/test/abr.jpg'}
+          component="img"
+          height="140"
+          image={'/img/test/abr.jpg'}
 
-            title={name}
-          />
-        </Link>
-        <CardContent className='grid-card__content'>
-          <Typography variant="h6">
-            {name}
-          </Typography>
-          <Typography variant="body1">
-            {date}
-          </Typography>
-          <Typography variant="body1">
-            {status}
-          </Typography>
-          {extLink}
+          title={name}
+        /> */}
+      </CardLink>
+      <CardContent className='grid-card__content'>
+        <Typography variant="h6">
+          {name}
+        </Typography>
+        <Typography variant="body1">
+          {date}
+        </Typography>
+        <Typography variant="body1">
+          {status}
+        </Typography>
+        {extLink}
 
-        </CardContent>
-      </Card>
+      </CardContent>
+    </Card>
 
-    </Grid>
-    // {/* </Link> */}
+  // </Grid>
+  // {/* </Link> */}
   );
 };
