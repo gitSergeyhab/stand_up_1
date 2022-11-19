@@ -1,81 +1,72 @@
-import { ContentName } from '../../const/const';
 import { EventsOfComedianCC, EventsOfComedianSC, EventTypeCC, EventTypeSC, OneEventTypeCC, OneEventTypeSC } from '../../types/event-types';
-import { GridCardType } from '../../types/types';
+import { DataType } from '../../types/types';
 
-export const adaptEventsToClient = (event: EventTypeSC): EventTypeCC => (
+export const adaptEventsToClient = (data: EventTypeSC): EventTypeCC => (
   {
-    countryId: event['country_id'],
-    countryName: event['country_name'],
-    countryNameEn: event['country_name_en'],
-    eventDate: event['event_date'],
-    eventDateAdded: event['event_date_added'],
-    eventId: event['event_id'],
-    eventName: event['event_name'],
-    eventNameEn: event['event_name_en'],
-    eventPicture: event['event_picture'],
-    eventStatus: event['event_status'],
-    placeCity: event['place_city'],
-    placeCityEn: event['place_city_en'],
-    totalViews: event['total_views'],
-    upcoming: event['upcoming'],
-    views: event['views'],
+    countryId: data['country_id'],
+    countryName: data['country_name'],
+    countryNameEn: data['country_name_en'],
+    eventDate: data['event_date'],
+    eventDateAdded: data['event_date_added'],
+    eventId: data['event_id'],
+    eventName: data['event_name'],
+    eventNameEn: data['event_name_en'],
+    eventPicture: data['event_picture'],
+    eventStatus: data['event_status'],
+    placeCity: data['place_city'],
+    placeCityEn: data['place_city_en'],
+    totalViews: data['total_views'],
+    upcoming: data['upcoming'],
+    views: data['views'],
   }
 );
 
 
-export const adaptOneEventToClient = (event: OneEventTypeSC): OneEventTypeCC => (
+export const adaptOneEventToClient = (data: OneEventTypeSC): OneEventTypeCC => (
   {
-    countryId: event['country_id'],
-    countryName: event['country_name'],
-    countryNameEn: event['country_name_en'],
-    eventComedians: event['event_comedians'],
-    eventDate: event['event_date'],
-    eventDateAdded: event['event_date_added'],
-    eventDescription: event['event_description'],
-    eventId: event['event_id'],
-    eventName: event['event_name'],
-    eventNameEn: event['event_name_en'],
-    eventPicture: event['event_picture'],
-    eventResources: event['event_resources'],
-    eventShows: event['event_shows'],
-    eventStatus: event['event_status'],
-    placeId: event['place_id'],
-    placeName: event['place_name'],
-    placeNameEn: event['place_name_en'],
-    placePicture: event['place_picture'],
-    totalViews: event['total_views'],
-    userAvatar: event['user_avatar'],
-    userId: event['user_id'],
-    userNik: event['user_nik'],
-    views: event['views']
+    countryId: data['country_id'],
+    countryName: data['country_name'],
+    countryNameEn: data['country_name_en'],
+    eventComedians: data['event_comedians'],
+    eventDate: data['event_date'],
+    eventDateAdded: data['event_date_added'],
+    eventDescription: data['event_description'],
+    eventId: data['event_id'],
+    eventName: data['event_name'],
+    eventNameEn: data['event_name_en'],
+    eventPicture: data['event_picture'],
+    eventResources: data['event_resources'],
+    eventShows: data['event_shows'],
+    eventStatus: data['event_status'],
+    placeId: data['place_id'],
+    placeName: data['place_name'],
+    placeNameEn: data['place_name_en'],
+    placePicture: data['place_picture'],
+    totalViews: data['total_views'],
+    userAvatar: data['user_avatar'],
+    userId: data['user_id'],
+    userNik: data['user_nik'],
+    views: data['views']
   }
 );
 
-export const adaptEventsOfComedianToClient = (event: EventsOfComedianSC): EventsOfComedianCC => (
+export const adaptEventsOfComedianToClient = (data: EventsOfComedianSC): EventsOfComedianCC => (
   {
-    comedianFirstName: event['comedian_first_name'],
-    comedianFirstNameEn: event['comedian_first_name_en'],
-    comedianLastName: event['comedian_last_name'],
-    comedianLastNameEn: event['comedian_last_name_en'],
-    eventDate: event['event_date'],
-    eventId: event['event_id'],
-    eventName: event['event_name'],
-    eventNameEn: event['event_name_en'],
-    eventPromoPicture: event['event_promo_picture'],
-    eventStatus: event['event_status'],
-    placeId: event['place_id'],
-    placeName: event['place_name']
+    comedianFirstName: data['comedian_first_name'],
+    comedianFirstNameEn: data['comedian_first_name_en'],
+    comedianLastName: data['comedian_last_name'],
+    comedianLastNameEn: data['comedian_last_name_en'],
+    eventDate: data['event_date'],
+    eventId: data['event_id'],
+    eventName: data['event_name'],
+    eventNameEn: data['event_name_en'],
+    eventPromoPicture: data['event_promo_picture'],
+    eventStatus: data['event_status'],
+    placeId: data['place_id'],
+    placeName: data['place_name'],
+    placeNameEn: data['place_name_en'],
+    showName: data['show_name'],
+    dataType: DataType.EventsOfComedianCC
   }
 );
 
-export const adaptEventToCard = (event: EventsOfComedianCC): GridCardType => ({
-  date: event.eventDate || '',
-  extId: event.placeId,
-  extName: event.placeName,
-  id: event.eventId,
-  name: event.eventName,
-  picture: event.eventPromoPicture,
-  status: event.eventStatus,
-  type: ContentName.Events,
-  extType: ContentName.Places
-});

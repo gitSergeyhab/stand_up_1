@@ -34,4 +34,24 @@ export const Color = {
   BrownMain: '#300606'
 };
 
+export const EventType = {
+  Planned: 'planned',
+  Ended: 'ended',
+  Canceled: 'canceled'
+} as const;
 
+export const FilterName = {
+  Year: 'year',
+  Days: 'days',
+  EventStatus: 'status',
+  CountryId: 'country_id',
+  ComedianId: 'comedian_id',
+  PlaceId: 'place_id',
+  LanguageId: 'language_id',
+  City: 'city',
+  Rate: 'rate',
+  Limit: 'limit',
+  Offset: 'offset',
+  Order: 'order',
+  Direction: 'direction',
+} as const;

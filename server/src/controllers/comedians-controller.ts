@@ -237,9 +237,9 @@ class ComedianController {
                 }
             )
 
-            if (!data.length) {
-                return res.status(StatusCode.NotFoundError).json({message: `there is not comedian with id = ${id}`})
-            }
+            // if (!data.length) {
+            //     return res.status(StatusCode.NotFoundError).json({message: `there is not comedian with id = ${id}`})
+            // }
             
             // const data = getDataFromSQL(result, 'events')
 
@@ -250,6 +250,52 @@ class ComedianController {
         } catch(err) {
             console.log(err)
             return res.status(500).json({message: 'error getEventsByComedianId'})
+        }
+    }
+
+    async getShowsByComedianId(req: Request, res: Response) {
+        try {
+            const {id} = req.params;
+            const {year = null} = req.query;
+
+            const where = `
+                WHERE comedian_id = :id
+                ${year ? 'AND EXTRACT( YEAR FROM show_date_added) = :year' : '' }  
+            `;
+
+            const data = await sequelize.query(
+                `
+                SELECT
+                show_id, show_name, show_date_added, show_poster,
+                comedian_id, comedian_first_name, comedian_first_name_en, comedian_last_name, comedian_last_name_en
+
+                FROM shows
+                LEFT JOIN comedians USING (comedian_id)
+
+                ${where}
+
+                ORDER BY show_id ASC
+                ;
+                `,
+                {
+                    replacements: { id, year },
+                    type: 'SELECT'
+                }
+            )
+
+            // if (!data.length) {
+            //     return res.status(StatusCode.NotFoundError).json({message: `there is not comedian with id = ${id}`})
+            // }
+            
+            // const data = getDataFromSQL(result, 'events')
+
+
+            return res.status(200).json(data);
+    
+   
+        } catch(err) {
+            console.log(err)
+            return res.status(500).json({message: 'error getShowsByComedianId'})
         }
     }
 

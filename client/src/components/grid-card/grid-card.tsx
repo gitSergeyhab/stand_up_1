@@ -1,11 +1,8 @@
-import {
-  // Card,
-  // CardContent,
-  CardMedia, Grid, Typography } from '@mui/material';
-import { Link } from 'react-router-dom';
+
 import { DefaultPath } from '../../const/const';
 import { GridCardType } from '../../types/types';
-import { Card, CardContent, CardLink, Img } from './grid-card-style';
+import { getFormatDate } from '../../utils/date-utils';
+import { Card, CardContent, CardLink, DateCard, ExtLink, Img, StatusCard, TitleCard } from './grid-card-style';
 
 
 export const GridCard = ( {card}: {card: GridCardType} ) => {
@@ -13,44 +10,28 @@ export const GridCard = ( {card}: {card: GridCardType} ) => {
   const {type, id, name, date, status, picture, extName, extId, extType} = card;
   const image = picture ? picture : DefaultPath.Any;
   const to = `/${type}/${id}/info`;
-  const toExt = `/${extType}/${extId || ''}/info`;
+  const toExt = extType ? `/${extType}/${extId || ''}/info` : '';
 
-  const extLink = extId ? <Link className='grid-card__link' to={toExt}><Typography variant="body1">{extName}</Typography></Link> : null;
+
+  const titleElement = name ? <TitleCard> { name } </TitleCard> : null;
+  const dateElement = date ? <DateCard> { getFormatDate(date, 'DD.MM.YYYY') } </DateCard> : null;
+  const statusElement = status ? <StatusCard> { status } </StatusCard> : null;
+  const extLink = extId ? <ExtLink to={toExt}>{extName}</ExtLink> : null;
+
+
   return (
-  // <Link to={to}>
-  // <Grid item xs={12} sm={6} md={4}>
-
     <Card className='grid-card'>
       <CardLink to={to} className='grid-card__link'>
-        <Img
-          // src='/img/test/abr.jpg'
-          src={image}
-        />
-        {/* <CardMedia
-          // image={image}
-          component="img"
-          height="140"
-          image={'/img/test/abr.jpg'}
+        <Img src={image}/>
 
-          title={name}
-        /> */}
       </CardLink>
       <CardContent className='grid-card__content'>
-        <Typography variant="h6">
-          {name}
-        </Typography>
-        <Typography variant="body1">
-          {date}
-        </Typography>
-        <Typography variant="body1">
-          {status}
-        </Typography>
+        {titleElement}
+        {dateElement}
+        {statusElement}
         {extLink}
 
       </CardContent>
     </Card>
-
-  // </Grid>
-  // {/* </Link> */}
   );
 };

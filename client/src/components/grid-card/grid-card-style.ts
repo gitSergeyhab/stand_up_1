@@ -11,56 +11,68 @@ export const Card = styled.li`
   display: flex;
   flex-direction: column;
   align-items: center;
+  border-radius: 13px;
+  padding: 1rem;
+  outline: #000000 2px solid;
+  box-shadow: 7px 6px 36px 0px rgba(60, 8, 6, 0.5);
+
 
   &:hover, &:focus{
-    scale: 1.02;
+    scale: 1.01;
     transition: 0.5s;
+    outline: goldenrod 2px solid;
+    box-shadow: 9px 8px 40px 2px rgba(60, 8, 6, 1);
   }
 `;
 
-export const Img = styled.img`width: 100%;`;
+export const Img = styled.img`height: 100%;`;
+
 
 export const CardLink = styled(Link)`
   background-color: inherit;
-  display: block;
+  display: flex;
+  /* flex-grow: 1; */
+  justify-content: center;
+  align-items: center;
   width: 100%;
   color: wheat;
   text-decoration: none;
+  height: 160px;
+  overflow: hidden;
+  margin-bottom: 1rem;
+  opacity: 0.9;
+
+  &:focus, &:hover {
+    outline: goldenrod 1px solid;
+  }
 `;
 
-// .grid-card {
-//   transition: 0.5s;
-// }
-
-// .grid-card:hover,
-// .grid-card:focus
-//  {
-//   scale: 1.02;
-//   transition: 0.5s;
-//  }
-
-// .grid-card__link,
-// .grid-card__link
-// {
-// color: wheat;
-// text-decoration: none;
-// }
-
-// .grid-card__link:hover,
-// .grid-card__link:focus
-//  {
-//   border: orange 2px solid;
-//   color: orange;
-//   opacity: 0.95;
-//   transition: 0.5s;
-// }
 
 export const CardContent = styled.div`
   background-color: #300606;
   color: white;
+  display: flex;
+  flex-grow: 1;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+
 `;
 
-// .grid-card:hover .grid-card__content{
-//   background-color: #1b0202;
-//   transition: 0.5s;
-// }
+export const TitleCard = styled.h4`margin: 3px; text-align: center;`;
+
+export const DateCard = styled.p`margin: 1px;`;
+
+export const StatusCard = styled.p`margin: 1px;`;
+
+export const ExtLink = styled(Link)`
+text-decoration: none;
+color: gold;
+
+&:hover, &:focus {
+  color: goldenrod;
+}
+`;
+
+// const extLink = extId ? <Link className='grid-card__link' to={toExt}><Typography variant="body1">{extName}</Typography></Link> : null;
+//

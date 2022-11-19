@@ -1,4 +1,5 @@
 import { ContentName } from '../../const/const';
+import { TabData } from '../../const/data';
 import { TabLi, TabLink, TabPanelUl } from './top-tab-styles';
 
 
@@ -24,15 +25,17 @@ type TopTabsProps = {
   id: string | undefined;
   type: ContentName;
   pathname: string;
-  tabData: DataTabType[];
 }
 
 
 export const TopTabs = ({tabProps} : {tabProps : TopTabsProps}) => {
 
-  const { id = '1', type, pathname, tabData } = tabProps;
+  const { id = '1', type, pathname } = tabProps;
+
+  const tabData = TabData[type];
 
   const tabs = getTabs(tabData, type, id);
+
 
   const tabsElements = tabs.map((item) => <Tab key={item.path} tab={item} pathName={pathname}/>);
   return (

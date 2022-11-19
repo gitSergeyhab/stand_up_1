@@ -1,4 +1,4 @@
-import { ResourceType } from './types';
+import { DataType, ResourceType } from './types';
 
 export const enum EventStatus {
   Planned = 'planned',
@@ -117,20 +117,23 @@ export type OneEventTypeCC = {
 export type EventsOfComedianSC = {
   event_id: string;
   event_name: string;
-
   event_name_en: string | null;
   event_date: string | null;
   event_status: EventStatus;
   event_promo_picture: string | null;
   place_id: string | null;
   place_name: string | null;
-  comedian_first_name:string | null;
+  place_name_en: string | null;
+  comedian_first_name: string | null;
   comedian_first_name_en: string | null;
   comedian_last_name: string | null;
   comedian_last_name_en: string | null;
+  show_name: string | null;
 }
 
+
 export type EventsOfComedianCC = {
+  dataType: DataType;
   eventId: string;
   eventName: string;
 
@@ -140,8 +143,10 @@ export type EventsOfComedianCC = {
   eventPromoPicture: string | null;
   placeId: string | null;
   placeName: string | null;
-  comedianFirstName:string | null;
+  placeNameEn: string | null;
+  comedianFirstName: string | null;
   comedianFirstNameEn: string | null;
   comedianLastName: string | null;
   comedianLastNameEn: string | null;
+  showName: string | null;
 }

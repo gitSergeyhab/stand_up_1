@@ -1,4 +1,4 @@
-import { PictureType } from './types';
+import { DataType, PictureType } from './types';
 
 export type VideoType = {
   id: number | string;
@@ -126,3 +126,42 @@ export type OneShowTypeCC = {
   videos: VideoType[] | null;
   views: string | null;
 };
+
+
+export type ShowsOfComedianSC = {
+  show_id: string;
+  show_name: string;
+  show_date_added: string;
+  show_poster: string | null;
+
+  comedian_id: string;
+  comedian_first_name: string | null;
+  comedian_first_name_en: string | null;
+  comedian_last_name: string | null;
+  comedian_last_name_en: string | null;
+
+  place_name: string | null;
+  place_name_en: string | null;
+  event_name: string | null;
+  event_name_en: string | null;
+}
+
+export type ShowsOfComedianCC = {
+  dataType: DataType;
+
+  showId: string;
+  showName: string;
+  showDateAdded: string;
+  showPoster: string | null;
+
+  comedianId: string;
+  comedianFirstName: string | null;
+  comedianFirstNameEn: string | null;
+  comedianLastName: string | null;
+  comedianLastNameEn: string | null;
+
+  placeName: string | null;
+  placeNameEn: string | null;
+  eventName: string | null;
+  eventNameEn: string | null;
+}

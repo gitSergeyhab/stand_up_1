@@ -7,8 +7,11 @@ import { Header } from '../components/header/header';
 import Footer from '../components/footer/footer';
 import { Box } from '@mui/joy';
 import CssBaseline from '@mui/material/CssBaseline';
-import { OneComedianPageEvents } from '../pages/one-comedian-page-events/one-comedian-page-events';
 import { MainContainer, MainWrapper } from './app-style';
+import { PageCardFilterList } from '../pages/page-card-filter-list/page-card-filter-list';
+import { adaptEventToCard } from '../utils/adapters/card-adapters';
+import { ContentName, FilterName } from '../const/const';
+import { useGetEventsOfComedianQuery } from '../store/comedians-api';
 
 
 export const App = () => {
@@ -50,7 +53,18 @@ export const App = () => {
 
                   <Route path={AppRoute.Comedians} element={<ComediansPage/>}/>
                   <Route path={AppRoute.Comedian} element={<OneComedianPage/>}/>
-                  <Route path={AppRoute.ComedianEvents} element={<OneComedianPageEvents/>}/>
+                  <Route path={AppRoute.ComedianEvents} element={
+                    <PageCardFilterList
+                      // adapter={adaptEventToCard}
+                      filters={[FilterName.EventStatus, FilterName.Year]}
+                      listType={ContentName.Events}
+                      mainType={ContentName.Comedians}
+                      useGetQuery={useGetEventsOfComedianQuery}
+                    />
+                  }
+                  />
+                  {/* <Route path={AppRoute.ComedianEvents} element={<OneComedianPageEvents/>}/>
+                  <Route path={AppRoute.ComedianShows} element={<OneComedianPageShows/>}/> */}
 
 
                   <Route path={AppRoute.Events} element={<EventsPage/>}/>

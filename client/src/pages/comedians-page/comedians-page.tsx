@@ -19,7 +19,7 @@ const ComedianCard = ({comedian} : {comedian : ComedianTypeCC}) => {
 
   return (
 
-    <Link to={`/comedians/${comedianId}`}>
+    <Link to={`/comedians/${comedianId}/info`}>
       <h3>{comedianFirstName} {comedianLastName}</h3>
       {/* {comedian_avatar && <img src={comedian_avatar} alt={comedian_first_name} width='400' height='300'/>} */}
       {/* <img src={comedianAvatar || DefaultPath.ComedianAvatar} alt={comedianFirstName} width='400' height='300'/> */}

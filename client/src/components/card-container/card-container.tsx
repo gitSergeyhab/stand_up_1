@@ -10,10 +10,10 @@ export const CardContainerUl = styled.ul`
 	box-sizing: border-box;
 	display: grid;
 	place-content: center;
-	gap: 3px;
+	gap: 1rem;
 	grid-template-columns: repeat(3, 30%);
 	margin: 0;
-	padding: 2px;
+	padding: 1rem;
   @media (max-width: 1200px) {
     grid-template-columns: repeat(2, 47%);
   }
@@ -27,7 +27,7 @@ export const CardContainer = ({cards} : {cards: GridCardType[]}) => {
   const cardElements = cards.map((item) => <GridCard key={item.id} card={item} />);
   return (
     <CardContainerUl>
-      {cardElements}  {cardElements}
+      {cardElements}
     </CardContainerUl>
   );
 };

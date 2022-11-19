@@ -132,12 +132,28 @@ INSERT INTO events (place_id, user_id, event_name, event_description, event_date
 
 INSERT INTO events (place_id, user_id, event_name, event_description, event_date, event_status, event_promo_picture ) VALUES
 (1,1, 'First Event1', 'First Event event_discription', '01.01.2021', 'ended', '/img/test/abr.jpg'),
-(2,1, 'Second Event1', 'Second Second Event event_discription', '01.02.2021', 'endedended', '/img/test/black.jpg'),
+(2,1, 'Second Event1', 'Second Second Event event_discription', '01.02.2021', 'ended', '/img/test/black.jpg'),
 (2,1, 'Third Event1', 'Third Third Third Event event_discription', '01.01.2020', 'ended', '/img/test/white.jpg'),
 (3,2, 'Event 41', '444444444 event_discription', '01.02.2020', 'ended', '/img/test/white.jpg'),
 (3,3, 'Event 551', '55 55 55 55 event_discription', '01.03.2019', 'ended', '/img/test/black.jpg'),
 (3,3, 'Event 6661', '666 666 666', '04.01.2018', 'ended', '/img/test/abr.jpg');
 
+
+INSERT INTO events (place_id, user_id, event_name, event_description, event_date, event_status, event_promo_picture ) VALUES
+(4,1, 'First Event --11', 'First Event event_discription--11', '03.01.2023', 'planned', '/img/test/girl.webp'),
+(3,1, 'Second Event --12', 'Second Second Event event_discription', '06.06.2023', 'planned', '/img/test/kom.jpg'),
+(2,1, 'Third Event --13', 'Third Third Third Event event_discription', '01.09.2024', 'planned', '/img/test/d-r.jpeg'),
+(1,1, 'Event --14', '444444444 event_discription', '01.02.2024', 'planned', '/img/test/abr.jpg'),
+(3,2, 'Event --155', '55 55 55 55 event_discription', '01.03.2024', 'planned', '/img/test/d-r.jpeg'),
+(3,2, 'Event --1666', '666 666 666', '04.01.2025', 'planned', '/img/test/kom.jpg');
+
+INSERT INTO events (place_id, user_id, event_name, event_description, event_date, event_status, event_promo_picture ) VALUES
+(1,1, 'First Event1', 'First Event event_discription', '01.05.2021', 'ended', '/img/test/abr.jpg'),
+(2,1, 'Second Event1', 'Second Second Event event_discription', '01.04.2020', 'ended', '/img/test/black.jpg'),
+(2,1, 'Third Event1', 'Third Third Third Event event_discription', '01.11.2019', 'ended', '/img/test/white.jpg'),
+(3,1, 'Event 41', '444444444 event_discription', '01.02.2021', 'canceled', '/img/test/white.jpg'),
+(3,3, 'Event 551', '55 55 55 55 event_discription', '01.03.2022', 'canceled', '/img/test/black.jpg'),
+(3,3, 'Event 6661', '666 666 666', '04.04.2018', 'canceled', '/img/test/abr.jpg');
 
 
 INSERT INTO shows(
@@ -193,6 +209,26 @@ INSERT INTO shows(event_id, user_added_id, comedian_id, language_id, show_date, 
 (1, 2, 3, 1, '2022-11-03', 'SHOW #6', 'show_description 666', '/img/test/xz.jpg'),
 (1, 1, 4, 1, '2022-11-30', 'SHOW #7', 'show_description 577', '/img/test/girl.webp'),
 (2, 2, 1, 1, '2022-11-13', 'SHOW #8', 'show_description 666 888', '/img/test/d-r.jpeg');
+
+INSERT INTO shows(event_id, user_added_id, comedian_id, language_id, show_date, show_name, show_description, show_poster, show_date_added) VALUES
+(1, 1, 2, 1, '2020-10-30', 'SHOW #9', 'show_description 995 asdfg', '/img/test/black.jpg', '2022-10-30'),
+(1, 2, 3, 1, '2020-11-03', 'SHOW #10', 'show_description 10666 dfgfdsdf', '/img/test/xz.jpg', '2022-11-10'),
+(1, 1, 4, 1, '2021-11-30', 'SHOW #11', 'show_description 11577 df fghj', '/img/test/girl.webp', '2019-12-20'),
+(2, 2, 1, 1, '2021-11-13', 'SHOW #12', 'show_description 12666 888 dsdfsdsd', '/img/test/d-r.jpeg', '2018-01-10'),
+(1, 1, 2, 1, '2022-10-30', 'SHOW #13', 'show_description 135 sdf', '/img/test/black.jpg', '2019-02-11'),
+(1, 2, 3, 1, '2022-11-03', 'SHOW #14', 'show_description 14666 s', '/img/test/xz.jpg', '2020-03-22'),
+(1, 1, 4, 1, '2020-11-30', 'SHOW #15', 'show_description 15577', '/img/test/girl.webp', '2021-04-01'),
+(2, 2, 1, 1, '2021-11-13', 'SHOW #16', 'show_description 16666 888', '/img/test/d-r.jpeg', '2022-05-02'),
+(1, 1, 2, 1, '2019-10-30', 'SHOW #17', 'show_description 175', '/img/test/black.jpg', '2020-06-03'),
+(1, 2, 3, 1, '2018-11-03', 'SHOW #18', 'show_description 18666', '/img/test/xz.jpg', '2019-07-30'),
+(1, 1, 4, 1, '2017-11-30', 'SHOW #19', 'show_description 19577', '/img/test/girl.webp', '2021-11-30'),
+(2, 2, 1, 1, '2016-11-13', 'SHOW #20', 'show_description 20666 888', '/img/test/d-r.jpeg', '2017-11-30');
+
+
+INSERT INTO shows(user_added_id, comedian_id, language_id, show_date, show_name, show_description, show_poster, show_date_added) VALUES
+(1, 2, 1, '2020-09-30', 'SHOW #21', 'show_description 995 asdfg', '/img/test/black.jpg', '2021-10-30'),
+(2, 3, 1, '2020-08-03', 'SHOW #22', 'show_description 10666 dfgfdsdf', '/img/test/xz.jpg', '2020-11-10'),
+(1, 4, 1, '2021-07-30', 'SHOW #23', 'show_description 11577 df fghj', '/img/test/girl.webp', '2018-12-20');
  
 INSERT INTO pictures(show_id, picture_path) VALUES
 (1, '/img/test/black.jpg'),
@@ -294,6 +330,27 @@ INSERT INTO comedians_events VALUES
 (3,9), 
 (4,8), 
 (4,7); 
+
+INSERT INTO comedians_events VALUES
+(1,13), 
+(1,14), 
+(1,15), 
+(1,16), 
+(1,17), 
+(1,18), 
+(4,19), 
+(2,20), 
+(3,19), 
+(4,18), 
+(4,24), 
+(1,19), 
+(1,20), 
+(1,21), 
+(1,22), 
+(2,14), 
+(3,24), 
+(4,23),
+(2,22); 
 
 INSERT INTO resources(resource_type_id, event_id, resource_href) VALUES 
 (2, 1, 'https://vk.com/vk-ev-1'),

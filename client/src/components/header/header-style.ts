@@ -38,6 +38,7 @@ export const Nav = styled.nav`
   position: fixed;
   width: 100%;
   top: 0;
+  z-index: 2;
     @media (min-width: 900px) {
       background: #300606;
     };
@@ -233,7 +234,7 @@ export const UserContainer = styled.div<LogoContainerProp>`
   display: inline-block;
   vertical-align: middle;
   width: ${({ width }) => `${width}px`};
-  
+
   @media (min-width: 900px) {
     margin: 0;
     position: static;

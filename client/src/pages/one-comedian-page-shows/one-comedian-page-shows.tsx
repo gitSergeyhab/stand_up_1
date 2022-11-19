@@ -6,13 +6,13 @@ import { TopTabs } from '../../components/top-tabs/top-tabs';
 import { ContentName, FilterName } from '../../const/const';
 import { TabData } from '../../const/data';
 import { CardContainer } from '../../components/card-container/card-container';
-import { useGetEventsOfComedianQuery } from '../../store/comedians-api';
+import { useGetShowsOfComedianQuery } from '../../store/comedians-api';
 import { SearchByIdType } from '../../types/types';
 import { Filter } from '../../components/filters/filter';
-import { adaptEventToCard } from '../../utils/adapters/card-adapters';
+import { adaptShowsToCard } from '../../utils/adapters/card-adapters';
 
 
-export const OneComedianPageEvents = () => {
+export const OneComedianPageShows = () => {
 
   const { id } = useParams();
 
@@ -20,7 +20,7 @@ export const OneComedianPageEvents = () => {
 
   const queryParams = {id, search} as SearchByIdType;
 
-  const {isError, isLoading, data: events} = useGetEventsOfComedianQuery(queryParams);
+  const {isError, isLoading, data} = useGetShowsOfComedianQuery(queryParams);
 
 
   if (isError) {
@@ -36,7 +36,7 @@ export const OneComedianPageEvents = () => {
     );
   }
 
-  if (isLoading || !events) {
+  if (isLoading || !data) {
 
     return (
 
@@ -51,7 +51,7 @@ export const OneComedianPageEvents = () => {
     );
   }
 
-  if (!events.length) {
+  if (!data.length) {
     return (
       <Box component={'section'} sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'start', alignItems: 'center', pt: '70px', background: '#0d0101' }} >
         <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'start', alignItems: 'center', background: '#ffffff', width: '60%'}}>
@@ -64,9 +64,9 @@ export const OneComedianPageEvents = () => {
   }
 
 
-  const cardData = events.map(adaptEventToCard);
+  const cardData = data.map(adaptShowsToCard);
 
-  const {comedianFirstName, comedianFirstNameEn, comedianLastName, comedianLastNameEn} = events[0];
+  const {comedianFirstName, comedianFirstNameEn, comedianLastName, comedianLastNameEn} = data[0];
 
   const tabProps = {id, type: ContentName.Comedians, pathname, tabData: TabData[ContentName.Comedians]};
 
@@ -79,7 +79,7 @@ export const OneComedianPageEvents = () => {
       />
 
       <TopTabs tabProps={tabProps}/>
-      <Filter filters={[FilterName.EventStatus, FilterName.Year]}/>
+      <Filter filters={[FilterName.Year]}/>
 
 
       <CardContainer cards={cardData} />

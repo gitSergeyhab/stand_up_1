@@ -1,41 +1,41 @@
 import { OnePlaceTypeCC, OnePlaceTypeSC, PlaceTypeCC, PlaceTypeSC } from '../../types/place-types';
 
-export const adaptEventsToClient = (place: PlaceTypeSC): PlaceTypeCC => (
+export const adaptEventsToClient = (data: PlaceTypeSC): PlaceTypeCC => (
   {
-    countryId: place['country_id'],
-    countryName: place['country_name'],
-    countryNameEn: place['country_name_en'],
-    placeCity: place['place_city'],
-    placeCityEn: place['place_city_en'],
-    placeId: place['place_id'],
-    placeName: place['place_name'],
-    placeNameEn: place['place_name_en'],
-    placePromoPicture: place['place_promo_picture'],
-    totalViews: place['total_views'],
-    views: place['views'],
+    countryId: data['country_id'],
+    countryName: data['country_name'],
+    countryNameEn: data['country_name_en'],
+    placeCity: data['place_city'],
+    placeCityEn: data['place_city_en'],
+    placeId: data['place_id'],
+    placeName: data['place_name'],
+    placeNameEn: data['place_name_en'],
+    placePromoPicture: data['place_promo_picture'],
+    totalViews: data['total_views'],
+    views: data['views'],
   }
 );
 
 
-export const adaptOneEventToClient = (place: OnePlaceTypeSC): OnePlaceTypeCC => (
+export const adaptOneEventToClient = (data: OnePlaceTypeSC): OnePlaceTypeCC => (
   {
-    countryId: place['country_id'],
-    countryName: place['country_name'],
-    countryNameEn: place['country_name_en'],
-    datePlaceAdded: place['date_place_added'],
-    pictures: place['pictures'],
-    placeCity: place['place_city'],
-    placeCityEn: place['place_city_en'],
-    placeDateFounded: place['place_date_founded'],
-    placeDescription: place['place_description'],
-    placeId: place['place_id'],
-    placeName: place['place_name'],
-    placeNameEn: place['place_name_en'],
-    placePromoPicture: place['place_promo_picture'],
-    resources: place['resources'],
-    totalViews: place['total_views'],
-    userId: place['user_id'],
-    userNik: place['user_nik'],
-    views: place['views'],
+    countryId: data['country_id'],
+    countryName: data['country_name'],
+    countryNameEn: data['country_name_en'],
+    datePlaceAdded: data['date_place_added'],
+    pictures: data['pictures'],
+    placeCity: data['place_city'],
+    placeCityEn: data['place_city_en'],
+    placeDateFounded: data['place_date_founded'],
+    placeDescription: data['place_description'],
+    placeId: data['place_id'],
+    placeName: data['place_name'],
+    placeNameEn: data['place_name_en'],
+    placePromoPicture: data['place_promo_picture'],
+    resources: data['resources'],
+    totalViews: data['total_views'],
+    userId: data['user_id'],
+    userNik: data['user_nik'],
+    views: data['views'],
   }
 );

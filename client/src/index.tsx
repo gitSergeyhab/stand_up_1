@@ -4,6 +4,8 @@ import { Provider } from 'react-redux';
 import { App } from './app/app';
 import { store } from './store/store';
 
+import 'normalize.css';
+
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement,
