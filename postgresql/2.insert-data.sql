@@ -52,22 +52,22 @@ INSERT INTO users (user_email, user_password, user_nik, user_status, country_id,
 INSERT INTO users (
     user_email, user_password, user_nik, user_first_name, user_last_name, 
     country_id, user_city, user_avatar, user_date_birth, user_description) VALUES
-    ('eqqwww@m.com', 'p1', 'full', 'full', '1111',  1, 'New Mordor1', '/avatars/user_avatar1/', '1917-01-01', 'it is description'),
-    ('full@m.com', 'p123', 'full2', '2full', '222-last',  1, 'New Mordor2', '/avatars/user_avatar2/', '1977-07-07', 'it is description1');
+    ('eqqwww@m.com', 'p1', 'full', 'full', '1111',  1, 'New Mordor1', '/img/test/abr.jpg', '1917-01-01', 'it is description'),
+    ('full@m.com', 'p123', 'full2', '2full', '222-last',  1, 'New Mordor2', '/img/test/d-r.jpeg', '1977-07-07', 'it is description1');
 
 
 INSERT INTO comedians(
     comedian_first_name, comedian_last_name, country_id, comedian_city, comedian_avatar, comedian_date_birth
 ) VALUES 
-('Слава', 'Комиссаренко', 1, 'Минск', '/avatars/comedian/comedian_avatar/s-komisarenko.jpeg', '1985-07-27'),
-('Дмитрий', 'Романов', 2, 'Одесса', '/avatars/comedian/comedian_avatar/d-romanov.jpeg', '1985-01-08');
+('Слава', 'Комиссаренко', 1, 'Минск', '/img/test/xz.jpeg', '1985-07-27'),
+('Дмитрий', 'Романов', 2, 'Одесса', '/img/test/girl.webp', '1985-01-08');
 
 INSERT INTO comedians(
     comedian_first_name, comedian_last_name, comedian_first_name_en, comedian_last_name_en, 
     country_id, comedian_city, comedian_avatar, comedian_date_birth, comedian_description
 ) VALUES 
-('Идрак', 'Мирзализаде', 'Idrak', 'Mirzalizade', 3, '', '/avatars/comedian/comedian_avatar/idrak.jpeg', '1985-01-08', 'cd'),
-('Денис', 'Чужой', 'Denis', 'Chuzhoy', 2, '', '/avatars/comedian/comedian_avatar/Chuzhoy.jpeg', '1988-07-23', 'iam verygood');
+('Идрак', 'Мирзализаде', 'Idrak', 'Mirzalizade', 3, '', '/img/test/girl.webp', '1985-01-08', 'cd'),
+('Денис', 'Чужой', 'Denis', 'Chuzhoy', 2, '', '/img/test/abr.jpg', '1988-07-23', 'iam verygood');
 
 
 INSERT INTO places(place_name, country_id, place_city, user_added_id, place_promo_picture, place_description) VALUES

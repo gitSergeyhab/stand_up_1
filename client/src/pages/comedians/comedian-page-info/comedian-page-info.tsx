@@ -3,21 +3,21 @@ import { useState } from 'react';
 
 
 import { useParams, useLocation } from 'react-router-dom';
-import { AboutBlock } from '../../components/about-block/about-block';
-import { ImageModal } from '../../components/image-modal/image-modal';
-import { ImgList } from '../../components/img-list/img-list';
-import { MainPic } from '../../components/main-pic/main-pic';
-import { Rating } from '../../components/rating/rating';
-import { ResourceBlock } from '../../components/resource-block/resource-block';
-import { PictureType } from '../../types/types';
+import { AboutBlock } from '../../../components/about-block/about-block';
+import { ImageModal } from '../../../components/image-modal/image-modal';
+import { ImgList } from '../../../components/img-list/img-list';
+import { MainPic } from '../../../components/main-pic/main-pic';
+import { Rating } from '../../../components/rating/rating';
+import { ResourceBlock } from '../../../components/resource-block/resource-block';
+import { PictureType } from '../../../types/types';
 
 
-import { Titles } from '../../components/titles/titles';
-import { TopTabs } from '../../components/top-tabs/top-tabs';
-import { ContentName } from '../../const/const';
-import { ViewsBlock } from '../../components/views-block/views-block';
-import { TabData } from '../../const/data';
-import { useGetComedianByIdQuery } from '../../store/comedians-api';
+import { Titles } from '../../../components/titles/titles';
+import { TopTabs } from '../../../components/top-tabs/top-tabs';
+import { ContentName } from '../../../const/const';
+import { ViewsBlock } from '../../../components/views-block/views-block';
+import { TabData } from '../../../const/data';
+import { useGetComedianByIdQuery } from '../../../store/comedians-api';
 
 
 const pictures = [
@@ -32,7 +32,7 @@ const pictures = [
 ];
 
 
-export const OneComedianPage = () => {
+export const ComedianPageInfo = () => {
 
   const { id } = useParams();
   const { pathname } = useLocation();

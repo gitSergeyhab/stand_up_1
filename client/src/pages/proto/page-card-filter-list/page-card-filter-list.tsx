@@ -1,54 +1,39 @@
 import { Box, Typography } from '@mui/material';
 import { useParams, useLocation } from 'react-router-dom';
 
-import { Titles } from '../../components/titles/titles';
-import { TopTabs } from '../../components/top-tabs/top-tabs';
-import { ContentName } from '../../const/const';
-import { CardContainer } from '../../components/card-container/card-container';
+import { Titles } from '../../../components/titles/titles';
+import { TopTabs } from '../../../components/top-tabs/top-tabs';
+import { ContentName, Language } from '../../../const/const';
+import { CardContainer } from '../../../components/card-container/card-container';
 
-import { DataType, GridCardType, SearchByIdType, UseGetQueryType } from '../../types/types';
-import { Filter } from '../../components/filters/filter';
+import { SearchByIdType, UseGetQueryType } from '../../../types/types';
+import { Filter } from '../../../components/filters/filter';
 
-import { AdapterCardType, adaptEventsToCard, adaptShowsToCard } from '../../utils/adapters/card-adapters';
-import { EventsOfComedianCC } from '../../types/event-types';
-import { ShowsOfComedianCC } from '../../types/show-types';
+import { adaptEventsToCard, adaptShowsToCard } from '../../../utils/adapters/card-adapters';
+import { EventsOfComedianCC } from '../../../types/event-types';
+import { ShowsOfComedianCC } from '../../../types/show-types';
+import { getTitle } from '../../../utils/utils';
 
 
-const enum Language {
-  En = 'english',
-  Native = 'native'
-}
+/**
+ * в зависимости от типа выбирает адаптер для данных с сервера и возвращает массив переведенных в CamelCase данных
+ * @param data массив данных с сервера
+ * @param type Тип - к чему относится страница (событие/шоу/комик и тд)
+ * @returns массив переведенных в CamelCase данных
+ */
 
-const getTitle = (data: GridCardType, type: ContentName, language: Language ) => {
-
+const getCardData = (data: EventsOfComedianCC[] | ShowsOfComedianCC[], type: ContentName) => {
   switch (type) {
-    case ContentName.Comedians:
-      return language === Language.Native ? data.comedianTitle : data.comedianTitleEn;
     case ContentName.Events:
-      return language === Language.Native ? data.eventTitle : data.eventTitleEn;
-    case ContentName.Places:
-      return language === Language.Native ? data.placeTitle : data.placeTitleEn;
+      return data.map((item) => adaptEventsToCard(item as EventsOfComedianCC));
+    case ContentName.Shows:
+      return data.map((item) => adaptShowsToCard(item as ShowsOfComedianCC));
 
-    default: return '';
+    default: return data.map((item) => adaptShowsToCard(item as ShowsOfComedianCC));
   }
 };
-
-const choseAdapter = (data: EventsOfComedianCC | ShowsOfComedianCC) => {
-  switch (data.dataType) {
-
-    case DataType.EventsOfComedianCC:
-      return adaptEventsToCard;
-    case DataType.ShowsOfComedianCC:
-      return adaptShowsToCard;
-
-    default: return adaptEventsToCard;
-  }
-};
-// AdapterCardType<EventsOfComedianCC> | AdapterCardType<ShowsOfComedianCC> |
 
 type PageCardFilterListProps = {
-  // adapter: AdapterCardType<EventsOfComedianCC | ShowsOfComedianCC>;
-  // adapter: (x: EventsOfComedianCC | ShowsOfComedianCC ) => GridCardType;
 
   filters: string[];
   mainType: ContentName;
@@ -56,10 +41,17 @@ type PageCardFilterListProps = {
   useGetQuery: UseGetQueryType;
 };
 
+/**
+ *  возвращает JSXElement - страницу с набором карточек
+ * @param param0 {filters, mainType, listType, useGetQuery }:
+ * filters - массив фильтров [year, languages  и тд] ;
+ * mainType - к чему относится страница (событие/шоу/комик и тд) ;
+ * listType - к чему относится карточка (событие/шоу/комик и тд) ;
+ * useGetQuery - ф-ция RTK-query, возвращающая {isError, isLoading, data}.
+ * @returns JSXElement - страницу с набором карточек
+ */
 
-export const PageCardFilterList = (
-  {filters, mainType, listType, useGetQuery }: PageCardFilterListProps
-) => {
+export const PageCardFilterList = ({filters, mainType, listType, useGetQuery }: PageCardFilterListProps) => {
 
   const { id } = useParams();
 
@@ -111,17 +103,7 @@ export const PageCardFilterList = (
   }
 
 
-  // const adapter = choseAdapter(data[0]);
-
-  let adapter: typeof adaptEventsToCard | typeof adaptShowsToCard | null = null;
-
-  if (data[0].dataType === DataType.EventsOfComedianCC) {
-    adapter = adaptEventsToCard;
-  } else {
-    adapter = adaptShowsToCard;
-  }
-
-  const cardData = data.map(adapter);
+  const cardData = getCardData(data, listType);
 
 
   const title = getTitle(cardData[0], mainType, Language.Native);
@@ -133,7 +115,6 @@ export const PageCardFilterList = (
   return (
     <>
       <Titles
-
         first={title}
         second={titleEn}
       />

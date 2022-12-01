@@ -5,6 +5,7 @@ import { App } from './app/app';
 import { store } from './store/store';
 
 import 'normalize.css';
+import './index.css';
 
 
 const root = ReactDOM.createRoot(

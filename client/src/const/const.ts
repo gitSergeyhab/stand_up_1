@@ -55,3 +55,8 @@ export const FilterName = {
   Order: 'order',
   Direction: 'direction',
 } as const;
+
+export const enum Language {
+  En = 'english',
+  Native = 'native'
+}

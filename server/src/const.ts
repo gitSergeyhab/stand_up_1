@@ -34,10 +34,18 @@ export const enum Column {
     User = 'user_id'
 }
 
-export const enum Table {
-    Comedian = 'comedians',
-    Show = 'shows',
-    Place = 'places',
-    Event = 'events',
-    User = 'users'
+export const TableName = {
+    Comedians: 'comedians',
+    Shows: 'shows',
+    Places: 'places',
+    Events: 'events',
+    Users: 'users'
+}
+
+export const ColumnId = {
+    Comedians: 'comedian_id',
+    Shows: 'show_id',
+    Places: 'place_id',
+    Events: 'event_id',
+    Users: 'user_id'
 }

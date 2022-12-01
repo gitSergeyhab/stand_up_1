@@ -122,6 +122,8 @@ class ComedianController {
 
             await insertView(id, user_id, Column.Comedian); // Добавляет 1 просмотр
 
+            console.log(comedians)
+
 
             return res.status(200).json(comedians[0]);
     

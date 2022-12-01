@@ -1,6 +1,18 @@
 import styled from 'styled-components';
 
 
+// export const Main = styled.main`
+//     background-color: #000000;
+//     padding: 0;
+// `;
+
+export const PageWrapper = styled.div`
+    background-color: #0d0101;
+    min-height: 100vh;
+    padding-bottom: 30px;
+
+`;
+
 export const MainWrapper = styled.div`
     display: flex;
     flex-direction: column;
@@ -28,3 +40,5 @@ export const MainContainer = styled.section`
         width: 60%;
     };
 `;
+
+
