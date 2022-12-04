@@ -20,18 +20,6 @@ import { TabData } from '../../../const/data';
 import { useGetComedianByIdQuery } from '../../../store/comedians-api';
 
 
-const pictures = [
-  {id: 19, src: '/img/test/xz.jpg'},
-  {id: 13, src: '/img/test/girl.webp'},
-  {id: 12, src: '/img/test/kom.jpg'},
-  {id: 10, src: '/img/test/white.jpg'},
-  {id: 7, src: '/img/test/xz-2.jpg'},
-  {id: 3, src: '/img/test/black.jpg'},
-  {id: 2, src: '/img/test/abr.jpg'},
-  {id: 1, src: '/img/test/d-r.jpeg'},
-];
-
-
 export const ComedianPageInfo = () => {
 
   const { id } = useParams();
@@ -84,13 +72,12 @@ export const ComedianPageInfo = () => {
 
 
   const {
-
     avgRate, numberOfRate, views, totalViews,
     comedianCity, countryName,
     comedianDateBirth, comedianDateDeath,
     comedianDescription,
-    comedianFirstName, comedianFirstNameEn, comedianLastName, comedianLastNameEn,
-    // pictures,
+    comedianFirstName, comedianLastName, comedianLastNameEn, comedianFirstNameEn,
+    pictures,
     resources, comedianAvatar,
   } = comedian;
 
@@ -107,10 +94,11 @@ export const ComedianPageInfo = () => {
   const goodAbout = about.filter((item) => item.point);
 
 
+  // const tabProps = {id, type: ContentName.Comedians, pathname, tabData: TabData[ContentName.Comedians]};
+
   const tabProps = {id, type: ContentName.Comedians, pathname, tabData: TabData[ContentName.Comedians]};
 
-
-  const imageModal = shownModal ? (
+  const imageModal = shownModal && pictures && pictures.length ? (
     <ImageModal
       pictures={pictures}
       onClose={onCloseModal}
@@ -118,6 +106,9 @@ export const ComedianPageInfo = () => {
       setImg={setPic}
     />
   ) : null;
+
+
+  const imageListElement = pictures && pictures.length ? <ImgList handleImgClick={handleClickImg} pictures={pictures.slice(0,3)}/> : null;
 
   return (
     <>
@@ -141,7 +132,7 @@ export const ComedianPageInfo = () => {
 
       <ResourceBlock resources={resources}/>
 
-      <ImgList handleImgClick={handleClickImg} pictures={pictures.slice(0,3)}/>
+      {imageListElement}
       {imageModal}
     </>
   );

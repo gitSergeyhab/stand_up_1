@@ -59,7 +59,7 @@ INSERT INTO users (
 INSERT INTO comedians(
     comedian_first_name, comedian_last_name, country_id, comedian_city, comedian_avatar, comedian_date_birth
 ) VALUES 
-('Слава', 'Комиссаренко', 1, 'Минск', '/img/test/xz.jpeg', '1985-07-27'),
+('Слава', 'Комиссаренко', 1, 'Минск', '/img/test/xz.jpg', '1985-07-27'),
 ('Дмитрий', 'Романов', 2, 'Одесса', '/img/test/girl.webp', '1985-01-08');
 
 INSERT INTO comedians(
@@ -69,6 +69,8 @@ INSERT INTO comedians(
 ('Идрак', 'Мирзализаде', 'Idrak', 'Mirzalizade', 3, '', '/img/test/girl.webp', '1985-01-08', 'cd'),
 ('Денис', 'Чужой', 'Denis', 'Chuzhoy', 2, '', '/img/test/abr.jpg', '1988-07-23', 'iam verygood');
 
+INSERT INTO comedians(comedian_first_name) VALUES ('Test');
+
 
 INSERT INTO places(place_name, country_id, place_city, user_added_id, place_promo_picture, place_description) VALUES
 ('SUPER-CLUB', 1, 'Tula', 2, '/img/test/xz.jpg', 'very nice');
@@ -76,6 +78,8 @@ INSERT INTO places(place_name, country_id, place_city, user_added_id, place_prom
 ('SUPER-Moskow-CLUB', 1, 'Moskow', 3, '/img/test/girl.webp', 'burn this place'),
 ('SPB-CLUB', 1, 'St Peterburg', 3, '/img/test/kom.jpg', 'hate this place'),
 ('LONDON-CLUB', 2, 'London', 1, '/img/test/white.jpg', 'fuck this place');
+
+INSERT INTO places(place_name) VALUES('The Test Place');
 
 INSERT INTO resources(resource_type_id, user_id, resource_href) VALUES 
 (2, 2, 'https://vk.com/vk-1'),

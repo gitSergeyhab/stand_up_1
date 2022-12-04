@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { ColumnId, StatusCode } from "../const";
 import { sequelize } from "../sequelize";
+import { getDataFromSQL, getDataFromSQLWithTitles, getTitlesQuery } from "../utils/sql-utils";
 
 class PicturesController {
     async getPictureById(req: Request, res: Response) {
@@ -8,15 +9,18 @@ class PicturesController {
         try {
             const {type, id} = req.params;
             const {limit = null, offset = null} = req.query; 
-            const columnId: string = ColumnId[type as string] || ColumnId.Comedians;
+            const columnId: string = ColumnId[type as string] || ColumnId.comedians;
 
-            const where = `WHERE ${columnId} = :id`
-            const data = await sequelize.query(
+            const where = `WHERE ${columnId} = :id`;
+
+            const result = await sequelize.query(
                 `SELECT picture_id, picture_path 
                 FROM pictures
                 ${where}
                 LIMIT :limit
                 OFFSET :offset;
+
+                ${getTitlesQuery(type)}
                 
                 SELECT COUNT(picture_id) 
                 FROM pictures
@@ -26,6 +30,7 @@ class PicturesController {
                     type: 'SELECT'
                 }
             );
+            const data = getDataFromSQLWithTitles(result)
 
             return res.status(StatusCode.Ok).json(data)
         } catch(err) {

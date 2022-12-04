@@ -15,6 +15,14 @@ const MENU_DATA = [
   ContentName.Shows
 ];
 
+// const MENU_DATA = [
+//   'Main',
+//   ContentName.comedians,
+//   ContentName.events,
+//   ContentName.places,
+//   ContentName.shows
+// ];
+
 
 const USER_DATA = [
   {title: 'Профиль', to: '/user/profile'},

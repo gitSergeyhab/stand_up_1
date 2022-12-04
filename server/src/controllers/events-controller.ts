@@ -1,7 +1,7 @@
 import { sequelize } from "../sequelize";
 import { Request, Response } from "express";
-import { Column, OrderValues, SQLFunctionName, StatusCode } from "../const";
-import { getDataFromSQL, insertView } from "../utils/sql-utils";
+import { Column, ColumnId, OrderValues, SQLFunctionName, StatusCode } from "../const";
+import { getDataFromSQL, getDataFromSQLWithTitles, getTitlesQuery, insertView } from "../utils/sql-utils";
 
 const EventOrder = {
     totalViews: 'total_views',
@@ -14,6 +14,7 @@ const EventOrder = {
 class EventsController {
     async getEventById(req: Request, res: Response) {
         try {
+            console.log('getEventById')
             const {id, user_id = '1'} = req.params
                 const events = await sequelize.query(
                     `
@@ -118,6 +119,62 @@ class EventsController {
             return res.status(500).json({message: 'error get shows by query'})
         }
     }
+
+    async getEventsByColumnId(req: Request, res: Response) {
+        try {
+            const {type, id} = req.params;
+            const {year = null, limit = null, offset = null, status = null} = req.query;
+            const columnId: string = ColumnId[type as string] || ColumnId.comedians;
+
+            const where = `
+                WHERE ${columnId} = :id
+                ${year ? 'AND EXTRACT( YEAR FROM event_date) = :year' : '' } 
+                AND ${status ? 'event_status = :status' : '1 = 1'}
+            `;
+
+            const result = await sequelize.query(
+                `
+                SELECT
+                event_id, event_name, event_name_en, event_date, event_promo_picture, event_status,
+                comedian_id, place_id, place_name, place_name_en
+
+                FROM events
+                LEFT JOIN comedians_events USING (event_id)
+                LEFT JOIN comedians USING (comedian_id)
+                LEFT JOIN places USING (place_id)
+
+                ${where}
+
+                ORDER BY ABS(EXTRACT( DAY FROM (NOW() - event_date))) ASC
+                LIMIT :limit
+                OFFSET :offset
+                ;
+                ${getTitlesQuery(type)}
+                SELECT COUNT(event_id) 
+                FROM events
+                LEFT JOIN comedians_events USING (event_id)
+                LEFT JOIN comedians USING (comedian_id)
+                ${where}
+                ;`,
+                {
+                    replacements: { id, year, status, limit, offset },
+                    type: 'SELECT'
+                }
+            )
+            
+            const data = getDataFromSQLWithTitles(result)
+
+            console.log(data)
+
+            return res.status(200).json(data);
+    
+   
+        } catch(err) {
+            console.log(err)
+            return res.status(500).json({message: 'error getShowsByColumnId'})
+        }
+    }
+
 
 
 }

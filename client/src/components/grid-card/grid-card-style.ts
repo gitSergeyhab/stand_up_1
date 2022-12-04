@@ -1,5 +1,3 @@
-
-
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -20,7 +18,6 @@ export const Card = styled.li`
   &:hover, &:focus{
     scale: 1.01;
     transition: 0.5s;
-    outline: goldenrod 2px solid;
     box-shadow: 9px 8px 40px 2px rgba(60, 8, 6, 1);
   }
 `;
@@ -40,7 +37,7 @@ export const CardLink = styled(Link)`
   height: 160px;
   overflow: hidden;
   margin-bottom: 1rem;
-  opacity: 0.9;
+  border-radius: 13px;
 
   &:focus, &:hover {
     outline: goldenrod 1px solid;
@@ -65,14 +62,13 @@ export const DateCard = styled.p`margin: 1px;`;
 
 export const StatusCard = styled.p`margin: 1px;`;
 
+export const RateCard = styled.p`margin: 1px; font-size: 12px`;
+
 export const ExtLink = styled(Link)`
-text-decoration: none;
-color: gold;
+  text-decoration: none;
+  color: gold;
 
-&:hover, &:focus {
-  color: goldenrod;
-}
+  &:hover, &:focus {
+    color: goldenrod;
+  }
 `;
-
-// const extLink = extId ? <Link className='grid-card__link' to={toExt}><Typography variant="body1">{extName}</Typography></Link> : null;
-//

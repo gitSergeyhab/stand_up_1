@@ -1,14 +1,18 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
 
 import { comediansApi } from './comedians-api';
+import { mainReducer } from './main-reducer/main-reducer';
+import { subApi } from './sub-api';
 
-// export const enum ReducerName {
-//     Comedians = comediansApi.reducerPath.
-// }
+export const enum ReducerName {
+    Main = 'Main'
+}
 
 
 export const reducer = combineReducers({
-  [comediansApi.reducerPath]: comediansApi.reducer
+  [comediansApi.reducerPath]: comediansApi.reducer,
+  [subApi.reducerPath]: subApi.reducer,
+  [ReducerName.Main]: mainReducer
 });
 
 export const store = configureStore({

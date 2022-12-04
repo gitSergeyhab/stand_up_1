@@ -1,7 +1,7 @@
 import { sequelize } from "../sequelize";
 import { Request, Response } from "express";
-import { Column, OrderValues, SQLFunctionName, StatusCode } from "../const";
-import { getDataFromSQL, insertView } from "../utils/sql-utils";
+import { Column, ColumnId, OrderValues, SQLFunctionName, StatusCode } from "../const";
+import { getDataFromSQL, getDataFromSQLWithTitles, getTitlesQuery, insertView } from "../utils/sql-utils";
 
 
 class ShowsController {
@@ -207,6 +207,62 @@ class ShowsController {
     //         return res.status(500).json({message: 'error search shows'})
     //     }
     // }
+
+    async getShowsByColumnId(req: Request, res: Response) {
+        try {
+            const {type, id} = req.params;
+            const {year = null, limit = null, offset = null} = req.query;
+            const columnId: string = ColumnId[type as string] || ColumnId.comedians;
+
+            const where = `
+                WHERE ${columnId} = :id
+                ${year ? 'AND EXTRACT( YEAR FROM show_date_added) = :year' : '' }  
+            `;
+
+            const countQuery = `SELECT COUNT(show_id) FROM shows ${where};`;
+
+            
+
+            const result = await sequelize.query(
+                `
+                SELECT
+                show_id, show_name, show_date_added, show_poster,
+                comedian_id, 
+                get_one_name_of_two(comedian_first_name, comedian_last_name) AS comedian_name,
+                get_one_name_of_two(comedian_first_name_en, comedian_last_name_en) AS comedian_name_en,
+                AVG(show_rate)::real AS avg_rate, COUNT (show_id) AS number_of_rate
+
+                FROM shows
+                LEFT JOIN comedians USING (comedian_id)
+                LEFT JOIN show_ratings USING (show_id)
+
+                ${where}
+
+                GROUP BY show_id, comedian_first_name, comedian_last_name, comedian_first_name_en, comedian_last_name_en
+                ORDER BY number_of_rate DESC
+                LIMIT :limit
+                OFFSET :offset
+                ;
+                ${getTitlesQuery(type)}
+                ${countQuery}
+                ;`,
+                {
+                    replacements: { id, year, limit, offset },
+                    type: 'SELECT'
+                }
+            )
+            
+            const data = getDataFromSQLWithTitles(result)
+
+
+            return res.status(200).json(data);
+    
+   
+        } catch(err) {
+            console.log(err)
+            return res.status(500).json({message: 'error getShowsByColumnId'})
+        }
+    }
 
 }
 

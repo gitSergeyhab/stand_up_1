@@ -150,7 +150,7 @@ RETURNS SETOF JSON AS $$
 BEGIN
 	RETURN QUERY EXECUTE '
 	SELECT 
-	JSON_AGG(JSON_BUILD_OBJECT(''id'', picture_id, ''href'', picture_path))
+	JSON_AGG(JSON_BUILD_OBJECT(''id'', picture_id, ''src'', picture_path))
 	FROM (
 		SELECT * FROM pictures 
 		WHERE ' ||  quote_ident(_col) || '  = ' ||  idx ||'
@@ -267,4 +267,8 @@ CREATE OR REPLACE FUNCTION get_videos_by_show(idx BIGINT) RETURNS JSON AS $$
 		ORDER BY show_video_id DESC
 	) AS sv
 	LEFT JOIN users USING(user_id);
+$$ LANGUAGE SQL;
+
+CREATE OR REPLACE FUNCTION get_one_name_of_two(first TEXT, second TEXT) RETURNS TEXT AS $$
+	SELECT TRIM(COALESCE(first, '') || ' ' || COALESCE(second, ''))
 $$ LANGUAGE SQL;

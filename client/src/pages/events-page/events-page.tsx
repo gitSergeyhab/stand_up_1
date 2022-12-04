@@ -1,8 +1,6 @@
 import axios from 'axios';
-import {useState, useEffect} from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { ComedianTypeCC, ComedianTypeSC } from '../../types/comedian-types';
-import { adaptComediansToClient } from '../../utils/adapters/comedian-adapters';
 
 
 type ResultType = { comedians: ComedianTypeSC[]; count: number };

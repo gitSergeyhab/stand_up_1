@@ -7,9 +7,10 @@ import Footer from '../components/footer/footer';
 import { MainContainer, MainWrapper, PageWrapper } from './app-style';
 import { PageCardFilterList } from '../pages/proto/page-card-filter-list/page-card-filter-list';
 import { ContentName, FilterName } from '../const/const';
-import { useGetEventsOfComedianQuery, useGetShowsOfComedianQuery } from '../store/comedians-api';
 import { ComediansPage } from '../pages/comedians/comedians-page/comedians-page';
 import { ComedianPageInfo } from '../pages/comedians/comedian-page-info/comedian-page-info';
+import { useGetEventsQuery, useGetShowsQuery } from '../store/sub-api';
+import { PagePictureList } from '../pages/proto/page-picture-list/page-picture-list';
 
 const AppRoute = {
   Main: '/',
@@ -17,8 +18,10 @@ const AppRoute = {
   Comedian: '/comedians/:id/info',
   ComedianShows: '/comedians/:id/shows',
   ComedianEvents: '/comedians/:id/events',
-  ComedianPhotos: '/comedians/:id/photos',
+  // ComedianPhotos: '/comedians/:id/photos',
   ComedianRatings: '/comedians/:id/ratings',
+
+  Pictures: '/:mainType/:id/pictures',
 
   Comedians: '/comedians',
   Show: '/shows/:id',
@@ -55,9 +58,7 @@ export const App = () => {
                 <Route path={AppRoute.ComedianEvents} element={
                   <PageCardFilterList
                     filters={[FilterName.EventStatus, FilterName.Year]}
-                    listType={ContentName.Events}
-                    mainType={ContentName.Comedians}
-                    useGetQuery={useGetEventsOfComedianQuery}
+                    useGetQuery={useGetEventsQuery}
                   />
                 }
                 />
@@ -65,12 +66,12 @@ export const App = () => {
                 <Route path={AppRoute.ComedianShows} element={
                   <PageCardFilterList
                     filters={[FilterName.Year]}
-                    listType={ContentName.Shows}
-                    mainType={ContentName.Comedians}
-                    useGetQuery={useGetShowsOfComedianQuery}
+                    useGetQuery={useGetShowsQuery}
                   />
                 }
                 />
+
+                <Route path={AppRoute.Pictures} element={<PagePictureList/>}/>
 
 
                 <Route path={AppRoute.Events} element={<EventsPage/>}/>

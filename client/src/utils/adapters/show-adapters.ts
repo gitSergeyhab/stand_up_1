@@ -1,33 +1,32 @@
-import { OneShowTypeCC, OneShowTypeSC, ShowsOfComedianCC, ShowsOfComedianSC, ShowTypeCC, ShowTypeSC } from '../../types/show-types';
-import { DataType } from '../../types/types';
+import { OneShowTypeCC, OneShowTypeSC, SubShowCC, SubShowSC } from '../../types/show-types';
 
-export const adaptShowsToClient = (data: ShowTypeSC): ShowTypeCC => (
-  {
-    avgRate: data['avg_rate'],
-    comedianFirstName: data['comedian_first_name'],
-    comedianFirstNameEn: data['comedian_first_name_en'],
-    comedianId: data['comedian_id'],
-    comedianLastName: data['comedian_last_name'],
-    comedianLastNameEn: data['comedian_last_name_en'],
-    countryId: data['country_id'],
-    countryName: data['country_name'],
-    countryNameEn: data['country_name_en'],
-    dateAdded: data['date_added'],
-    languageId: data['language_id'],
-    languageName: data['language_name'],
-    languageNameEn: data['language_name_en'],
-    numberOfRate: data['number_of_rate'],
-    placeId: data['place_id'],
-    placeName: data['place_name'],
-    placeNameEn: data['place_name_en'],
-    showDate: data['show_date'],
-    showId: data['show_id'],
-    showName: data['show_name'],
-    showPoster: data['show_poster'],
-    totalViews: data['total_views'],
-    views: data['views'],
-  }
-);
+// export const adaptShowsToClient = (data: ShowTypeSC): ShowTypeCC => (
+//   {
+//     avgRate: data['avg_rate'],
+//     comedianFirstName: data['comedian_first_name'],
+//     comedianFirstNameEn: data['comedian_first_name_en'],
+//     comedianId: data['comedian_id'],
+//     comedianLastName: data['comedian_last_name'],
+//     comedianLastNameEn: data['comedian_last_name_en'],
+//     countryId: data['country_id'],
+//     countryName: data['country_name'],
+//     countryNameEn: data['country_name_en'],
+//     dateAdded: data['date_added'],
+//     languageId: data['language_id'],
+//     languageName: data['language_name'],
+//     languageNameEn: data['language_name_en'],
+//     numberOfRate: data['number_of_rate'],
+//     placeId: data['place_id'],
+//     placeName: data['place_name'],
+//     placeNameEn: data['place_name_en'],
+//     showDate: data['show_date'],
+//     showId: data['show_id'],
+//     showName: data['show_name'],
+//     showPoster: data['show_poster'],
+//     totalViews: data['total_views'],
+//     views: data['views'],
+//   }
+// );
 
 
 export const adaptOneShowToClient = (data: OneShowTypeSC): OneShowTypeCC => (
@@ -65,7 +64,7 @@ export const adaptOneShowToClient = (data: OneShowTypeSC): OneShowTypeCC => (
 );
 
 
-export const adaptShowsOfComedianToClient = (data: ShowsOfComedianSC): ShowsOfComedianCC => (
+export const adaptShowsToClient = (data: SubShowSC): SubShowCC => (
   {
     showId: data['show_id'],
     showName: data['show_name'],
@@ -73,16 +72,11 @@ export const adaptShowsOfComedianToClient = (data: ShowsOfComedianSC): ShowsOfCo
     showPoster: data['show_poster'],
 
     comedianId: data['comedian_id'],
-    comedianFirstName: data['comedian_first_name'],
-    comedianFirstNameEn: data['comedian_first_name_en'],
-    comedianLastName: data['comedian_last_name'],
-    comedianLastNameEn: data['comedian_last_name_en'],
+    comedianName: data['comedian_name'],
+    comedianNameEn: data['comedian_name_en'],
+    avgRate: data['avg_rate'],
+    numberOfRate: data['number_of_rate']
 
-    eventName: data['event_name'],
-    eventNameEn: data['event_name_en'],
-    placeName: data['place_name'],
-    placeNameEn: data['place_name_en'],
-    dataType: DataType.ShowsOfComedianCC
 
   }
 );

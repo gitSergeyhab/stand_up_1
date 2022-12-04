@@ -3,41 +3,19 @@ import { useParams, useLocation } from 'react-router-dom';
 
 import { Titles } from '../../../components/titles/titles';
 import { TopTabs } from '../../../components/top-tabs/top-tabs';
-import { ContentName, Language } from '../../../const/const';
+// import { ContentName } from '../../../const/const';
 import { CardContainer } from '../../../components/card-container/card-container';
 
-import { SearchByIdType, UseGetQueryType } from '../../../types/types';
+import { UseGetQueryType } from '../../../types/types';
 import { Filter } from '../../../components/filters/filter';
+import { getCardData, getTypes } from '../../../utils/utils';
 
-import { adaptEventsToCard, adaptShowsToCard } from '../../../utils/adapters/card-adapters';
-import { EventsOfComedianCC } from '../../../types/event-types';
-import { ShowsOfComedianCC } from '../../../types/show-types';
-import { getTitle } from '../../../utils/utils';
-
-
-/**
- * в зависимости от типа выбирает адаптер для данных с сервера и возвращает массив переведенных в CamelCase данных
- * @param data массив данных с сервера
- * @param type Тип - к чему относится страница (событие/шоу/комик и тд)
- * @returns массив переведенных в CamelCase данных
- */
-
-const getCardData = (data: EventsOfComedianCC[] | ShowsOfComedianCC[], type: ContentName) => {
-  switch (type) {
-    case ContentName.Events:
-      return data.map((item) => adaptEventsToCard(item as EventsOfComedianCC));
-    case ContentName.Shows:
-      return data.map((item) => adaptShowsToCard(item as ShowsOfComedianCC));
-
-    default: return data.map((item) => adaptShowsToCard(item as ShowsOfComedianCC));
-  }
-};
 
 type PageCardFilterListProps = {
 
   filters: string[];
-  mainType: ContentName;
-  listType: ContentName;
+  // mainType: ContentName;
+  // listType: ContentName;
   useGetQuery: UseGetQueryType;
 };
 
@@ -51,15 +29,13 @@ type PageCardFilterListProps = {
  * @returns JSXElement - страницу с набором карточек
  */
 
-export const PageCardFilterList = ({filters, mainType, listType, useGetQuery }: PageCardFilterListProps) => {
+export const PageCardFilterList = ({filters, useGetQuery }: PageCardFilterListProps) => {
 
-  const { id } = useParams();
+  const {id} = useParams();
 
   const {pathname, search} = useLocation();
 
-  const queryParams = {id, search} as SearchByIdType;
-
-  const {isError, isLoading, data} = useGetQuery(queryParams);
+  const {isError, isLoading, data: result} = useGetQuery(pathname + search);
 
 
   if (isError) {
@@ -75,7 +51,7 @@ export const PageCardFilterList = ({filters, mainType, listType, useGetQuery }: 
     );
   }
 
-  if (isLoading || !data) {
+  if (isLoading || !result) {
 
     return (
 
@@ -90,7 +66,7 @@ export const PageCardFilterList = ({filters, mainType, listType, useGetQuery }: 
     );
   }
 
-  if (!data.length) {
+  if (!result.data.length) {
     return (
       <Box component={'section'} sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'start', alignItems: 'center', pt: '70px', background: '#0d0101' }} >
         <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'start', alignItems: 'center', background: '#ffffff', width: '60%'}}>
@@ -103,11 +79,15 @@ export const PageCardFilterList = ({filters, mainType, listType, useGetQuery }: 
   }
 
 
+  const { data, count, titles } = result;
+  const { listType, mainType } = getTypes(pathname);
+
   const cardData = getCardData(data, listType);
 
 
-  const title = getTitle(cardData[0], mainType, Language.Native);
-  const titleEn = getTitle(cardData[0], mainType, Language.En);
+  const title = titles.native;
+  const titleEn = titles.en;
+
 
   const tabProps = {id, type: mainType, pathname};
 
@@ -124,6 +104,7 @@ export const PageCardFilterList = ({filters, mainType, listType, useGetQuery }: 
 
 
       <CardContainer cards={cardData} />
+      count: {count}
 
     </>
   );

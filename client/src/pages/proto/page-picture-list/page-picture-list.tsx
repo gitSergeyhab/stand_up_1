@@ -1,47 +1,48 @@
-// import { useLocation, useParams } from "react-router-dom";
-// import { ImgList } from "../../../components/img-list/img-list";
-// import { Titles } from "../../../components/titles/titles";
-// import { TopTabs } from "../../../components/top-tabs/top-tabs";
-// import { ContentName } from "../../../const/const";
-// import { SearchByIdType, UseGetQueryType } from "../../../types/types";
-// import { getTitle } from "../../../utils/utils";
+import { useLocation, useParams } from 'react-router-dom';
+import { ImgList } from '../../../components/img-list/img-list';
+import { Titles } from '../../../components/titles/titles';
+import { TopTabs } from '../../../components/top-tabs/top-tabs';
+import { useGetPicturesQuery } from '../../../store/sub-api';
+import { getTypes } from '../../../utils/utils';
 
 
-// type PagePictureListProps = {
+export const PagePictureList = () => {
 
-//     filters: string[];
-//     type: ContentName;
-//     useGetQuery: UseGetQueryType;
-//   };
+  const { id } = useParams();
 
-
-// export const PagePictureList = ({filters, type, useGetQuery }: PagePictureListProps) => {
-
-//     const { id } = useParams();
-
-//     const {pathname, search} = useLocation();
-
-//     const queryParams = {id, search} as SearchByIdType;
-
-//     const {isError, isLoading, data} = useGetQuery(queryParams);
-
-//     const title = getTitle()
+  const { pathname, search } = useLocation();
 
 
-//     return (
-//       <>
-//         <Titles
-//           first={title}
-//           second={titleEn}
-//         />
+  const {isError, isLoading, data: res} = useGetPicturesQuery(pathname + search);
 
-//         <TopTabs tabProps={tabProps}/>
+  if (isError || isLoading || !res) {
+    return (
+      <h1>Err</h1>
+    );
+  }
+
+  const {count, data, titles} = res;
+
+  const { mainType } = getTypes(pathname);
+
+  const tabProps = {id, type: mainType, pathname};
 
 
-//         <ImgList  />
+  return (
+    <>
+      <Titles
+        first={titles.native}
+        second={titles.en}
+      />
 
-//       </>
-//     );
-//   };
+      <TopTabs tabProps={tabProps}/>
 
-export const x = 'x';
+
+      <ImgList pictures={data} handleImgClick={() => null} />
+
+      {count}
+
+    </>
+  );
+};
+

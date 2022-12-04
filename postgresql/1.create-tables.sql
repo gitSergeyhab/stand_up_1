@@ -36,7 +36,7 @@ CREATE TABLE comedians (
     user_added_id BIGINT REFERENCES users(user_id),
 
     comedian_first_name VARCHAR(64) NOT NULL,
-    comedian_last_name VARCHAR(64) NOT NULL,
+    comedian_last_name VARCHAR(64),
     comedian_first_name_en VARCHAR(64),
     comedian_last_name_en VARCHAR(64),
     comedian_city VARCHAR(256),

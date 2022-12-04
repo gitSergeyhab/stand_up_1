@@ -13,8 +13,19 @@ export const enum ContentName {
   Comedians = 'comedians',
   Events = 'events',
   Shows = 'shows',
-  Places = 'places'
+  Places = 'places',
+  Countries = 'countries',
+  Pictures = 'pictures'
 }
+// export const enum ContentName {
+//   users = 'users',
+//   comedians = 'comedians',
+//   events = 'events',
+//   shows = 'shows',
+//   places = 'places',
+//   countries = 'countries',
+//   pictures = 'pictures'
+// }
 
 export const DefaultPath = {
   UserAvatar: '/img/default/user.jpg',

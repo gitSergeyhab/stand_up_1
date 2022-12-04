@@ -35,17 +35,18 @@ export const enum Column {
 }
 
 export const TableName = {
-    Comedians: 'comedians',
-    Shows: 'shows',
-    Places: 'places',
-    Events: 'events',
-    Users: 'users'
+    comedians: 'comedians',
+    shows: 'shows',
+    places: 'places',
+    events: 'events',
+    users: 'users'
 }
 
+
 export const ColumnId = {
-    Comedians: 'comedian_id',
-    Shows: 'show_id',
-    Places: 'place_id',
-    Events: 'event_id',
-    Users: 'user_id'
+    comedians: 'comedian_id',
+    shows: 'show_id',
+    places: 'place_id',
+    events: 'event_id',
+    users: 'user_id'
 }

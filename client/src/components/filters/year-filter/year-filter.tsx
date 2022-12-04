@@ -15,7 +15,7 @@ export const YearFilter = ({yearRef, isAnyDate, setAnyDate} : YearFilterProps) =
   // const yearRef = useRef<HTMLInputElement>(null)
 
   const currentYear = getCurrentYear();
-  const maxYear = currentYear + 1;
+  const maxYear = currentYear + 3;
 
   const handleChange = () => setAnyDate(!isAnyDate);
 
