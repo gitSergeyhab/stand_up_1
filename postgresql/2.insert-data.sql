@@ -536,3 +536,10 @@ INSERT INTO views(user_watched_id, event_id, view_date) VALUES
 (1, 1, '2022-05-06'),
 (2, 1, '2022-05-04'),
 (2, 1, '2022-07-07');
+
+INSERT INTO pictures (comedian_id, user_id, place_id, show_id, picture_path) VALUES 
+(1,1,1,1, '/img/test/xz-2.jpg'),
+(1,1,1,1, '/img/test/xz-2.jpg'),
+(1,1,1,1, '/img/test/abr.jpg'),
+(1,1,1,1, '/img/test/d-r.jpeg'),
+(1,1,1,1, '/img/test/girl.webp');

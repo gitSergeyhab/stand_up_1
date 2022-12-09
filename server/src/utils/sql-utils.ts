@@ -1,4 +1,4 @@
-import { ColumnId, SQLFunctionName, TableName } from "../const";
+import { TableName } from "../const";
 import { sequelize } from "../sequelize";
 
 

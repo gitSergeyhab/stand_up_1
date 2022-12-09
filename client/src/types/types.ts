@@ -13,19 +13,6 @@ export type PictureType = {
   src: string;
 }
 
-// export type GridCardType = {
-//   type: ContentName;
-//   extType: ContentName | null;
-//   id: string;
-//   name: string;
-//   date: string | null;
-//   status: string | null;
-//   picture: string | null;
-//   extName: string | null;
-//   extId: string | null;
-//   rate: number | null | undefined;
-//   numberOfRate: number | null | undefined;
-// };
 
 export type GridCardType = {
   type: ContentName;
@@ -67,3 +54,32 @@ export type TabsContent = {
   name: string;
   path: string;
 }
+
+export type StatRateSC = {
+  rate: number;
+  rate_count: string;
+};
+
+export type DataRateSC = {
+  rate_id: string;
+  rate: number;
+
+  date: string;
+  user_id: string;
+  user_nik: string;
+  user_avatar: string;
+};
+
+export type StatRateCC = {
+  rate: number;
+  count: string;
+};
+
+export type DataRateCC = {
+  rateId: string;
+  rate: number;
+  date: string;
+  userId: string;
+  userNik: string;
+  userAvatar: string;
+};

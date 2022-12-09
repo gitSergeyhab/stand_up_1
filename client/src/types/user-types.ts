@@ -88,3 +88,16 @@ export type OneUserTypeCC = {
   userLastName: string | null;
   userNik: string;
 };
+
+
+export type UserContentRate = {
+  id: string;
+  rate: number;
+}
+
+
+export type UserData = {
+  showRates: UserContentRate[];
+  comedianRates: UserContentRate[];
+  reviews: string[];
+};

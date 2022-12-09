@@ -50,3 +50,15 @@ export const ColumnId = {
     events: 'event_id',
     users: 'user_id'
 }
+
+export const JoiMessageKey = {
+    StringMin: `string.min`,
+    StringMax: `string.max`,
+    StringEmpty: `string.empty`,
+    Required: `any.required`,
+    AnyOnly: `any.only`,
+    NumberMin: `number.min`,
+    NumberBase: `number.base`,
+    Regexp: `string.pattern.base`,
+    Email: `string.email`
+  };

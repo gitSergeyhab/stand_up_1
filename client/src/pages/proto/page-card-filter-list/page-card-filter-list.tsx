@@ -85,18 +85,14 @@ export const PageCardFilterList = ({filters, useGetQuery }: PageCardFilterListPr
   const cardData = getCardData(data, listType);
 
 
-  const title = titles.native;
-  const titleEn = titles.en;
-
-
   const tabProps = {id, type: mainType, pathname};
 
 
   return (
     <>
       <Titles
-        first={title}
-        second={titleEn}
+        native={titles.native}
+        en={titles.en}
       />
 
       <TopTabs tabProps={tabProps}/>

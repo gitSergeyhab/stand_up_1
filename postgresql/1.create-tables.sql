@@ -19,7 +19,7 @@ CREATE TABLE users (
 
     user_email VARCHAR(128) UNIQUE,
     user_password VARCHAR(512) NOT NULL,
-    user_nik VARCHAR(32) NOT NULL,
+    user_nik VARCHAR(64) UNIQUE,
     user_first_name VARCHAR(64),
     user_last_name VARCHAR(64),
     user_city VARCHAR(256),
@@ -148,7 +148,7 @@ CREATE TABLE comedian_ratings (
     comedian_id BIGINT NOT NULL REFERENCES comedians(comedian_id),
 
     comedian_rate SMALLINT CHECK (comedian_rate > 0 AND 11 > comedian_rate),
-    comedian_date_rate DATE DEFAULT CURRENT_TIMESTAMP
+    comedian_date_rate TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     );
 
 CREATE TABLE show_ratings ( 
@@ -157,7 +157,7 @@ CREATE TABLE show_ratings (
     show_id BIGINT NOT NULL REFERENCES shows(show_id),
 
     show_rate SMALLINT CHECK (show_rate > 0 AND 11 > show_rate),
-    show_date_rate DATE DEFAULT CURRENT_TIMESTAMP
+    show_date_rate TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     );
 
 CREATE TABLE resource_types (

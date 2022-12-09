@@ -1,13 +1,19 @@
-import { Typography } from '@mui/material';
+import styled from 'styled-components';
+
+const NativeTitle = styled.h1`
+  margin: 1rem;
+  margin-bottom: 0.5rem;
+`;
+
+const EnTitle = styled.h2`
+  margin: 1rem;
+  color: #222222;
+`;
 
 
-export const Titles = ({first = '', second = ''} : {first: string; second: string}) => (
+export const Titles = ({native, en} : {native: string; en: string}) => (
   <>
-    <Typography component={'h1'} fontSize={30} fontWeight={'700'} >
-      {first}
-    </Typography>
-    <Typography component={'h2'} fontSize={27} fontWeight={'400'}>
-      {second}
-    </Typography>
+    <NativeTitle >{native}</NativeTitle>
+    <EnTitle> {en}</EnTitle>
   </>
 );

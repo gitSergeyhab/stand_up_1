@@ -6,11 +6,13 @@ import Footer from '../components/footer/footer';
 
 import { MainContainer, MainWrapper, PageWrapper } from './app-style';
 import { PageCardFilterList } from '../pages/proto/page-card-filter-list/page-card-filter-list';
-import { ContentName, FilterName } from '../const/const';
+import { FilterName } from '../const/const';
 import { ComediansPage } from '../pages/comedians/comedians-page/comedians-page';
 import { ComedianPageInfo } from '../pages/comedians/comedian-page-info/comedian-page-info';
 import { useGetEventsQuery, useGetShowsQuery } from '../store/sub-api';
 import { PagePictureList } from '../pages/proto/page-picture-list/page-picture-list';
+import { PageRatingList } from '../pages/proto/page-rate-list/page-rate-list';
+import { RegistrationPage } from '../pages/registration-page/registration-page';
 
 const AppRoute = {
   Main: '/',
@@ -22,6 +24,7 @@ const AppRoute = {
   ComedianRatings: '/comedians/:id/ratings',
 
   Pictures: '/:mainType/:id/pictures',
+  Ratings: '/:mainType/:id/ratings',
 
   Comedians: '/comedians',
   Show: '/shows/:id',
@@ -31,7 +34,9 @@ const AppRoute = {
   Place: '/places/:id',
   Places: '/places',
   User: '/users/:id',
-  Users: '/users'
+  Users: '/users',
+
+  Registration: '/registration'
 };
 
 
@@ -72,9 +77,12 @@ export const App = () => {
                 />
 
                 <Route path={AppRoute.Pictures} element={<PagePictureList/>}/>
+                <Route path={AppRoute.Ratings} element={<PageRatingList/>}/>
 
 
                 <Route path={AppRoute.Events} element={<EventsPage/>}/>
+
+                <Route path={AppRoute.Registration} element={<RegistrationPage/>}/>
 
 
               </Routes>

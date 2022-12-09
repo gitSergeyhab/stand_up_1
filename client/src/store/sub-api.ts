@@ -3,10 +3,12 @@ import { SubComedianCC, SubComedianSC } from '../types/comedian-types';
 import { SubEventCC, SubEventSC } from '../types/event-types';
 import { PictureCC, PictureSC } from '../types/pic-types';
 import { SubShowCC, SubShowSC } from '../types/show-types';
+import { DataRateCC, DataRateSC, StatRateCC, StatRateSC } from '../types/types';
 import { adaptComediansToClient } from '../utils/adapters/comedian-adapters';
 import { adaptEventsToClient } from '../utils/adapters/event-adapters';
 import { adaptPictureToClient } from '../utils/adapters/pic-adapter';
 import { adaptShowsToClient } from '../utils/adapters/show-adapters';
+import { adaptRateToClient, adaptStatToClient } from '../utils/adapters/small-adapters';
 
 const SUB_API_URL = 'http://localhost:5000/api/sub';
 
@@ -15,6 +17,13 @@ type SupApiType<Sub> = {
   data: Sub[];
   titles: {en: string; native: string};
   count: string;
+}
+
+type SupRateType<Stat, Rate> = {
+  stats: Stat[];
+  rates: Rate[];
+  count: string;
+  titles: {en: string; native: string};
 }
 
 
@@ -40,10 +49,18 @@ export const subApi = createApi({
     getPictures: build.query<SupApiType<PictureCC>, string>({
       query: (queryParams) => queryParams,
       transformResponse:  ({data, count, titles}: SupApiType<PictureSC>) => ({ data: data.map(adaptPictureToClient), count, titles })
+    }),
+    getRatings: build.query<SupRateType<StatRateCC, DataRateCC>, string>({
+      query: (queryParams) => queryParams,
+      transformResponse:  ({rates, count, stats, titles}: SupRateType<StatRateSC, DataRateSC>) => ({
+        count, titles,
+        rates: rates.map(adaptRateToClient),
+        stats: stats.map(adaptStatToClient)
+      })
     })
   })
 
 });
 
 
-export const { useGetEventsQuery, useGetShowsQuery, useGetComediansQuery, useGetPicturesQuery } = subApi;
+export const { useGetEventsQuery, useGetShowsQuery, useGetComediansQuery, useGetPicturesQuery, useGetRatingsQuery } = subApi;

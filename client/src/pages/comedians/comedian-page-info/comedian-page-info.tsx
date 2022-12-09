@@ -108,13 +108,14 @@ export const ComedianPageInfo = () => {
   ) : null;
 
 
-  const imageListElement = pictures && pictures.length ? <ImgList handleImgClick={handleClickImg} pictures={pictures.slice(0,3)}/> : null;
+  const imageListElement = pictures && pictures.length ? <ImgList info handleImgClick={handleClickImg} pictures={pictures.slice(0,3)}/> : null;
+
 
   return (
     <>
       <Titles
-        first={`${comedianFirstName} ${comedianLastName || ''}`}
-        second={`${comedianFirstNameEn || ''} ${comedianLastNameEn || ''}`}
+        native={`${comedianFirstName} ${comedianLastName || ''}`}
+        en={`${comedianFirstNameEn || ''} ${comedianLastNameEn || ''}`}
       />
 
       <TopTabs tabProps={tabProps}/>
