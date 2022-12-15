@@ -1,13 +1,16 @@
 import styled from 'styled-components';
 
 
-export const RegForm = styled.form`
+export const RegForm = styled.form<{disabled?: boolean}>`
 background-color: #1a0e0d;
 display: flex;
 flex-direction: column;
 align-items: center;
 width: 100%;
 padding: 1rem;
+pointer-events: ${({ disabled }) => disabled ? 'none' : 'auto' };
+;
+
 `;
 
 export const RegInput = styled.input`
@@ -40,6 +43,12 @@ padding: 0.4rem;
 cursor: pointer;
 transition: all 0.3s ease;
 
+&:disabled {
+  background-color: #130101;
+  color: #000000;
+  &:hover, &:focus {color: #000000;}
+}
+
   &:hover, &:focus {
     color: gold;
 
@@ -50,9 +59,3 @@ transition: all 0.3s ease;
 `;
 
 
-export const ErrorBlockUl = styled.ul`
-background-color: #F0E68C;
-color: #300606;
-font-size: 13px;
-border: 2px solid #000000;
-`;

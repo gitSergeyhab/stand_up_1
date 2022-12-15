@@ -1,14 +1,15 @@
-import { Box, Typography } from '@mui/material';
 import { useParams, useLocation } from 'react-router-dom';
 
 import { Titles } from '../../../components/titles/titles';
 import { TopTabs } from '../../../components/top-tabs/top-tabs';
-// import { ContentName } from '../../../const/const';
 import { CardContainer } from '../../../components/card-container/card-container';
 
 import { UseGetQueryType } from '../../../types/types';
 import { Filter } from '../../../components/filters/filter';
 import { getCardData, getTypes } from '../../../utils/utils';
+import { BigSpinner } from '../../../components/spinner/big-spinner';
+import { ErrorPage } from '../../error-page/error-page';
+import { Pagination } from '../../../components/pagination/pagination';
 
 
 type PageCardFilterListProps = {
@@ -35,55 +36,29 @@ export const PageCardFilterList = ({filters, useGetQuery }: PageCardFilterListPr
 
   const {pathname, search} = useLocation();
 
-  const {isError, isLoading, data: result} = useGetQuery(pathname + search);
+  const {isError, isLoading, data: result, error} = useGetQuery(pathname + search);
 
 
   if (isError) {
-    return (
-      <Box component={'section'} sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'start', alignItems: 'center', pt: '70px', background: '#0d0101' }} >
-        <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'start', alignItems: 'center', background: '#ffffff', width: '60%'}}>
-          <Typography sx={{ minWidth: 100, fontSize:'51px', textAlign: 'center' }}>
-          Error !
-          </Typography>
-        </Box>
-      </Box>
-
-    );
+    return <ErrorPage error={error}/>;
   }
 
   if (isLoading || !result) {
-
-    return (
-
-      <Box component={'section'} sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'start', alignItems: 'center', pt: '70px', background: '#0d0101' }} >
-        <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'start', alignItems: 'center', background: '#ffffff', width: '60%'}}>
-          <Typography sx={{ minWidth: 100, fontSize:'51px', textAlign: 'center' }}>
-          Loading ...
-          </Typography>
-        </Box>
-      </Box>
-
-    );
-  }
-
-  if (!result.data.length) {
-    return (
-      <Box component={'section'} sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'start', alignItems: 'center', pt: '70px', background: '#0d0101' }} >
-        <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'start', alignItems: 'center', background: '#ffffff', width: '60%'}}>
-          <Typography sx={{ minWidth: 100, fontSize:'21px', textAlign: 'center' }}>
-          Sorry... can not find events
-          </Typography>
-        </Box>
-      </Box>
-    );
+    return <BigSpinner/>;
   }
 
 
   const { data, count, titles } = result;
+
+
   const { listType, mainType } = getTypes(pathname);
+
 
   const cardData = getCardData(data, listType);
 
+  const content = (+count) ?
+    <CardContainer cards={cardData} /> :
+    <ErrorPage altTitles={{en: '', ru: 'Нет контента, соответствующего параметам'}}/>;
 
   const tabProps = {id, type: mainType, pathname};
 
@@ -99,8 +74,9 @@ export const PageCardFilterList = ({filters, useGetQuery }: PageCardFilterListPr
       <Filter filters={filters}/>
 
 
-      <CardContainer cards={cardData} />
+      {content}
       count: {count}
+      <Pagination count={+count}/>
 
     </>
   );

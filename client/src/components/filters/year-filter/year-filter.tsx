@@ -7,14 +7,14 @@ type YearFilterProps = {
   yearRef: RefObject<HTMLInputElement>;
   isAnyDate: boolean;
   setAnyDate: (isAnyDate: boolean) => void;
+  year: string | null;
 }
 
 
-export const YearFilter = ({yearRef, isAnyDate, setAnyDate} : YearFilterProps) => {
+export const YearFilter = ({yearRef, isAnyDate, setAnyDate, year} : YearFilterProps) => {
 
-  // const yearRef = useRef<HTMLInputElement>(null)
 
-  const currentYear = getCurrentYear();
+  const currentYear = year ? +year : getCurrentYear();
   const maxYear = currentYear + 3;
 
   const handleChange = () => setAnyDate(!isAnyDate);

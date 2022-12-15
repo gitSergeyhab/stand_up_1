@@ -1,14 +1,13 @@
 import { ChangeEventHandler } from 'react';
-import { EventType } from '../../../const/const';
+import { EventStatus } from '../../../const/const';
 import { EventStatusFieldSet } from './event-status-filter-style';
-
-// import { EventType } from '../../const/const';
 
 
 const EventName: {[key: string] : string} = {
-  [EventType.Canceled] : 'Отмененные',
-  [EventType.Ended]: 'Прошедшие',
-  [EventType.Planned]: 'Планируемые'
+  [EventStatus.All]: 'Любые',
+  [EventStatus.Canceled] : 'Отмененные',
+  [EventStatus.Ended]: 'Прошедшие',
+  [EventStatus.Planned]: 'Планируемые',
 
 };
 
@@ -46,10 +45,9 @@ type EventStatusFilterProps = {
 
 export const EventStatusFilter = ({currentEventType, setEventType} : EventStatusFilterProps) => {
 
-
   const handleChangeEventType: ChangeEventHandler<HTMLInputElement> = (evt) => setEventType(evt.currentTarget.value);
 
-  const eventTypeElements = Object.values(EventType).map(
+  const eventTypeElements = Object.values(EventStatus).map(
     (item) => <OneEventType key={item} value={item} onChange={handleChangeEventType} currentValue={currentEventType} />
   );
 

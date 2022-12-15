@@ -24,7 +24,11 @@ export const CardContainerUl = styled.ul`
 `;
 
 export const CardContainer = ({cards} : {cards: GridCardType[]}) => {
-  const cardElements = cards.map((item) => <GridCard key={item.id} card={item} />);
+
+  const cardElements = cards
+    .filter((item) => item.id) // без этого при переключении с  page-card-filter-list  на  page-card-filter-list  не выдает ошибку, потому что в  cards  становится {id: undefined, name: undefined ...}
+    .map((item) => <GridCard key={item.id} card={item} />);
+
   return (
     <CardContainerUl>
       {cardElements}

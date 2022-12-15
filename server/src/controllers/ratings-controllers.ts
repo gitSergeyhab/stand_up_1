@@ -1,7 +1,8 @@
 import { Request, Response } from "express";
 import { ColumnId, StatusCode } from "../const";
 import { sequelize } from "../sequelize";
-import { getTitlesQuery } from "../utils/sql-utils";
+import { RateResult } from "../types";
+import { checkTitles, getTitlesQuery } from "../utils/sql-utils";
 
 
 
@@ -18,21 +19,10 @@ const getTableParams = (columnId: string) => {
 }
 
 
-type Result = {
-    count?: string;
-    rate?: number;
-    rate_count?: string;
-    rate_id?: string;
-    date?: string;
-    user_id?: string;
-    user_nik?: string;
-    user_avatar?: string;
-    en?: string
-    native?: string
-}
 
 
-const getData = (result: Result[]) => {
+
+const getData = (result: RateResult[]) => {
     const count = result.filter((item) => item.count);
     const stats = result.filter((item) => item.rate_count);
     const rates = result.filter((item) => item.user_id);
@@ -86,11 +76,9 @@ class RatingController {
             );
 
             const data = getData(result);
-            // console.log({result, data})
+            return checkTitles(data, res);
 
-            return res.status(StatusCode.Ok).json(data)
         } catch (err) {
-            // console.log(err)
             return res.status(StatusCode.Ok).json({message: 'Error getRatings'})
         }
     }

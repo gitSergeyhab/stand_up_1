@@ -17,8 +17,8 @@ export const ComedianOrder = {
 class ComedianController {
     async getComedians(req: Request, res: Response) {
         try {
-            console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -- !!!!!!!!!!!!!!!!!!!!!!!!!!')
 
+            console.log(' ! -- getComedians session -- ! ', req.session)
             const {country_id, city, limit = null, offset = null, order='pop', direction=null} = req.query;
 //!!goodwhere
             const where = `
@@ -174,12 +174,12 @@ class ComedianController {
             );
 
             if (!comedians.length) {
-                return res.status(400).json({message: `there is not comedian with id = ${id}`})
+                return res.status(StatusCode.NotFoundError).json({message: `there is not comedian with id = ${id}`})
             }
 
             await insertView(id, user_id, Column.Comedian); // Добавляет 1 просмотр
 
-            console.log(comedians)
+            // console.log(comedians)
 
 
             return res.status(200).json(comedians[0]);

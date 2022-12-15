@@ -5,6 +5,8 @@ import {
 } from './header-style';
 
 import { ContentName, DefaultPath } from '../../const/const';
+import { getUser } from '../../store/user-reducer/user-selectors';
+import { useSelector } from 'react-redux';
 
 
 const MENU_DATA = [
@@ -15,38 +17,32 @@ const MENU_DATA = [
   ContentName.Shows
 ];
 
-// const MENU_DATA = [
-//   'Main',
-//   ContentName.comedians,
-//   ContentName.events,
-//   ContentName.places,
-//   ContentName.shows
-// ];
-
 
 const USER_DATA = [
   {title: 'Профиль', to: '/user/profile'},
   {title: 'Настройки', to: '/user/settings'},
-  {title: 'Выйти', to: '#'},
 ];
 
-
-const defaultUser = {
-  avatar: '/img/test/black.jpg',
-  nik: 'user'
-};
 
 export const Header = () => {
 
   const [shown, setShown] = useState(false);
   const [shownUserMenu, setShownUserMenu] = useState(false);
 
-  const user = defaultUser;
+  const user = useSelector(getUser);
+  // console.log({user});
+
+  // const user = defaultUser;
 
   const userSrc = user ? user.avatar : DefaultPath.UserAvatar ;
+  const src = userSrc || DefaultPath.UserAvatar;
 
   const handleClickMenu = () => {setShown((val) => !val); };
   const handleClickUserMenu = () => {setShownUserMenu((val) => !val);};
+  const handleClickExit = () => {
+    // console.log('exit');
+    setShownUserMenu((val) => !val);
+  };
 
 
   const navItems = MENU_DATA.map((item) => (
@@ -65,9 +61,13 @@ export const Header = () => {
     </UserMenuLi>
   ));
 
+  const exit = <UserMenuLi key={'exit'}><UserMenuLink onClick={handleClickExit} to='/'>Выйти</UserMenuLink> </UserMenuLi>;
+
+  const noUserItem = <UserMenuLi><UserMenuLink to={'/login'}>Войти</UserMenuLink></UserMenuLi>;
+
   const userMenu = shownUserMenu ? (
     <UserMenu>
-      {userMenuItems}
+      { user ? [...userMenuItems, exit] : noUserItem }
     </UserMenu>
   ) : null;
 
@@ -84,7 +84,7 @@ export const Header = () => {
 
         <UserContainer width={120}>
           <UserAvatarBtn radius={40} onClick={handleClickUserMenu}>
-            <UserAvatarImg src={userSrc}/>
+            <UserAvatarImg src={src}/>
           </UserAvatarBtn>
 
           {userMenu}
@@ -95,7 +95,7 @@ export const Header = () => {
       </Icon>
       <UserContainer small width={80}>
         <UserAvatarBtn small radius={40} onClick={handleClickUserMenu}>
-          <UserAvatarImg src={userSrc}/>
+          <UserAvatarImg src={src}/>
         </UserAvatarBtn>
         {userMenu}
       </UserContainer>

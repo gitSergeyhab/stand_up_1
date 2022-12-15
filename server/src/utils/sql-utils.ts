@@ -1,10 +1,39 @@
-import { TableName } from "../const";
+import { Response } from "express";
+import { StatusCode, TableName } from "../const";
 import { sequelize } from "../sequelize";
+import { DataTypeRate, TitlesDataType } from "../types";
 
 
 export const getDataFromSQL = (result: [unknown[], unknown], field: string) => ({[field]: result.slice(0, result.length - 1), ...result[result.length - 1] as {}});
-export const getDataFromSQLWithTitles = (result: [unknown[], unknown]) => 
-    ({data: result.slice(0, result.length - 2), titles: result[result.length - 2], ...result[result.length - 1] as {}});
+
+type DataType = {
+    data: unknown[];
+    titles: TitlesDataType;
+}
+
+
+
+export const getDataFromSQLWithTitles = (result: [unknown[], unknown]):{data: unknown[], titles: TitlesDataType}  => 
+    ({data: result.slice(0, result.length - 2), titles: result[result.length - 2] as TitlesDataType, ...result[result.length - 1] as {}});
+
+
+/**
+ * Проверяет, есть ли заголовки(а значит и комик/событие/место...) с данным айдишником, и если нет выдает онибку 404
+ * @param data обработанные данные их SQL
+ * @param res response
+ * @returns респонсит ошибку 404 - когда нет заголовка; либо данные
+ *  */    
+
+export const checkTitles = async (data: DataType | DataTypeRate, res: Response) => {
+    const native = data.titles?.native;
+    console.log('checkTitles - 0')
+    if (!native) {
+        console.log('checkTitles - +')
+        
+        return res.status(StatusCode.NotFoundError).json({message: `not found this content with such id`})
+    }
+    return res.status(StatusCode.Ok).json(data);
+}
 
 
 

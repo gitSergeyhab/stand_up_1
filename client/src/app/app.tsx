@@ -1,10 +1,12 @@
+import { useEffect } from 'react';
+
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { EventsPage } from '../pages/events-page/events-page';
 import { MainPage } from '../pages/main-page/main-page';
 import { Header } from '../components/header/header';
 import Footer from '../components/footer/footer';
 
-import { MainContainer, MainWrapper, PageWrapper } from './app-style';
+import { MainContainer, MainMain, MainWrapper, PageWrapper } from './app-style';
 import { PageCardFilterList } from '../pages/proto/page-card-filter-list/page-card-filter-list';
 import { FilterName } from '../const/const';
 import { ComediansPage } from '../pages/comedians/comedians-page/comedians-page';
@@ -13,6 +15,11 @@ import { useGetEventsQuery, useGetShowsQuery } from '../store/sub-api';
 import { PagePictureList } from '../pages/proto/page-picture-list/page-picture-list';
 import { PageRatingList } from '../pages/proto/page-rate-list/page-rate-list';
 import { RegistrationPage } from '../pages/registration-page/registration-page';
+import { LoginPage } from '../pages/login-page/login-page';
+import { useAuthUserQuery } from '../store/user-api';
+import { useDispatch } from 'react-redux';
+import { setUser } from '../store/actions';
+import { ErrorPage } from '../pages/error-page/error-page';
 
 const AppRoute = {
   Main: '/',
@@ -36,20 +43,41 @@ const AppRoute = {
   User: '/users/:id',
   Users: '/users',
 
-  Registration: '/registration'
+  Registration: '/registration',
+  Login: '/login'
+
 };
 
 
 export const App = () => {
 
-  const x = 'x';
+  // const cashless = Date.now();
+
+  const { isError, isLoading, data } = useAuthUserQuery(null);
+
+  // console.log('app', isError, isLoading, data, cashless);
+  const dispatch = useDispatch();
+
+
+  useEffect(() => {
+    if (!isLoading) {
+      // console.log('useEffect', {isError, isLoading, data});
+      if (data) {
+        dispatch(setUser(data));
+      }
+
+      if (isError) {
+        dispatch(setUser(null));
+      }
+    }
+  }, [isError, isLoading, data, dispatch]);
 
 
   return (
     <BrowserRouter>
       <PageWrapper>
         <Header/>
-        <main>
+        <MainMain>
           <MainWrapper>
             <MainContainer>
               <Routes>
@@ -83,12 +111,14 @@ export const App = () => {
                 <Route path={AppRoute.Events} element={<EventsPage/>}/>
 
                 <Route path={AppRoute.Registration} element={<RegistrationPage/>}/>
+                <Route path={AppRoute.Login} element={<LoginPage/>}/>
+                <Route path='*' element={<ErrorPage/>}/>
 
 
               </Routes>
             </MainContainer>
           </MainWrapper>
-        </main>
+        </MainMain>
 
         <Footer/>
       </PageWrapper>

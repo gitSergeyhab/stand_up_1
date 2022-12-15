@@ -62,3 +62,16 @@ export const JoiMessageKey = {
     Regexp: `string.pattern.base`,
     Email: `string.email`
   };
+
+  export const EventStatus = {
+    Planned: 'planned',
+    Ended: 'ended',
+    Canceled: 'canceled',
+    All: 'all'
+  } as const;
+
+  export const DefaultQueryParams = {
+    Limit: 6,
+    Offset: 0, 
+    EventTStatus: EventStatus.All,
+  }

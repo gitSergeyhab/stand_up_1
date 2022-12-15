@@ -18,6 +18,8 @@ import { ContentName } from '../../../const/const';
 import { ViewsBlock } from '../../../components/views-block/views-block';
 import { TabData } from '../../../const/data';
 import { useGetComedianByIdQuery } from '../../../store/comedians-api';
+import { ErrorPage } from '../../error-page/error-page';
+import { BigSpinner } from '../../../components/spinner/big-spinner';
 
 
 export const ComedianPageInfo = () => {
@@ -26,7 +28,7 @@ export const ComedianPageInfo = () => {
   const { pathname } = useLocation();
 
 
-  const {isError, isLoading, data: comedian} = useGetComedianByIdQuery(id as string);
+  const {isError, isLoading, data: comedian, error } = useGetComedianByIdQuery(id as string);
 
 
   const [currentPic, setPic] = useState<PictureType | null>(null);
@@ -43,31 +45,11 @@ export const ComedianPageInfo = () => {
 
 
   if (isError) {
-    return (
-      <Box component={'section'} sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'start', alignItems: 'center', pt: '70px', background: '#0d0101' }} >
-        <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'start', alignItems: 'center', background: '#ffffff', width: '60%'}}>
-          <Typography sx={{ minWidth: 100, fontSize:'51px', textAlign: 'center' }}>
-          Error !
-          </Typography>
-        </Box>
-      </Box>
-
-    );
+    return <ErrorPage error={error}/>;
   }
 
-  if (isLoading || !comedian) {
-
-    return (
-
-      <Box component={'section'} sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'start', alignItems: 'center', pt: '70px', background: '#0d0101' }} >
-        <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'start', alignItems: 'center', background: '#ffffff', width: '60%'}}>
-          <Typography sx={{ minWidth: 100, fontSize:'51px', textAlign: 'center' }}>
-          Loading ...
-          </Typography>
-        </Box>
-      </Box>
-
-    );
+  if (isLoading || !comedian /* || 1 + 1 === 2*/) {
+    return <BigSpinner/>;
   }
 
 

@@ -1,19 +1,21 @@
 import styled from 'styled-components';
 
 export const EventStatusFieldSet = styled.fieldset`
-
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  text-align: start;
 
   & input {
     margin-right: 0.2rem;
   }
 
+  @media (min-width: 700px) {
+    text-align: center;
+    grid-template-columns: repeat(4, 1fr);
+  }
 
   @media (min-width: 1200px) {
-
-    flex-direction: column;
-    justify-content: flex-start;
+    text-align: start;
+    grid-template-columns: 1fr;
   }
 `;

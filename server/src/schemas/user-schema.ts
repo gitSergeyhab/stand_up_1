@@ -2,13 +2,13 @@ import Joi from "joi";
 import { JoiMessageKey } from "../const";
 
 const Message = {
-    NikMin: `you need at least 3 characters in your name and last name`,
-    NikMax: `Max length of Nik is 50`,
-    NameBad: `the name can only contain letters and a space`,
-    Email: `email is incorrect`,
-    Password: `you need at least 6 characters in the password`,
-    PasswordRepeat: `the passwords do not match`,
-    Picture: `the image type is not supported`
+    NikMin: `you need at least 3 characters in your Nik / минимальная длина ника 3 символов`,
+    NikMax: `Max length of Nik is 50 / максимальная длина ника 50 символов`,
+    NameBad: `the name can only contain letters and a space / в имени не должно быть прробелов`,
+    Email: `email is incorrect / некорректный email`,
+    Password: `you need at least 8 characters in the password / нужно как минимум 8 символов в пороле`,
+    PasswordRepeat: `the passwords do not match / пароли не совпадают`,
+    Picture: `the image type is not supported / тип изображения не поддерживается`
   };
 
   const Pattern = {
@@ -21,7 +21,7 @@ const Message = {
     NikMax: 50,
     Email: 2,
     Name: 2,
-    Password: 6
+    Password: 8
   };
 
 export const userSchema = Joi.object({

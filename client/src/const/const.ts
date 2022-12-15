@@ -28,7 +28,7 @@ export const enum ContentName {
 // }
 
 export const DefaultPath = {
-  UserAvatar: '/img/default/user.jpg',
+  UserAvatar: '/img/default/place.jpg',
   ComedianAvatar: '/img/default/comedian.jpg',
   ShowPoster: '/img/default/show.jpg',
   EventPicture: '/img/default/event.jpg',
@@ -45,10 +45,11 @@ export const Color = {
   BrownMain: '#300606'
 };
 
-export const EventType = {
+export const EventStatus = {
   Planned: 'planned',
   Ended: 'ended',
-  Canceled: 'canceled'
+  Canceled: 'canceled',
+  All: 'all'
 } as const;
 
 export const FilterName = {

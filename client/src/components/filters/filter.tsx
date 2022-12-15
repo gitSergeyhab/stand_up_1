@@ -1,51 +1,68 @@
 import { useState, useRef, FormEventHandler } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
-import { EventType, FilterName } from '../../const/const';
+import { EventStatus, FilterName } from '../../const/const';
+import { QueryField } from '../../types/types';
+import { createNewSearch, deleteFieldFromSearch, getFieldFromSearch } from '../../utils/nanigation-utils';
 import { EventStatusFilter } from './event-status-filter/event-status-filter';
 import { FilterForm, SubmitButton } from './filter-style';
 import { YearFilter } from './year-filter/year-filter';
 
+const DefaultFilterParam = {
+  Status: EventStatus.All
 
-const connectSearchStr = (strings: string[]) => `?${strings.filter((item) => item).join('&')}`;
+};
 
-type GetSearchParams = {
-  year?: string;
-  isAnyDate?: boolean;
-  currentEventType?: string;
-}
+/**
+ * из url(search) достает limit и offset
+ * @param search location.search
+ * @returns - {limit, offset}
+ */
 
-const getSearch = ({year, isAnyDate, currentEventType} : GetSearchParams) => {
-  const yearStr = year ? `year=${year}` : '';
-  const searchYear = isAnyDate ? '' : yearStr;
-  const searchStatus = currentEventType ? `status=${currentEventType}` : '';
-
-  return connectSearchStr([searchYear, searchStatus]);
+const getFilterParams = (search: string) => {
+  const status = getFieldFromSearch({field: 'status', search}) as string || DefaultFilterParam.Status;
+  const year = getFieldFromSearch({field: 'year', search}) as string || null;
+  return {status, year};
 };
 
 
 export const Filter = ({filters} : {filters: string[] }) => {
 
-  const yearRef = useRef<HTMLInputElement>(null);
-  const [currentEventType, setEventType] = useState<string>(EventType.Planned);
-  const [isAnyDate, setAnyDate] = useState(true);
-
   const navigate = useNavigate();
+  const {search} = useLocation();
+
+  const {status, year} = getFilterParams(search);
+
+  const yearRef = useRef<HTMLInputElement>(null);
+  const [currentStatus, setStatus] = useState(status);
+  const [isAnyYear, setAnyYear] = useState(!year);
+
 
   const handleSubmit: FormEventHandler = (evt) => {
     evt.preventDefault();
-    const filterSearch = getSearch({year: yearRef.current?.value, isAnyDate, currentEventType});
-    navigate(filterSearch);
+
+    const valueYearRef = yearRef.current?.value;
+    const valueYear = !isAnyYear && valueYearRef ? valueYearRef : null;
+
+    const fields = [
+      {name: 'status', value: currentStatus},
+      {name: 'year', value: valueYear}
+    ].filter((item) => item.name && item.value) as unknown as QueryField[];
+
+    const yearSearch = isAnyYear ? deleteFieldFromSearch({field: 'year', search}) : search;
+
+    const newSearch = createNewSearch({search: yearSearch, fields, replace: true});
+    navigate(`?${newSearch}`);
   };
 
 
   const eventStatusFilter = filters.some((item) => item === FilterName.EventStatus) ?
-    <EventStatusFilter currentEventType={currentEventType} setEventType={setEventType}/> :
+    <EventStatusFilter currentEventType={currentStatus} setEventType={setStatus}/> :
     null;
 
 
   const yearFilter = filters.some((item) => item === FilterName.Year) ?
-    <YearFilter isAnyDate={isAnyDate} yearRef={yearRef} setAnyDate={setAnyDate}/> :
+    <YearFilter isAnyDate={isAnyYear} yearRef={yearRef} year={year} setAnyDate={setAnyYear}/> :
     null;
 
   return (
@@ -55,6 +72,5 @@ export const Filter = ({filters} : {filters: string[] }) => {
       {yearFilter}
 
       <SubmitButton>искать</SubmitButton>
-
     </FilterForm>
   );};

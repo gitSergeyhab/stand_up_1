@@ -1,11 +1,13 @@
 import { useLocation, useParams } from 'react-router-dom';
 import { GraphRound } from '../../../components/graph-round/graph-round';
+import { BigSpinner } from '../../../components/spinner/big-spinner';
 
 import { Titles } from '../../../components/titles/titles';
 import { TopTabs } from '../../../components/top-tabs/top-tabs';
 import { Vote } from '../../../components/vote/vote';
 import { useGetRatingsQuery } from '../../../store/sub-api';
 import { getTypes } from '../../../utils/utils';
+import { ErrorPage } from '../../error-page/error-page';
 import { VotesUl } from './page-rate-list-style';
 
 
@@ -16,12 +18,14 @@ export const PageRatingList = () => {
   const { pathname, search } = useLocation();
 
 
-  const {isError, isLoading, data: res} = useGetRatingsQuery(pathname + search);
+  const {isError, isLoading, data: res, error} = useGetRatingsQuery(pathname + search);
 
-  if (isError || isLoading || !res) {
-    return (
-      <h1>Err</h1>
-    );
+  if (isError) {
+    return <ErrorPage error={error}/>;
+  }
+
+  if (isLoading || !res /* || 1 + 1 === 2*/) {
+    return <BigSpinner/>;
   }
 
   const {count, rates, stats, titles} = res;

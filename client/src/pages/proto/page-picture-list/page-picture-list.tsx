@@ -2,11 +2,13 @@ import { useState } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
 import { ImageModal } from '../../../components/image-modal/image-modal';
 import { ImgList } from '../../../components/img-list/img-list';
+import { BigSpinner } from '../../../components/spinner/big-spinner';
 import { Titles } from '../../../components/titles/titles';
 import { TopTabs } from '../../../components/top-tabs/top-tabs';
 import { useGetPicturesQuery } from '../../../store/sub-api';
 import { PictureType } from '../../../types/types';
 import { getTypes } from '../../../utils/utils';
+import { ErrorPage } from '../../error-page/error-page';
 
 
 export const PagePictureList = () => {
@@ -28,14 +30,16 @@ export const PagePictureList = () => {
   };
 
 
-  const {isError, isLoading, data: res} = useGetPicturesQuery(pathname + search);
+  const {isError, isLoading, data: res, error} = useGetPicturesQuery(pathname + search);
 
-  if (isError || isLoading || !res) {
-    return (
-      <h1>Err</h1>
-    );
+  if (isError) {
+    return <ErrorPage error={error}/>;
   }
 
+  if (isLoading || !res) {
+    return <BigSpinner/>;
+  }
+  console.log(res);
   const {count, data, titles} = res;
 
   const { mainType } = getTypes(pathname);

@@ -1,7 +1,7 @@
 import { sequelize } from "../sequelize";
 import { Request, Response } from "express";
 import { Column, ColumnId, OrderValues, SQLFunctionName, StatusCode } from "../const";
-import { getDataFromSQL, getDataFromSQLWithTitles, getTitlesQuery, insertView } from "../utils/sql-utils";
+import { checkTitles, getDataFromSQL, getDataFromSQLWithTitles, getTitlesQuery, insertView } from "../utils/sql-utils";
 
 
 class ShowsController {
@@ -252,11 +252,9 @@ class ShowsController {
                 }
             )
             
-            const data = getDataFromSQLWithTitles(result)
+            const data = getDataFromSQLWithTitles(result);
+            return checkTitles(data, res);
 
-
-            return res.status(200).json(data);
-    
    
         } catch(err) {
             console.log(err)

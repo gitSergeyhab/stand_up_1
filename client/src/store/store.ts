@@ -4,9 +4,12 @@ import { comediansApi } from './comedians-api';
 import { mainReducer } from './main-reducer/main-reducer';
 import { subApi } from './sub-api';
 import { userApi } from './user-api';
+import { userReducer } from './user-reducer/user-reducer';
 
 export const enum ReducerName {
-    Main = 'Main'
+    Main = 'Main',
+    User = 'User'
+
 }
 
 
@@ -14,6 +17,8 @@ export const reducer = combineReducers({
   [comediansApi.reducerPath]: comediansApi.reducer,
   [subApi.reducerPath]: subApi.reducer,
   [userApi.reducerPath]: userApi.reducer,
+  [ReducerName.User]: userReducer,
+
   [ReducerName.Main]: mainReducer
 });
 

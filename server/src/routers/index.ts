@@ -11,6 +11,7 @@ import { userRouter } from './users-router';
 const router =  Router();
 
 router.use('/users', userRouter);
+
 router.use('/comedians', comedianRouter);
 router.use('/countries', countriesRouter);
 router.use('/shows', showsRouter);

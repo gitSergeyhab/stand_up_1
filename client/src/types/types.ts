@@ -83,3 +83,11 @@ export type DataRateCC = {
   userNik: string;
   userAvatar: string;
 };
+
+export type GetPageNumArgs = {
+  count: number;
+  limit: number;
+  offset: number;
+}
+
+export type QueryField = { name: string; value: string | number }

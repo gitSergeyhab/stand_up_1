@@ -212,7 +212,7 @@ type LogoContainerProp = {
   small?: boolean;
 }
 
-export const LogoContainer = styled.div<LogoContainerProp>`
+export const LogoContainer = styled(Link).attrs({ to: '/' })<LogoContainerProp>`
   color: gold;
   display: flex;
   justify-content: center;

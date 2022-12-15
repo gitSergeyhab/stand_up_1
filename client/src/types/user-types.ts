@@ -101,3 +101,19 @@ export type UserData = {
   comedianRates: UserContentRate[];
   reviews: string[];
 };
+
+export type AuthUserTypeSC = {
+  user_email: string;
+  user_nik: string;
+  user_status: string;
+  user_id: string;
+  user_avatar: string | null;
+}
+
+export type AuthUserTypeCC = {
+  email: string;
+  nik: string;
+  status: string;
+  id: string;
+  avatar: string | null;
+}

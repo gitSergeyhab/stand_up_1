@@ -1,7 +1,8 @@
 import { sequelize } from "../sequelize";
 import { Request, Response } from "express";
-import { Column, ColumnId, OrderValues, SQLFunctionName, StatusCode } from "../const";
-import { getDataFromSQL, getDataFromSQLWithTitles, getTitlesQuery, insertView } from "../utils/sql-utils";
+import { Column, ColumnId, DefaultQueryParams, OrderValues, SQLFunctionName, StatusCode } from "../const";
+import { checkTitles, getDataFromSQL, getDataFromSQLWithTitles, getTitlesQuery, insertView } from "../utils/sql-utils";
+import { TitlesDataType } from "../types";
 
 const EventOrder = {
     totalViews: 'total_views',
@@ -9,6 +10,8 @@ const EventOrder = {
     time: 'event_date',
     upcoming : 'upcoming '
 }
+
+const {Limit, Offset, EventTStatus} = DefaultQueryParams;
 
 
 class EventsController {
@@ -59,7 +62,7 @@ class EventsController {
 // !!! PLANNED -> planned
     async getEventsByQuery(req: Request, res: Response) {
         try {
-            const {days = '365', country_id = null, city = null, status = null, order = null, direction = null, limit = null, offset = null } = req.query;
+            const {days = '365', country_id = null, city = null, status = null, order = null, direction = null, limit = Limit, offset = Offset } = req.query;
 
             const where = `
                 WHERE  country_id = ${country_id ? ':country_id' : 'country_id'}
@@ -123,13 +126,14 @@ class EventsController {
     async getEventsByColumnId(req: Request, res: Response) {
         try {
             const {type, id} = req.params;
-            const {year = null, limit = null, offset = null, status = null} = req.query;
+            const {year = null, limit = Limit , offset = Offset, status = EventTStatus} = req.query;
             const columnId: string = ColumnId[type as string] || ColumnId.comedians;
+            console.log({limit, offset})
 
             const where = `
                 WHERE ${columnId} = :id
                 ${year ? 'AND EXTRACT( YEAR FROM event_date) = :year' : '' } 
-                AND ${status ? 'event_status = :status' : '1 = 1'}
+                AND ${status && status !== EventTStatus ? 'event_status = :status' : '1 = 1'}
             `;
 
             const result = await sequelize.query(
@@ -161,12 +165,13 @@ class EventsController {
                     type: 'SELECT'
                 }
             )
+
+ 
             
-            const data = getDataFromSQLWithTitles(result)
+            const data = getDataFromSQLWithTitles(result);
+            return checkTitles(data, res);
 
-            console.log(data)
 
-            return res.status(200).json(data);
     
    
         } catch(err) {
