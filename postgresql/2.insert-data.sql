@@ -106,26 +106,6 @@ INSERT INTO resources(resource_type_id, comedian_id, resource_href) VALUES
 (3, 3, 'https://YouTube.com/yt-3');
 
 
-
-INSERT INTO pictures(user_id, picture_path) VALUES 
-(2, '/img/test/xz-2.jpg'),
-(3, '/img/test/black.jpg');
-
-INSERT INTO pictures(comedian_id, picture_path) VALUES 
-(2, '/img/test/xz-2.jpg'),
-(3, '/img/test/black.jpg'),
-(2, '/img/test/abr.jpg'),
-(2, '/img/test/d-r.jpeg'),
-(1, '/img/test/girl.webp');
-
-INSERT INTO pictures(place_id, picture_path) VALUES
-(1, '/img/test/xz-2.jpg'),
-(1, '/img/test/abr.jpg'),
-(1, '/img/test/black.jpg');
-
-
-
-
 INSERT INTO events (place_id, user_id, event_name, event_description, event_date, event_status, event_promo_picture ) VALUES
 (1,1, 'First Event', 'First Event event_discription', '01.01.2023', 'planned', '/img/test/girl.webp'),
 (2,1, 'Second Event', 'Second Second Event event_discription', '01.02.2023', 'planned', '/img/test/kom.jpg'),
@@ -543,3 +523,35 @@ INSERT INTO pictures (comedian_id, user_id, place_id, show_id, picture_path) VAL
 (1,1,1,1, '/img/test/abr.jpg'),
 (1,1,1,1, '/img/test/d-r.jpeg'),
 (1,1,1,1, '/img/test/girl.webp');
+
+
+
+INSERT INTO pictures(user_id, picture_path, user_added_id) VALUES 
+(2, '/img/test/xz-2.jpg', 1),
+(3, '/img/test/black.jpg', 2);
+
+INSERT INTO pictures(comedian_id, picture_path, user_added_id) VALUES 
+(2, '/img/test/xz-2.jpg', 1),
+(3, '/img/test/black.jpg', 2),
+(2, '/img/test/abr.jpg', 1),
+(2, '/img/test/d-r.jpeg', 2),
+(1, '/img/test/girl.webp', 3);
+
+INSERT INTO pictures(place_id, picture_path, user_added_id) VALUES
+(1, '/img/test/xz-2.jpg', 1),
+(1, '/img/test/abr.jpg', 1),
+(1, '/img/test/black.jpg', 1);
+
+INSERT INTO pictures(event_id, picture_path, user_added_id) VALUES 
+(2, '/img/test/xz-2.jpg', 1),
+(3, '/img/test/black.jpg', 2),
+(2, '/img/test/abr.jpg', 1),
+(2, '/img/test/d-r.jpeg', 2),
+(1, '/img/test/girl.webp', 3);
+
+INSERT INTO pictures(show_id, picture_path, user_added_id) VALUES 
+(2, '/img/test/xz-2.jpg', 1),
+(3, '/img/test/black.jpg', 2),
+(2, '/img/test/abr.jpg', 1),
+(2, '/img/test/d-r.jpeg', 2),
+(1, '/img/test/girl.webp', 3);

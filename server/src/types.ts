@@ -19,3 +19,15 @@ export type DataTypeRate = {
     rates: RateResult[];
     titles: RateResult;
 }
+
+export type UserDTO_SC = {
+    user_id: string,
+    user_email: string,
+    user_activated: boolean,
+}
+
+export type UserDTO_CC = {
+    userId: string,
+    userEmail: string,
+    userActivated: boolean,
+}

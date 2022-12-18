@@ -18,7 +18,6 @@ class ComedianController {
     async getComedians(req: Request, res: Response) {
         try {
 
-            console.log(' ! -- getComedians session -- ! ', req.session)
             const {country_id, city, limit = null, offset = null, order='pop', direction=null} = req.query;
 //!!goodwhere
             const where = `

@@ -19,6 +19,7 @@ class EventsController {
         try {
             console.log('getEventById')
             const {id, user_id = '1'} = req.params
+            console.log({id})
                 const events = await sequelize.query(
                     `
                     SELECT 
@@ -51,8 +52,9 @@ class EventsController {
                 }
 
                 await insertView(id, user_id, Column.Event)
+                console.log(events)
         
-                return res.status(StatusCode.Ok).json({event: events[0]})
+                return res.status(StatusCode.Ok).json(events[0])
             
         } catch {
             return res.status(StatusCode.ServerError).json({message: 'error get show by id'})

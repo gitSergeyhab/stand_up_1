@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { EventsPage } from '../pages/events-page/events-page';
+import { EventPageInfo } from '../pages/event-page-info/event-page-info';
 import { MainPage } from '../pages/main-page/main-page';
 import { Header } from '../components/header/header';
 import Footer from '../components/footer/footer';
@@ -36,7 +36,7 @@ const AppRoute = {
   Comedians: '/comedians',
   Show: '/shows/:id',
   Shows: '/shows',
-  Event: '/events/:id',
+  Event: '/events/:id/info',
   Events: '/events',
   Place: '/places/:id',
   Places: '/places',
@@ -108,7 +108,8 @@ export const App = () => {
                 <Route path={AppRoute.Ratings} element={<PageRatingList/>}/>
 
 
-                <Route path={AppRoute.Events} element={<EventsPage/>}/>
+                {/* <Route path={AppRoute.Events} element={<EventsPage/>}/> */}
+                <Route path={AppRoute.Event} element={<EventPageInfo/>}/>
 
                 <Route path={AppRoute.Registration} element={<RegistrationPage/>}/>
                 <Route path={AppRoute.Login} element={<LoginPage/>}/>

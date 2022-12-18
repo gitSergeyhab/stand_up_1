@@ -96,12 +96,16 @@ export const MenuLi = styled.li`
 
 
 export const MenuLink = styled(Link)`
+display: flex;
+align-items: center;
+justify-content: center;
     cursor: pointer;
-    display: block;
+    /* display: block; */
     color: gold;
     text-decoration: none;
     text-transform: uppercase;
     width: 100%;
+    height: 100%;
     &:hover, &:focus {
       background-color: #0d0101;
     }

@@ -75,3 +75,8 @@ export const JoiMessageKey = {
     Offset: 0, 
     EventTStatus: EventStatus.All,
   }
+
+  export const TokenExpire = {
+    Access: '30m',
+    Refresh: '30d'
+  }

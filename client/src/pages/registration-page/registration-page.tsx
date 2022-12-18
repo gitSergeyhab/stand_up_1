@@ -2,7 +2,7 @@ import { Header, RegButton, RegForm, RegInput } from './registration-page-style'
 import { FormEventHandler, useRef, useState } from 'react';
 import { useRegisterUserMutation } from '../../store/user-api';
 import { useNavigate } from 'react-router-dom';
-import { UserErrorMessage } from '../../const/errors';
+import { ServerError, UserErrorMessage } from '../../const/errors';
 import { UserErrorsBlock } from '../../components/user-errors-block/user-errors-block';
 
 
@@ -32,7 +32,9 @@ const getErrorMessages = ({nik, email, password, passwordRepeat}: ErrorMessagesA
   return errorMessages;
 };
 
-
+type DataErrorType = {
+  data: {errors: string[]; message: string};
+}
 export const RegistrationPage = () => {
 
   const [regUser] = useRegisterUserMutation();
@@ -52,7 +54,7 @@ export const RegistrationPage = () => {
   const navigate = useNavigate();
 
   const onSuccessReg = (res: any) =>{ navigate('/'); console.log(res);};
-  const setDataErrors = (err: {data: string[]}) => setErrors(err.data);
+  const setDataErrors = (err: DataErrorType) => setErrors(err.data.errors || [ServerError.Default]);
 
 
   const handleRegSubmit: FormEventHandler = ( evt ) => {

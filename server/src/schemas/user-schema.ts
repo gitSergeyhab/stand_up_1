@@ -2,13 +2,13 @@ import Joi from "joi";
 import { JoiMessageKey } from "../const";
 
 const Message = {
-    NikMin: `you need at least 3 characters in your Nik / минимальная длина ника 3 символов`,
-    NikMax: `Max length of Nik is 50 / максимальная длина ника 50 символов`,
-    NameBad: `the name can only contain letters and a space / в имени не должно быть прробелов`,
-    Email: `email is incorrect / некорректный email`,
-    Password: `you need at least 8 characters in the password / нужно как минимум 8 символов в пороле`,
-    PasswordRepeat: `the passwords do not match / пароли не совпадают`,
-    Picture: `the image type is not supported / тип изображения не поддерживается`
+    NikMin: `you need at least 3 characters in your Nik`,
+    NikMax: `Max length of Nik is 50`,
+    NameBad: `the name can only contain letters and a space`,
+    Email: `email is incorrect`,
+    Password: `you need at least 8 characters in the password`,
+    PasswordRepeat: `the passwords do not match`,
+    Picture: `the image type is not supported`
   };
 
   const Pattern = {

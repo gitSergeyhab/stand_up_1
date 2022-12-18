@@ -1,5 +1,4 @@
 import { OneEventTypeCC, OneEventTypeSC, SubEventCC, SubEventSC } from '../../types/event-types';
-import { DataType } from '../../types/types';
 
 // export const adaptEventsToClient = (data: EventTypeSC): EventTypeCC => (
 //   {
@@ -22,8 +21,9 @@ import { DataType } from '../../types/types';
 // );
 
 
-export const adaptOneEventToClient = (data: OneEventTypeSC): OneEventTypeCC => (
-  {
+export const adaptOneEventToClient = (data: OneEventTypeSC): OneEventTypeCC =>
+  // console.log(data);
+  ({
     countryId: data['country_id'],
     countryName: data['country_name'],
     countryNameEn: data['country_name_en'],
@@ -47,9 +47,7 @@ export const adaptOneEventToClient = (data: OneEventTypeSC): OneEventTypeCC => (
     userId: data['user_id'],
     userNik: data['user_nik'],
     views: data['views']
-  }
-);
-
+  });
 export const adaptEventsToClient = (data: SubEventSC): SubEventCC => (
   {
     eventId: data['event_id'],

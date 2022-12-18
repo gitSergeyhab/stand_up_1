@@ -26,9 +26,16 @@ CREATE TABLE users (
     user_avatar VARCHAR(128),
     user_date_birth DATE,
     user_description TEXT,
-    user_date_registration DATE DEFAULT CURRENT_DATE
+    user_date_registration DATE DEFAULT CURRENT_DATE,
+    user_activated BOOLEAN DEFAULT FALSE,
+    user_activation_link VARCHAR(128)
     );
 
+CREATE TABLE tokens (
+    token_id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    user_id BIGINT REFERENCES users(user_id),
+    refresh_token VARCHAR(512) NOT NULL
+);
 
 CREATE TABLE comedians ( 
     comedian_id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
@@ -60,7 +67,8 @@ CREATE TABLE places (
     place_date_founded DATE,
     place_description TEXT,
     place_promo_picture VARCHAR(256),
-    date_place_added DATE DEFAULT CURRENT_DATE
+    place_date_added DATE DEFAULT CURRENT_DATE,
+    place_active BOOLEAN DEFAULT TRUE
     );
 
 
@@ -118,7 +126,10 @@ CREATE TABLE show_videos (
 CREATE TABLE reviews ( 
     review_id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY, 
     user_id BIGINT NOT NULL REFERENCES users(user_id),
-    show_id BIGINT NOT NULL REFERENCES shows(show_id),
+
+    show_id BIGINT REFERENCES shows(show_id),
+    event_id BIGINT REFERENCES events(event_id),
+    place_id BIGINT REFERENCES places(place_id),
 
     review_title VARCHAR(256),
     review_text TEXT,
@@ -167,12 +178,15 @@ CREATE TABLE resource_types (
 
 CREATE TABLE pictures (
     picture_id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+
     user_id BIGINT REFERENCES users(user_id),
     comedian_id BIGINT REFERENCES comedians(comedian_id),
     place_id BIGINT REFERENCES places(place_id),
     show_id BIGINT REFERENCES shows(show_id),
+    event_id BIGINT REFERENCES events(event_id),
 
-    picture_path VARCHAR(256) NOT NULL
+    picture_path VARCHAR(256) NOT NULL,
+    user_added_id BIGINT
 );
 
 CREATE TABLE resources (

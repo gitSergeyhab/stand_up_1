@@ -4,3 +4,7 @@ export const UserErrorMessage = {
   Password: 'пароль должен быть не меньше 8 символов',
   PasswordRepeat: 'пароли должны совпадать',
 };
+
+export const ServerError = {
+  Default: 'Server Error - Try Again Later'
+};
