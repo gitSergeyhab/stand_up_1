@@ -91,3 +91,7 @@ export type GetPageNumArgs = {
 }
 
 export type QueryField = { name: string; value: string | number }
+
+export type DataErrorType = {
+  data: {errors: string[]; message: string};
+}

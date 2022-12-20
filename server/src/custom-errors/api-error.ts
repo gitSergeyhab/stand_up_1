@@ -10,7 +10,7 @@ export class ApiError extends Error {
     }
 
     static UnauthorizedError() {
-        return new ApiError(401, 'User is not Unauthorized')
+        return new ApiError(401, 'You are Unauthorized')
     }
 
     static ForbiddenError() {

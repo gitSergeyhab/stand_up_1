@@ -31,3 +31,12 @@ export type UserDTO_CC = {
     userEmail: string,
     userActivated: boolean,
 }
+
+export type UserPseudoType = {
+    user_email: string,
+    user_password: string,
+    user_avatar: string,
+    user_status: string,
+    user_id: string,
+    user_nik: string,
+}

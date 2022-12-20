@@ -7,6 +7,7 @@ import {
 import { ContentName, DefaultPath } from '../../const/const';
 import { getUser } from '../../store/user-reducer/user-selectors';
 import { useSelector } from 'react-redux';
+import { useLogoutUserMutation } from '../../store/user-api';
 
 
 const MENU_DATA = [
@@ -30,6 +31,8 @@ export const Header = () => {
   const [shownUserMenu, setShownUserMenu] = useState(false);
 
   const user = useSelector(getUser);
+
+  const [logout] = useLogoutUserMutation();
   // console.log({user});
 
   // const user = defaultUser;
@@ -39,9 +42,15 @@ export const Header = () => {
 
   const handleClickMenu = () => {setShown((val) => !val); };
   const handleClickUserMenu = () => {setShownUserMenu((val) => !val);};
+  // const handleClickExit = () => {
+  //   // console.log('exit');
+  //   setShownUserMenu((val) => !val);
+  // };
+
   const handleClickExit = () => {
-    // console.log('exit');
-    setShownUserMenu((val) => !val);
+    logout(null).unwrap()
+      .then((res) => console.log({res}))
+      .catch((err) => console.log({err}));
   };
 
 
@@ -67,7 +76,13 @@ export const Header = () => {
 
   const userMenu = shownUserMenu ? (
     <UserMenu>
-      { user ? [...userMenuItems, exit] : noUserItem }
+      {/* { user ? [...userMenuItems, exit] : noUserItem } */}
+
+      {/* test */}
+      {exit}
+      {noUserItem}
+      {/* test */}
+
     </UserMenu>
   ) : null;
 

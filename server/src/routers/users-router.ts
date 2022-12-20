@@ -1,5 +1,6 @@
 import {Router} from 'express'
 import { userController } from '../controllers/users-controller';
+import { asyncHandler } from '../middlewares/async-handler';
 import { userValidate } from '../middlewares/user-validate';
 
 const userRouter =  Router();
@@ -8,13 +9,13 @@ const userRouter =  Router();
 // userRouter.get('/auth', userController.auth);
 userRouter.get('/:id', userController.getUserById);
 
-userRouter.post('/registration', userValidate, userController.registration);
-userRouter.post('/login', userController.login);
-userRouter.post('/logout', userController.logout);
+userRouter.post('/registration', userValidate, asyncHandler(userController.registration));
+userRouter.post('/login', asyncHandler(userController.login));
+userRouter.post('/logout', asyncHandler(userController.logout));
 
-userRouter.get('/activate/:link', userController.activate);
+userRouter.get('/activate/:link', asyncHandler(userController.activate));
 
-userRouter.get('/refresh', userController.refreshToken);
+userRouter.get('/refresh', asyncHandler(userController.refreshToken));
 
 
 

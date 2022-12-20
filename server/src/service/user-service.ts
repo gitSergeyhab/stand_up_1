@@ -1,7 +1,7 @@
 import { ApiError } from "../custom-errors/api-error";
 import { userSchema } from "../schemas/user-schema";
 import { sequelize } from "../sequelize";
-import { UserDTO_SC } from "../types";
+import { UserDTO_SC, UserPseudoType } from "../types";
 import { crypt } from "../utils/bcrypt-utils";
 import { mailService } from "./mail-service";
 import { tokenService } from "./token-service";
@@ -18,10 +18,11 @@ const generateActivateLink = (hashPassword: string) => {
     return `${hashPassword.slice(0,  length)}-${date}-activate`
 };
 
+const getUserDTO = (user: UserPseudoType) => ({...user, user_password: 'no way'})
 
 
 class UserService {
-    async registration ({email, nik, password}) {
+    async registration ({email, nik, password}: {email: string, nik: string, password: string}) {
 
         // const {error} = userSchema.validate({email, nik, password, passwordRepeat: password}, { abortEarly: false }); 
 
@@ -93,7 +94,7 @@ class UserService {
         // await mailService.sendActivationMail({email, link}); // не работает - нужен рассылочный сервис !!!
         await mailService.sendActivationMailImitation({email, link: activationLink}); // пока не настроен sendActivationMail !!!
 
-        const userDTO = user[0][0] as unknown as UserDTO_SC;
+        const userDTO = getUserDTO(user[0][0] as unknown as UserPseudoType) ;
         //6.создает токены
         const {accessToken, refreshToken} = tokenService.generateTokens({userDTO});
         //7.создает / обновляет токены в БД
@@ -105,6 +106,8 @@ class UserService {
             user: userDTO
         }
     }
+
+
     async activate({activationLink} : {activationLink: string}) {
         const users = await sequelize.query(
             `
@@ -130,8 +133,65 @@ class UserService {
                 type: 'UPDATE'
             }
         );
+    }
+
+    async login({email, password}: {email: string, password: string}) {
+        const user = await sequelize.query(
+            `
+            SELECT 
+            user_id, user_nik, user_email, user_password, user_avatar, user_status
+            FROM users
+            WHERE LOWER(user_email) = LOWER(:email);
+            `,
+            {
+                type: 'SELECT',
+                replacements: { email }
+            }
+        );
+
+        if (!user.length) {
+            throw ApiError.BadRequest(`There is not user with email ${email}`);
+        }
+
+        console.log({user})
+        
+
+        const isPasswordCorrect = await crypt.compare(password, (user[0] as unknown as UserPseudoType).user_password);
+
+        
 
 
+        if (!isPasswordCorrect) {
+            throw ApiError.BadRequest('The password is wrong');
+        }
+
+        const userDTO = getUserDTO(user[0] as unknown as UserPseudoType);
+        const tokens = tokenService.generateTokens({userDTO});
+
+        await tokenService.saveToken({user_id: userDTO.user_id, refreshToken: tokens.refreshToken});
+
+        return { ...tokens, user: userDTO }
+    }
+
+    async logout({refreshToken} : { refreshToken: string }) {
+        if (!refreshToken) {
+            throw ApiError.UnauthorizedError();
+        }
+        const token = await tokenService.removeRefreshToken({refreshToken})
+        return token;
+    }
+
+    async findUserById ({id} : {id: string}) {
+        const user = await sequelize.query(
+            `
+            SELECT * FROM users WHERE user_id = :id
+            `,
+            {
+                type: 'SELECT',
+                replacements: {id}
+            }
+        )
+        return user;
     }
 }
 

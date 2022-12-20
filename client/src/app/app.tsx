@@ -53,24 +53,24 @@ export const App = () => {
 
   // const cashless = Date.now();
 
-  const { isError, isLoading, data } = useAuthUserQuery(null);
+  // const { isError, isLoading, data } = useAuthUserQuery(null);
 
   // console.log('app', isError, isLoading, data, cashless);
   const dispatch = useDispatch();
 
 
-  useEffect(() => {
-    if (!isLoading) {
-      // console.log('useEffect', {isError, isLoading, data});
-      if (data) {
-        dispatch(setUser(data));
-      }
+  // useEffect(() => {
+  //   if (!isLoading) {
+  //     // console.log('useEffect', {isError, isLoading, data});
+  //     if (data) {
+  //       dispatch(setUser(data));
+  //     }
 
-      if (isError) {
-        dispatch(setUser(null));
-      }
-    }
-  }, [isError, isLoading, data, dispatch]);
+  //     if (isError) {
+  //       dispatch(setUser(null));
+  //     }
+  //   }
+  // }, [isError, isLoading, data, dispatch]);
 
 
   return (

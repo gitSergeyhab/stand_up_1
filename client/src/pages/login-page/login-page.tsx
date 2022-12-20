@@ -2,14 +2,15 @@ import { FormEventHandler, useRef, useState } from 'react';
 import { useLoginUserMutation } from '../../store/user-api';
 import { useNavigate } from 'react-router-dom';
 import { Header, RegButton, RegForm, RegInput } from '../registration-page/registration-page-style';
-import { UserErrorMessage } from '../../const/errors';
+import { ServerError, UserErrorMessage } from '../../const/errors';
 import { UserErrorsBlock } from '../../components/user-errors-block/user-errors-block';
+import { DataErrorType } from '../../types/types';
 
 
 export const LoginPage = () => {
 
   const [loginUser] = useLoginUserMutation();
-  
+
 
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
@@ -17,15 +18,13 @@ export const LoginPage = () => {
   const [errors, setErrors] = useState<string[]>([]);
   const [disable, setDisable] = useState(false);
 
-  const setAble = () => {
-    console.log('setSubmitAble');
-    setDisable(false);
-  };
+  const setAble = () => setDisable(false);
+
 
   const navigate = useNavigate();
 
-  const onSuccessReg = (res: any) =>{ navigate('/'); console.log(res);};
-  const setDataErrors = (err: {data: string[]}) => setErrors(err.data);
+  const onSuccessReg = () => navigate('/');
+  const setDataErrors = (err: DataErrorType) => setErrors(err.data.errors || [ServerError.Default]);
 
 
   const handleLoginSubmit: FormEventHandler = ( evt ) => {
@@ -41,7 +40,7 @@ export const LoginPage = () => {
       setAble();
     } else if (email) {
       loginUser({ email, password }).unwrap()
-        .then((result) => onSuccessReg(result))
+        .then(onSuccessReg)
         .catch(setDataErrors)
         .finally(setAble);
     }

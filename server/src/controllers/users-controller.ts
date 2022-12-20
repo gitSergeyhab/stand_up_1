@@ -4,6 +4,7 @@ import { OrderValues, StatusCode, SQLFunctionName } from "../const";
 import { crypt } from "../utils/bcrypt-utils";
 import { userSchema } from "../schemas/user-schema";
 import { userService } from "../service/user-service";
+import { tokenService } from "../service/token-service";
 
 type UserType = {
     user_email: string,
@@ -16,59 +17,47 @@ type UserType = {
 
 
 type UserRequest = Request & {session: {user : UserType | null}}
+
 class UserController {
 
     async registration(req: Request, res: Response, next: NextFunction) {
-        try {
-            const {email, password, nik} = req.body;
-            const user = await userService.registration({email, nik, password});
-            res.cookie('refreshToken', user.refreshToken, { maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true });
-            return res.status(StatusCode.Added).json(user);
-
-        } catch (err) {
-            next(err)
-        }
-       
+        const {email, password, nik} = req.body;
+        const user = await userService.registration({email, nik, password});
+        res.cookie('refreshToken', user.refreshToken, { maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true });
+        return res.status(StatusCode.Added).json(user);
     }
 
 
-    async logout (req: UserRequest, res: Response, next: NextFunction) {
-        try {
 
-        } catch (err) {
-
-        }
-
-    }
 
     async login(req: UserRequest, res: Response, next: NextFunction) {
-        try {
+        const {email, password} = req.body;;
+        const user = await userService.login({email, password});
+        res.cookie('refreshToken', user.refreshToken, { maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true });
+        return res.status(StatusCode.Ok).json(user);
 
-        } catch (err) {
-            
-        }
 
+    }
+
+    async logout (req: UserRequest, res: Response, next: NextFunction) {
+        const refreshToken = req.cookies.refreshToken as string;
+        await userService.logout({refreshToken})
+        res.clearCookie('refreshToken');
+        return res.status(StatusCode.Ok).json({message: 'you are now logged out'});
     }
 
 
 
     async activate(req: UserRequest, res: Response, next: NextFunction) {
-        try {
-            const {link} = req.params;
-            await userService.activate({activationLink: link});
-            return res.redirect(process.env.CLIENT_URL);
-        } catch (err) {
-            next(err);
-        }
-       
+        const {link} = req.params;
+        await userService.activate({activationLink: link});
+        return res.redirect(process.env.CLIENT_URL);
     }
 
     async refreshToken(req: UserRequest, res: Response, next: NextFunction) {
-        try {
+        const refreshToken = req.cookies.refreshToken as string;
+        const userData = await tokenService.refreshToken({refreshToken})
 
-        } catch (err) {
-            
-        }
        
     }
 

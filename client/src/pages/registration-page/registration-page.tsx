@@ -4,6 +4,7 @@ import { useRegisterUserMutation } from '../../store/user-api';
 import { useNavigate } from 'react-router-dom';
 import { ServerError, UserErrorMessage } from '../../const/errors';
 import { UserErrorsBlock } from '../../components/user-errors-block/user-errors-block';
+import { DataErrorType } from '../../types/types';
 
 
 type RefType = string | undefined
@@ -32,9 +33,7 @@ const getErrorMessages = ({nik, email, password, passwordRepeat}: ErrorMessagesA
   return errorMessages;
 };
 
-type DataErrorType = {
-  data: {errors: string[]; message: string};
-}
+
 export const RegistrationPage = () => {
 
   const [regUser] = useRegisterUserMutation();
@@ -46,14 +45,11 @@ export const RegistrationPage = () => {
 
   const [errors, setErrors] = useState<string[]>([]);
   const [disable, setDisable] = useState(false);
-  const setAble = () => {
-    console.log('setSubmitAble');
-    setDisable(false);
-  };
+  const setAble = () => setDisable(false);
 
   const navigate = useNavigate();
 
-  const onSuccessReg = (res: any) =>{ navigate('/'); console.log(res);};
+  const onSuccessReg = () => navigate('/login');
   const setDataErrors = (err: DataErrorType) => setErrors(err.data.errors || [ServerError.Default]);
 
 
@@ -73,14 +69,12 @@ export const RegistrationPage = () => {
       setAble();
     } else {
       setErrors([]);
-      console.log('ok');
       if (email && nik && password && passwordRepeat) {
         regUser({ email, nik, password, passwordRepeat }).unwrap()
-          .then((result) => onSuccessReg(result))
+          .then(onSuccessReg)
           .catch(setDataErrors)
           .finally(setAble);
       }
-
     }
   };
 
@@ -97,8 +91,6 @@ export const RegistrationPage = () => {
         <RegInput type={'password'} placeholder='repeat password' ref={passwordRepeatRef} required/>
         {errorBlock}
         <RegButton disabled={disable}> Зарегистрироваться </RegButton>
-
-
       </RegForm>
     </>
   );

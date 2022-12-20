@@ -1,4 +1,4 @@
-CREATE DATABASE stand_up8
+CREATE DATABASE stand_up9
     WITH
 	TEMPLATE template0
     OWNER = postgres
