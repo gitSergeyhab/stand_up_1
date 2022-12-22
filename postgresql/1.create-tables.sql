@@ -11,10 +11,9 @@ CREATE TABLE countries (
     );
 
 
-
 CREATE TABLE users ( 
     user_id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    user_status VARCHAR(32) DEFAULT 'USER',
+    -- user_status VARCHAR(32) DEFAULT 'USER',
     country_id INTEGER REFERENCES countries(country_id),
 
     user_email VARCHAR(128) UNIQUE,
@@ -212,4 +211,17 @@ CREATE TABLE views (
 
     view_date TIMESTAMP without time zone DEFAULT CURRENT_TIMESTAMP
 );
+
+CREATE TABLE roles (
+    role_id SMALLINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    role_name VARCHAR(64)
+);
+
+CREATE TABLE users_roles (
+    user_id BIGINT REFERENCES users(user_id),
+    role_id SMALLINT REFERENCES roles(role_id),
+
+    CONSTRAINT users_roles_pkey PRIMARY KEY (user_id, role_id)
+);
+
 

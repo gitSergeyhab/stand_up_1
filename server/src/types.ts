@@ -1,3 +1,6 @@
+import { ParsedQs } from 'qs';
+import { Role } from './const';
+
 export type TitlesDataType = {native: string, en: string | null}
 
 export type RateResult = {
@@ -36,7 +39,15 @@ export type UserPseudoType = {
     user_email: string,
     user_password: string,
     user_avatar: string,
-    user_status: string,
     user_id: string,
     user_nik: string,
+    roles: Role[]
 }
+
+export type YearsFromQuery = {
+    yearFrom: number;
+    yearTo: number;
+}
+
+
+export type Query = string | ParsedQs | string[] | ParsedQs[];

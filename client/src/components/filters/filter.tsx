@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 
 import { EventStatus, FilterName } from '../../const/const';
 import { QueryField } from '../../types/types';
-import { createNewSearch, deleteFieldFromSearch, getFieldFromSearch } from '../../utils/nanigation-utils';
+import { createNewSearch, deleteFieldFromSearch, getFieldFromSearch } from '../../utils/navigation-utils';
 import { EventStatusFilter } from './event-status-filter/event-status-filter';
 import { FilterForm, SubmitButton } from './filter-style';
 import { YearFilter } from './year-filter/year-filter';

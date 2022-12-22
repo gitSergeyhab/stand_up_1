@@ -77,6 +77,25 @@ export const JoiMessageKey = {
   }
 
   export const TokenExpire = {
-    Access: '30m',
+    Access: '30s',
     Refresh: '30d'
   }
+
+  export const enum TokenType {
+    Refresh = 'REFRESH',
+    Access = 'ACCESS'
+}
+
+export const enum BooleanStr {
+  True = 'true',
+  False = 'false'
+}
+
+
+export const enum Role {
+  Super = 'SUPER',
+  Admin = 'ADMIN',
+  Moderator = 'MODERATOR',
+  User = 'USER',
+  ProUser = 'PRO-USER'
+}

@@ -3,7 +3,7 @@ import { MouseEvent } from 'react';
 
 import { getPageOffset, getPages } from '../../utils/pagination-utils';
 import { NextPrevPageLink, PageContainer, PageLink, SpaceLink } from './pagination-style';
-import { createNewSearch, getFieldFromSearch } from '../../utils/nanigation-utils';
+import { createNewSearch, getFieldFromSearch } from '../../utils/navigation-utils';
 
 const DefaultPageParam = {
   Limit: 6,

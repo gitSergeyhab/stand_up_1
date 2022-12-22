@@ -4,7 +4,7 @@ import { sequelize } from "../sequelize";
 import { DataTypeRate, TitlesDataType } from "../types";
 
 
-export const getDataFromSQL = (result: [unknown[], unknown], field: string) => ({[field]: result.slice(0, result.length - 1), ...result[result.length - 1] as {}});
+export const getDataFromSQL = (result: [unknown[], unknown], field: string) => ({[field]: result.slice(0, result.length - 1), ...result[result.length - 1] as {count: string }});
 
 type DataType = {
     data: unknown[];
@@ -71,4 +71,17 @@ export const getTitlesQuery = (type: string) => {
         case TableName.shows: return getProtoTitleQuery('show_name', '', 'shows', 'show_id');
         default: return getProtoTitleQuery('user_nik', '', 'users', 'user_id'); 
     }
+};
+
+
+export const getNeedYears = (from: any, to: any) => {
+
+    if (!from && !to) {
+        return null;
+    }
+
+    const yearFrom = +from;
+    const yearTo = +to || new Date().getFullYear();
+
+    return {yearFrom, yearTo};
 }

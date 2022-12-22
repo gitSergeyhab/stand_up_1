@@ -1,15 +1,14 @@
 import jwt from 'jsonwebtoken';
-import { TokenExpire } from '../const';
+import { TokenExpire, TokenType } from '../const';
 import { ApiError } from '../custom-errors/api-error';
 import { sequelize } from '../sequelize';
 import { UserDTO_SC, UserPseudoType } from '../types';
 import { userService } from './user-service';
+import { Request, Response, NextFunction } from "express";
 
 
-const enum TokenType {
-    Refresh = 'REFRESH',
-    Access = 'ACCESS'
-}
+
+
 
 class TokenService {
     generateTokens({userDTO} : {userDTO: UserPseudoType}) {
@@ -19,15 +18,26 @@ class TokenService {
     }
 
     validateToken({token, type}: {token: string, type: TokenType}) {
-        const secret = type === TokenType.Access ? process.env.JWT_ACCESS_SECRET : process.env.JWT_REFRESH_SECRET;
-        const userData = jwt.verify(token, secret);
-        console.log(userData);
-        return  userData;
+        try {
+            const secret = type === TokenType.Access ? process.env.JWT_ACCESS_SECRET : process.env.JWT_REFRESH_SECRET;
+            const userData = jwt.verify(token, secret);
+            return userData as UserPseudoType;
+        } catch {
+            return null;
+        }
     }
 
-    async saveToken({user_id, refreshToken}: {user_id: string, refreshToken: string}) {
-        // ищет в токенах токен с user_id
-        const oldTokens = await sequelize.query(
+    getTokenFromRequest({req} : {req: Request}) {
+        const authHeader = req.headers.authorization;
+        return authHeader ? authHeader.split(' ')[1] : null
+    }
+
+    setRefreshTokenToCookie({res, refreshToken} : {res: Response, refreshToken: string}) {
+        res.cookie('refreshToken', refreshToken,  { maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true } )
+    }
+
+    async findTokenByUserId({user_id} : {user_id: string}) {
+        const token = await sequelize.query(
             `
             SELECT * FROM tokens
             WHERE user_id = :user_id; 
@@ -37,24 +47,26 @@ class TokenService {
                 replacements: {user_id}
             }
         )
-        // если уже есть, то обновляет
-        if (oldTokens.length) {
-            const updatedToken = await sequelize.query(
-                `
-                UPDATE tokens
-                SET refresh_token = :refreshToken
-                WHERE user_id = :user_id;
-                `, 
-                {
-                    type: 'UPDATE',
-                    replacements: { user_id, refreshToken }
-                }
-            )
-            console.log(updatedToken);
-            return updatedToken;
-        }
-        // если нет, то создает новый
-        const newToken = await sequelize.query(
+        return token.length ? token[0] : null;
+    }
+
+    async updateToken({user_id, refreshToken} : { user_id: string, refreshToken: string }) {
+        const token =  await sequelize.query(
+            `
+            UPDATE tokens
+            SET refresh_token = :refreshToken
+            WHERE user_id = :user_id;
+            `, 
+            {
+                type: 'UPDATE',
+                replacements: { user_id, refreshToken }
+            }
+        )
+        return token;
+    }
+
+    async createToken({user_id, refreshToken} : { user_id: string, refreshToken: string }) {
+        const token =  await sequelize.query(
             `
             INSERT INTO tokens(user_id, refresh_token) VALUES
             (:user_id, :refreshToken);
@@ -64,9 +76,20 @@ class TokenService {
                 replacements:  { user_id, refreshToken }
             }
         )
-        console.log(newToken);
-        return newToken;
+        return token;
+    }
 
+    async saveToken({user_id, refreshToken}: {user_id: string, refreshToken: string}) {
+        // ищет в токенах токен с user_id
+        const oldTokens = await this.findTokenByUserId({user_id})
+        // если уже есть, то обновляет
+        if (oldTokens) {
+            const updatedToken = await this.updateToken({user_id, refreshToken})
+            return updatedToken;
+        }
+        // если нет, то создает новый
+        const newToken = await this.createToken({user_id, refreshToken})
+        return newToken;
     }
 
     async removeRefreshToken({refreshToken} : { refreshToken: string }) {
@@ -81,30 +104,13 @@ class TokenService {
             }
         );
 
-        console.log(token)
 
         return token;
     }
 
-    async refreshToken({refreshToken} : { refreshToken: string }) {
-        if (refreshToken) {
-            throw ApiError.UnauthorizedError();
-        }
-        const userData = this.validateToken({token: refreshToken, type: TokenType.Refresh});
 
-        const tokenFromDB = await this.findToken({refreshToken});
-
-        if (!userData || !tokenFromDB || !tokenFromDB.length) {
-            throw ApiError.UnauthorizedError()
-        }
-
-        const userDTO = await userService.findUserById({id: (userData as UserPseudoType).user_id})
-
-
-    }
-
-    async findToken({refreshToken} : { refreshToken: string }) {
-        const token = await sequelize.query(
+    async findTokenByToken({refreshToken} : { refreshToken: string }) {
+        const tokens = await sequelize.query(
             `
             SELECT * FROM tokens WHERE refresh_token = :refresh_token;
             `, 
@@ -112,9 +118,13 @@ class TokenService {
                 type: 'SELECT',
                 replacements: {refresh_token: refreshToken}
             }
-        )
+        );
 
-        return token;
+        if (!tokens || !tokens.length) {
+            throw ApiError.UnauthorizedError();
+        }
+
+        return tokens[0];
     }
 
 }

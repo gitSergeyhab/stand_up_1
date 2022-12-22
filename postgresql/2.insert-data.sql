@@ -266,8 +266,6 @@ INSERT INTO show_ratings (user_id, show_id, show_rate) VALUES
 (6, 4, 5);
 
 
-
-
 INSERT INTO reviews(user_id, show_id, review_title, review_text) VALUES
 (1, 1, 'first title', 'review_text1'),
 (1, 2, ' title 2', 'review_text22'),
@@ -555,3 +553,22 @@ INSERT INTO pictures(show_id, picture_path, user_added_id) VALUES
 (2, '/img/test/abr.jpg', 1),
 (2, '/img/test/d-r.jpeg', 2),
 (1, '/img/test/girl.webp', 3);
+
+INSERT INTO comedians_events VALUES
+(1,1), 
+(1,2), 
+(1,3), 
+(1,4), 
+(1,6), 
+(2,1), 
+(3,1), 
+(3,5), 
+(3,2), 
+(4,1), 
+(4,2); 
+
+INSERT INTO roles (role_name) VALUES
+('SUPER'), ('ADMIN'), ('MODERATOR'), ('USER'), ('PRO-USER');
+
+INSERT INTO users_roles VALUES 
+(1,1), (2,2), (2,3), (2,4), (2,5), (3,3), (3,4), (4,4), (4,5), (5,4), (6,4);

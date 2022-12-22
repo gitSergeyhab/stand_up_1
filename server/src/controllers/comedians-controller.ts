@@ -23,7 +23,8 @@ class ComedianController {
             const where = `
                 WHERE (country_id ${country_id ? ' = :country_id' : ' = country_id OR 1 = 1'})
                 AND ${ city ?  '(LOWER(comedian_city) = LOWER(:city)) OR (LOWER(comedian_city_en) = LOWER(:city))' : '1 = 1'}
-            `
+            `;
+
     
                 const result = await sequelize.query(
                     `

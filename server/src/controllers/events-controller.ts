@@ -128,9 +128,10 @@ class EventsController {
     async getEventsByColumnId(req: Request, res: Response) {
         try {
             const {type, id} = req.params;
-            const {year = null, limit = Limit , offset = Offset, status = EventTStatus} = req.query;
+            const {year = null, limit = Limit , offset = Offset, status = EventTStatus, test} = req.query;
             const columnId: string = ColumnId[type as string] || ColumnId.comedians;
             console.log({limit, offset})
+            console.log({test}, typeof test, test.length)
 
             const where = `
                 WHERE ${columnId} = :id
