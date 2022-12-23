@@ -84,6 +84,7 @@ class UserService {
         //3.создает ссылку для активации
         const activationLink = generateActivateLink(hashPassword);
 
+
         //4.создает юзера и ! возвращает user_id, user_email, user_activated
         const users = await sequelize.query(
             `
@@ -100,16 +101,17 @@ class UserService {
 
         const user = users[0][0] as UserPseudoType // на свмом деле пока без ролей
 
+
+
         // добавляет роль юзер и достает обновленного юзера
         await userService.addRoleToUser({id: user.user_id, role: Role.User})
         const userWithRoles = await userService.findUserDataById({id: user.user_id});
 
-
         //5.отправляет на почту ссылку для регистрации
 
-        // const link = `${process.env.API_URL}/api/users/activate/${activationLink}`;
-        // await mailService.sendActivationMail({email, link}); // не работает - нужен рассылочный сервис !!!
-        await mailService.sendActivationMailImitation({email, link: activationLink}); // пока не настроен sendActivationMail !!!
+        const link = `${process.env.API_URL}/api/users/activate/${activationLink}`;
+        await mailService.sendActivationMail({email, link}); // не работает - нужен рассылочный сервис !!!
+        // await mailService.sendActivationMailImitation({email, link: activationLink}); // пока не настроен sendActivationMail !!!
 
         const userDTO = getUserDTO(userWithRoles as unknown as UserPseudoType) ; //!
 
@@ -205,13 +207,20 @@ class UserService {
             throw ApiError.BadRequest(`There is not user with email ${email}`);
         }
 
-        const isPasswordCorrect = await crypt.compare(password, (user[0] as unknown as UserPseudoType).user_password);
+        const theUser = user[0] as unknown as UserPseudoType;
+
+        const isPasswordCorrect = await crypt.compare(password, theUser.user_password);
 
         if (!isPasswordCorrect) {
             throw ApiError.BadRequest('The password is wrong');
         }
 
-        const userDTO = getUserDTO(user[0] as unknown as UserPseudoType);
+              //!!! activated !!!
+        // if (!theUser.user_activated) {
+        //     throw ApiError.BadRequest('you need to activate your account by clicking on the link sent to your email');
+        // }
+
+        const userDTO = getUserDTO(theUser);
         const tokens = tokenService.generateTokens({userDTO});
 
         await tokenService.saveToken({user_id: userDTO.user_id, refreshToken: tokens.refreshToken});
@@ -291,7 +300,7 @@ class UserService {
             `
             SELECT 
                 user_id, 
-                user_email, user_password, user_nik, user_first_name, user_last_name, user_city, user_avatar, user_date_birth, user_description, user_date_registration,
+                user_email, user_password, user_nik, user_first_name, user_last_name, user_city, user_avatar, user_date_birth, user_description, user_date_registration, user_activated,
                 country_id, country_name, country_name_en,
                 AVG(show_rate)::real AS avg_rate,
                 get_review_user_data(:id, 3) AS reviews,

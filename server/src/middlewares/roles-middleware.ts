@@ -24,6 +24,11 @@ export const rolesMiddleware = (roles: Role[]) => (req: Request, res: Response, 
             return next(ApiError.UnauthorizedError()); 
         }
 
+              //!!! activated !!!
+        // if (!userData.user_activated) {
+        //     return next(ApiError.BadRequest('you need to activate your account by clicking on the link sent to your email')); 
+        // }
+
         const {roles: rolesFromToken} = userData;
         const matchRoles = rolesFromToken.filter((item) => roles.includes(item));
 

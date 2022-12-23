@@ -1,5 +1,8 @@
+import { Action, ThunkAction } from '@reduxjs/toolkit';
 import { ContentName } from '../const/const';
 import { useGetComediansQuery, useGetEventsQuery, useGetShowsQuery } from '../store/sub-api';
+import { AxiosInstance } from 'axios';
+import { ReducerType } from '../store/store';
 
 
 export type ResourceType = {
@@ -95,3 +98,11 @@ export type QueryField = { name: string; value: string | number }
 export type DataErrorType = {
   data: {errors: string[]; message: string};
 }
+
+export const enum TokenType {
+  Refresh = 'Refresh',
+  Access = 'Access'
+}
+
+
+export type ThunkActionResult<R = Promise<void>> = ThunkAction<R, ReducerType, AxiosInstance, Action>;

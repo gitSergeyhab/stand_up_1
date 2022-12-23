@@ -1,3 +1,4 @@
+import { Role } from '../store/actions';
 import { ResourceType } from './types';
 
 export type ReviewType = {
@@ -102,18 +103,33 @@ export type UserData = {
   reviews: string[];
 };
 
+
 export type AuthUserTypeSC = {
   user_email: string;
-  user_nik: string;
-  user_status: string;
-  user_id: string;
   user_avatar: string | null;
+  user_id: string;
+  user_nik: string;
+  user_activated: boolean;
+  roles: Role[];
+}
+
+export type LoginUserDataSC = {
+  user: AuthUserTypeSC;
+  accessToken: string;
+  refreshToken: string;
 }
 
 export type AuthUserTypeCC = {
   email: string;
   nik: string;
-  status: string;
   id: string;
   avatar: string | null;
+  activated: boolean;
+  roles: Role[];
+}
+
+export type LoginUserDataCC = {
+  user: AuthUserTypeCC;
+  accessToken: string;
+  refreshToken: string;
 }

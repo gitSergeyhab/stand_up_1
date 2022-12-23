@@ -5,9 +5,9 @@ import {
 } from './header-style';
 
 import { ContentName, DefaultPath } from '../../const/const';
-import { getUser } from '../../store/user-reducer/user-selectors';
 import { useSelector } from 'react-redux';
 import { useLogoutUserMutation } from '../../store/user-api';
+import { getUser } from '../../store/user-reducer/user-selectors';
 
 
 const MENU_DATA = [
@@ -32,10 +32,12 @@ export const Header = () => {
 
   const user = useSelector(getUser);
 
-  const [logout] = useLogoutUserMutation();
-  // console.log({user});
+  const id = user?.id;
+  const email = user?.email;
 
-  // const user = defaultUser;
+
+  const [logout] = useLogoutUserMutation();
+
 
   const userSrc = user ? user.avatar : DefaultPath.UserAvatar ;
   const src = userSrc || DefaultPath.UserAvatar;
@@ -98,6 +100,7 @@ export const Header = () => {
         {navItems}
 
         <UserContainer width={120}>
+          {email || 'no-auth'}
           <UserAvatarBtn radius={40} onClick={handleClickUserMenu}>
             <UserAvatarImg src={src}/>
           </UserAvatarBtn>
@@ -109,6 +112,7 @@ export const Header = () => {
         <IconSpan shown={shown}/>
       </Icon>
       <UserContainer small width={80}>
+        {email || 'no-auth'}
         <UserAvatarBtn small radius={40} onClick={handleClickUserMenu}>
           <UserAvatarImg src={src}/>
         </UserAvatarBtn>

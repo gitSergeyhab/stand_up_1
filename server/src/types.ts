@@ -41,6 +41,7 @@ export type UserPseudoType = {
     user_avatar: string,
     user_id: string,
     user_nik: string,
+    user_activated: boolean,
     roles: Role[]
 }
 

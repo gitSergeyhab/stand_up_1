@@ -20,11 +20,16 @@ export const authMiddleware = (req: ReqUser, res: Response, next: NextFunction) 
             return next(ApiError.UnauthorizedError());
         }
 
-        const user = tokenService.validateToken({token, type: TokenType.Access});
+        const userData = tokenService.validateToken({token, type: TokenType.Access});
 
-        if (!user) {
+        if (!userData) {
             return next(ApiError.UnauthorizedError());
         }
+
+        //!!! activated !!!
+        // if (!userData.user_activated) {
+        //     return next(ApiError.BadRequest('you need to activate your account by clicking on the link sent to your email')); 
+        // }
 
         next();
 

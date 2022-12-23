@@ -11,8 +11,8 @@ const userRouter =  Router();
 userRouter.get('/refresh', asyncHandler(userController.refreshToken));
 
 
-userRouter.get('/', rolesMiddleware([Role.Admin, Role.Moderator, Role.Super]), asyncHandler(userController.getUsersByQueries));
-// userRouter.get('/', authMiddleware, asyncHandler(userController.getUsersByQueries));      
+// userRouter.get('/', rolesMiddleware([Role.Admin, Role.Moderator, Role.Super]), asyncHandler(userController.getUsersByQueries));
+userRouter.get('/', authMiddleware, asyncHandler(userController.getUsersByQueries));      
 
 
 userRouter.get('/:id', userController.getUserById);

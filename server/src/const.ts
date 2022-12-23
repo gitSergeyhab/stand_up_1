@@ -77,7 +77,7 @@ export const JoiMessageKey = {
   }
 
   export const TokenExpire = {
-    Access: '30s',
+    Access: '30m',
     Refresh: '30d'
   }
 

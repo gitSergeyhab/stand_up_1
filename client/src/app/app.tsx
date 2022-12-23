@@ -20,6 +20,7 @@ import { useAuthUserQuery } from '../store/user-api';
 import { useDispatch } from 'react-redux';
 import { setUser } from '../store/actions';
 import { ErrorPage } from '../pages/error-page/error-page';
+import { UsersPage } from '../pages/users-page/users-page';
 
 const AppRoute = {
   Main: '/',
@@ -111,8 +112,13 @@ export const App = () => {
                 {/* <Route path={AppRoute.Events} element={<EventsPage/>}/> */}
                 <Route path={AppRoute.Event} element={<EventPageInfo/>}/>
 
+
+                <Route path={AppRoute.Users} element={<UsersPage/>}/>
+
                 <Route path={AppRoute.Registration} element={<RegistrationPage/>}/>
                 <Route path={AppRoute.Login} element={<LoginPage/>}/>
+
+
                 <Route path='*' element={<ErrorPage/>}/>
 
 
