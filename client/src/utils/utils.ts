@@ -47,6 +47,7 @@ export const getCardData = (data: SubEventCC[] | SubShowCC[] | SubComedianCC[], 
 };
 
 export const roundToPoints = (num: number) => Math.round(num * 100) / 100;
+export const round1 = (num: number) => Math.round(num * 10) / 10; // my-rate
 
 export const getTypes = (pathname: string) => {
   const paths = pathname.split('/');
@@ -56,3 +57,5 @@ export const getTypes = (pathname: string) => {
   return {mainType, listType};
 
 };
+
+// my-rate
