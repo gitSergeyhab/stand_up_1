@@ -16,6 +16,7 @@ class UserController {
         const {email, password, nik} = req.body;
         const user = await userService.registration({email, nik, password});
         tokenService.setRefreshTokenToCookie({res, refreshToken: user.refreshToken});
+        console.log('!!!', req.headers.cookie, '!!!!!!')
         return res.status(StatusCode.Added).json(user);
     }
 

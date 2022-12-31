@@ -1,59 +1,47 @@
-import { useState } from 'react';
-import { LogoSvg } from '../logo-svg/logo-svg';
-import {
-  Nav, Icon, IconSpan, MenuMobile, MenuLi, MenuLink, MenuDesktop, UserAvatarBtn , UserAvatarImg, UserMenuLi, UserMenuLink, UserMenu, LogoContainer, UserContainer
-} from './header-style';
+import { useState, useEffect } from 'react';
 
-import { ContentName, DefaultPath } from '../../const/const';
+import { LogoSvg } from '../logo-svg/logo-svg';
+import { Nav, Icon, IconSpan, MenuMobile, MenuLi, MenuLink, MenuDesktop, HeaderLink, UserContainer, LoginLink } from './header-style';
+import { ContentName } from '../../const/const';
 import { useSelector } from 'react-redux';
-import { useLogoutUserMutation } from '../../store/user-api';
 import { getUser } from '../../store/user-reducer/user-selectors';
+import { UserHeaderAvatar } from '../user-header-avatar/user-header-avatar';
 
 
 const MENU_DATA = [
-  'Main',
+  'main',
   ContentName.Comedians,
   ContentName.Events,
   ContentName.Places,
   ContentName.Shows
 ];
 
-
-const USER_DATA = [
-  {title: 'Профиль', to: '/user/profile'},
-  {title: 'Настройки', to: '/user/settings'},
-];
-
+export const enum MediaType {
+  Desktop = 'desktop',
+  Tablet = 'tablet',
+  Mobil = 'mobil'
+}
 
 export const Header = () => {
 
-  const [shown, setShown] = useState(false);
-  const [shownUserMenu, setShownUserMenu] = useState(false);
+  const [shownMenu, setShownMenu] = useState(false);
 
   const user = useSelector(getUser);
 
-  const id = user?.id;
-  const email = user?.email;
+  const handleClickMenu = () => {setShownMenu((val) => !val); };
 
+  const closeBurgerMenu = () => setShownMenu(false);
 
-  const [logout] = useLogoutUserMutation();
-
-
-  const userSrc = user ? user.avatar : DefaultPath.UserAvatar ;
-  const src = userSrc || DefaultPath.UserAvatar;
-
-  const handleClickMenu = () => {setShown((val) => !val); };
-  const handleClickUserMenu = () => {setShownUserMenu((val) => !val);};
-  // const handleClickExit = () => {
-  //   // console.log('exit');
-  //   setShownUserMenu((val) => !val);
-  // };
-
-  const handleClickExit = () => {
-    logout(null).unwrap()
-      .then((res) => console.log({res}))
-      .catch((err) => console.log({err}));
+  const closeMenuOnPageClick = (evt: MouseEvent) => {
+    if (evt.target instanceof Element && !evt.target.closest('#header-burger')) {
+      closeBurgerMenu();
+    }
   };
+
+  useEffect(() => {
+    document.addEventListener('click', closeMenuOnPageClick);
+    return () => document.removeEventListener('click', closeMenuOnPageClick);
+  });
 
 
   const navItems = MENU_DATA.map((item) => (
@@ -62,64 +50,37 @@ export const Header = () => {
     </MenuLi>
   ));
 
-  const userMenuItems = USER_DATA.map((item) => (
-    <UserMenuLi key={item.title}>
-      <UserMenuLink
-        onClick={() => setShownUserMenu(false)}
-        to={item.to}
-      >{item.title}
-      </UserMenuLink>
-    </UserMenuLi>
-  ));
 
-  const exit = <UserMenuLi key={'exit'}><UserMenuLink onClick={handleClickExit} to='/'>Выйти</UserMenuLink> </UserMenuLi>;
+  const logo = <HeaderLink to={'/'} width={120}>Stand<LogoSvg width={20}/>Up</HeaderLink>;
 
-  const noUserItem = <UserMenuLi><UserMenuLink to={'/login'}>Войти</UserMenuLink></UserMenuLi>;
+  const login = <LoginLink to={'/login'} width={120}>Войти</LoginLink>;
 
-  const userMenu = shownUserMenu ? (
-    <UserMenu>
-      {/* { user ? [...userMenuItems, exit] : noUserItem } */}
-
-      {/* test */}
-      {exit}
-      {noUserItem}
-      {/* test */}
-
-    </UserMenu>
-  ) : null;
+  const avatar = <UserHeaderAvatar user={user} />;
 
   return (
-
     <Nav>
       <MenuDesktop>
-        <LogoContainer width={120}>
-          Stand
-          <LogoSvg width={20}/>
-          Up
-        </LogoContainer>
+        {logo}
+
         {navItems}
 
-        <UserContainer width={120}>
-          {email || 'no-auth'}
-          <UserAvatarBtn radius={40} onClick={handleClickUserMenu}>
-            <UserAvatarImg src={src}/>
-          </UserAvatarBtn>
-
-          {userMenu}
+        <UserContainer>
+          {user ? avatar : login}
         </UserContainer>
       </MenuDesktop>
-      <Icon shown={shown} onClick={handleClickMenu}>
-        <IconSpan shown={shown}/>
+
+      <Icon shown={shownMenu} onClick={handleClickMenu} id={'header-burger'}>
+        <IconSpan shown={shownMenu}/>
       </Icon>
-      <UserContainer small width={80}>
-        {email || 'no-auth'}
-        <UserAvatarBtn small radius={40} onClick={handleClickUserMenu}>
-          <UserAvatarImg src={src}/>
-        </UserAvatarBtn>
-        {userMenu}
+
+      <UserContainer small>
+        {user ? avatar : login}
       </UserContainer>
-      <MenuMobile shown={shown}>
+
+      <MenuMobile shown={shownMenu}>
         {navItems}
       </MenuMobile>
     </Nav>
   );};
+
+// my-rate

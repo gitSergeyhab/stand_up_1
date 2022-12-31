@@ -1,53 +1,68 @@
-import { styled } from '@mui/material/styles';
-import { Rating as MR } from '@mui/material/';
-import { SentimentSatisfiedAlt, EmojiEmotions } from '@mui/icons-material/';
-import { Color } from '../../const/const';
-import { Box, Typography } from '@mui/joy';
-import { ChangeEventHandler, SyntheticEvent } from 'react';
+import { useState } from 'react';
+import { round1 } from '../../utils/utils';
+import { LineDiv, RatingInput, RatingLabel, RatingSection, StarsDiv, UserRateDiv, VotesSpan } from './rating-style';
 
 
-const StyledRating = styled(MR)({
-  '& .MuiRating-iconFilled': {
-    color: Color.Gold,
-  },
-  '& .MuiRating-iconHover': {
-    color: Color.GoldD,
-  },
+type RadioBtnProps = {
+  value: number;
+  checkedValue?: number;
+  onClick: React.Dispatch<React.SetStateAction<number | undefined>>;
+}
 
-  '& .MuiRating-iconDisabled': {
-    color: Color.GoldD,
-  },
-});
-
-
-export const Rating = ({avgRate, numberOfRate} : {avgRate: number | null; numberOfRate: string | null}) => {
-
-
-  const defaultValue = Math.round((avgRate || 0) * 10) / 10;
-  const num = numberOfRate || '0';
-
-  const handleChangeRate: ChangeEventHandler<HTMLInputElement> = (evt) => console.log(evt.currentTarget.value);
+const RadioBtn = ({value, checkedValue, onClick} : RadioBtnProps) => {
+  const id = `star${value}`;
+  const defaultChecked = value === checkedValue;
+  const handleClick = () => onClick(value);
 
   return (
-    <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+    <>
+      <RatingInput id={id} value={value} defaultChecked={defaultChecked} onClick={handleClick} />
+      <RatingLabel htmlFor={id}/>
+    </>
+  );
+};
 
-      <StyledRating
 
-        onChange={(handleChangeRate as unknown) as ((event: SyntheticEvent<Element, Event>) => void)}
-        name="customized-color"
-        defaultValue={defaultValue}
-        precision={1}
-        icon={<EmojiEmotions fontSize="inherit" />}
-        emptyIcon={<SentimentSatisfiedAlt fontSize="inherit" />}
-        max={10}
-      />
-      <Typography fontSize={20} fontWeight='700'>
-        &nbsp;{defaultValue}&nbsp;
-      </Typography>
-      <Typography fontSize={14}>
-      (оценили: {num})
-      </Typography>
+type AVGLineProps = {avgRate: number; votes: number}
 
-    </Box>
+const AVGLine = ({avgRate, votes} : AVGLineProps) => {
 
-  );};
+  const size = avgRate * 10;
+
+  return (
+    <LineDiv size={size}/>
+  );
+};
+
+type RatingProps = {avgRate: number | null; votes: string | null; checkedValue?: number}
+
+export const Rating = ({checkedValue, avgRate, votes}: RatingProps) => {
+
+  const starsArr = [1,2,3,4,5,6,7,8,9,10];
+
+  const [value, setValue] = useState(checkedValue);
+
+  const starsElements = starsArr.map((item) => {
+    const star = starsArr.length - item + 1;
+    return <RadioBtn key={star} value={star} onClick={setValue} checkedValue={checkedValue}/>;
+  });
+
+  const votesClient = votes ? +votes : 0;
+  const avgRateClient = avgRate ? round1(avgRate) : 0;
+
+  const avgDigit = votesClient ? avgRateClient : '-';
+
+  return (
+    <RatingSection>
+      <StarsDiv>
+        {starsElements}
+      </StarsDiv>
+      <UserRateDiv>{value}</UserRateDiv>
+
+      <AVGLine avgRate={avgRateClient} votes={votesClient}/>
+      <UserRateDiv>{avgDigit} <VotesSpan>({votesClient})</VotesSpan> </UserRateDiv>
+    </RatingSection>
+  );
+};
+
+// my-rate

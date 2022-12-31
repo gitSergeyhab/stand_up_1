@@ -133,3 +133,28 @@ export type LoginUserDataCC = {
   accessToken: string;
   refreshToken: string;
 }
+
+
+export type TestUserSC = {
+  country_id: number | null;
+  country_name: string | null;
+  roles: Role[];
+  user_activated: boolean;
+  user_avatar: string | null;
+  user_date_birth: string | null;
+  user_email: string;
+  user_id: string;
+  user_nik: string;
+}
+
+export type TestUserCC = {
+  countryId: number | null;
+  countryName: string | null;
+  roles: Role[];
+  activated: boolean;
+  avatar: string | null;
+  dateBirth: string | null;
+  email: string;
+  id: string;
+  nik: string;
+}

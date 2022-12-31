@@ -1,4 +1,4 @@
-import { AuthUserTypeCC, AuthUserTypeSC, LoginUserDataCC, LoginUserDataSC, OneUserTypeCC, OneUserTypeSC } from '../../types/user-types';
+import { AuthUserTypeCC, AuthUserTypeSC, LoginUserDataCC, LoginUserDataSC, OneUserTypeCC, OneUserTypeSC, TestUserCC, TestUserSC } from '../../types/user-types';
 
 
 export const adaptOneUserToClient = (data: OneUserTypeSC): OneUserTypeCC => (
@@ -39,4 +39,16 @@ export const adaptLoginUserDataToClient = (data: LoginUserDataSC): LoginUserData
   accessToken: data.accessToken,
   refreshToken: data.refreshToken,
   user: adaptAuthUserToClient(data.user)
+});
+
+export const adaptTestUserToClient = (data: TestUserSC): TestUserCC => ({
+  id: data['user_id'],
+  nik: data['user_nik'],
+  email: data['user_email'],
+  avatar: data['user_avatar'],
+  dateBirth: data['user_date_birth'],
+  activated: data['user_activated'],
+  countryId: data['country_id'],
+  countryName: data['country_name'],
+  roles: data.roles
 });

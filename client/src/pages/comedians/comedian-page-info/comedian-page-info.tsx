@@ -1,8 +1,6 @@
-import { Box, Typography } from '@mui/material';
 import { useState } from 'react';
-
-
 import { useParams, useLocation } from 'react-router-dom';
+
 import { AboutBlock } from '../../../components/about-block/about-block';
 import { ImageModal } from '../../../components/image-modal/image-modal';
 import { ImgList } from '../../../components/img-list/img-list';
@@ -10,8 +8,6 @@ import { MainPic } from '../../../components/main-pic/main-pic';
 import { Rating } from '../../../components/rating/rating';
 import { ResourceBlock } from '../../../components/resource-block/resource-block';
 import { PictureType } from '../../../types/types';
-
-
 import { Titles } from '../../../components/titles/titles';
 import { TopTabs } from '../../../components/top-tabs/top-tabs';
 import { ContentName } from '../../../const/const';
@@ -76,8 +72,6 @@ export const ComedianPageInfo = () => {
   const goodAbout = about.filter((item) => item.point);
 
 
-  // const tabProps = {id, type: ContentName.Comedians, pathname, tabData: TabData[ContentName.Comedians]};
-
   const tabProps = {id, type: ContentName.Comedians, pathname, tabData: TabData[ContentName.Comedians]};
 
   const imageModal = shownModal && pictures && pictures.length ? (
@@ -100,23 +94,28 @@ export const ComedianPageInfo = () => {
         en={`${comedianFirstNameEn || ''} ${comedianLastNameEn || ''}`}
       />
 
+
       <TopTabs tabProps={tabProps}/>
 
       <MainPic src={comedianAvatar} alt={`${comedianFirstName} ${comedianLastName || ''}`}/>
 
-      <Rating avgRate={avgRate} numberOfRate={numberOfRate}/>
+      <Rating avgRate={avgRate} votes={numberOfRate} checkedValue={8} />
+
 
       <ViewsBlock totalViews={totalViews} views={views}/>
 
       <AboutBlock about={goodAbout}/>
-      <Typography my={2} variant='body1'>
+      <p>
         {comedianDescription}
-      </Typography>
+      </p>
 
       <ResourceBlock resources={resources}/>
 
       {imageListElement}
       {imageModal}
+
     </>
   );
 };
+
+// my-rate

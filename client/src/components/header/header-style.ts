@@ -4,50 +4,19 @@ import styled from 'styled-components';
 
 type NavProps = { shown: boolean }
 
-
-type UserAvatarProps = {
-  radius: number;
-  small?: boolean;
-}
-
-export const UserAvatarBtn = styled.button.attrs({ type: 'button' })<UserAvatarProps>`
-  width: ${({ radius }) => radius}px;
-  height: ${({ radius }) => radius}px;
-  overflow: hidden;
-  background-color: #000000;
-  border-radius: 50%;
-  cursor: pointer;
-  outline: goldenrod solid 2px;
-
-  &:hover, &:focus {
-    outline: gold solid 2px;
-  }
-
-  @media (min-width: 900px) {
-    display: ${({ small }) => small ? 'none' : ''}
-  }
-`;
-
-export const UserAvatarImg = styled.img.attrs({ width: 40, height: 40 })`
-  width: 100%;
-  height: 100%;
-`;
-
-
 export const Nav = styled.nav`
   position: fixed;
   width: 100%;
   top: 0;
   z-index: 2;
+  min-width: 320px;
     @media (min-width: 900px) {
       background: #300606;
     };
 `;
 
-
 export const MenuDesktop = styled.ul`
   display: none;
-
 
   @media (min-width: 900px) {
     margin: 0;
@@ -56,7 +25,7 @@ export const MenuDesktop = styled.ul`
     display: flex;
     flex-flow: row wrap;
     justify-content: space-between;
-    height: 50px;
+    height: 60px;
   };
 `;
 
@@ -100,7 +69,6 @@ display: flex;
 align-items: center;
 justify-content: center;
     cursor: pointer;
-    /* display: block; */
     color: gold;
     text-decoration: none;
     text-transform: uppercase;
@@ -114,10 +82,10 @@ justify-content: center;
 export const Icon = styled.a<NavProps>`
     height: 32px;
     width: 43px;
-    margin: 3%;
+    margin: 10px;
     position: absolute;
     top: 10px;
-    left: 3%;
+    left: 10px;
     display: inline-block;
     vertical-align: middle;
     z-index: 20;
@@ -169,54 +137,12 @@ export const IconSpan = styled.span<NavProps>`
 `;
 
 
-export const UserMenu = styled.ul`
-  position: absolute;
-  top: 50px;
-  right: 22px;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: space-between;
-  z-index: 40;
-  background-color: grey;
-  border-radius: 3px;
-  padding: 4px;
-  outline: 2px solid #000000;
-`;
-
-export const UserMenuLi = styled.li`
-  flex-grow: 1;
-  text-align: left;
-  vertical-align: middle;
-  height: 30px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-`;
-
-export const UserMenuLink = styled(Link)`
-    cursor: pointer;
-    display: block;
-    color: gold;
-    text-decoration: none;
-    text-transform: uppercase;
-    width: 100%;
-    font-size: 10px;
-
-    &:hover, &:focus {
-      background-color: #0d0101;
-    }
-`;
 type LogoContainerProp = {
   width: number;
   small?: boolean;
 }
 
-export const LogoContainer = styled(Link).attrs({ to: '/' })<LogoContainerProp>`
+export const HeaderLink = styled(Link)<LogoContainerProp>`
   color: gold;
   display: flex;
   justify-content: center;
@@ -224,28 +150,31 @@ export const LogoContainer = styled(Link).attrs({ to: '/' })<LogoContainerProp>`
   width: ${({ width }) => `${width}px`};
 `;
 
+export const LoginLink = styled(HeaderLink)`
+  height: 40px;
+`;
 
-export const UserContainer = styled.div<LogoContainerProp>`
+
+export const UserContainer = styled.div<{small?: boolean}>`
   color: gold;
   display: flex;
   justify-content: center;
   align-items: center;
-  margin: 3%;
+  margin: 10px;
   position: absolute;
-  top: 10px;
+  top: 6px;
   right: 0;
   z-index: 20;
   display: inline-block;
   vertical-align: middle;
-  width: ${({ width }) => `${width}px`};
 
   @media (min-width: 900px) {
-    margin: 0;
     position: static;
     display: flex;
     justify-content: center;
     align-items: center;
-    width: ${({ width }) => `${width}px`};
     display: ${({ small }) => small ? 'none' : ''}
   }
 `;
+
+// my-rate

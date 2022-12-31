@@ -13,5 +13,5 @@ const FooterX = styled.footer`
 `;
 
 export default function Footer() {
-  return ( <FooterX>Copyright ©2022. [] Limited</FooterX>);
+  return ( <FooterX>Copyright ©2022. [] // redmoloch@yandex.ru Limited</FooterX>);
 }

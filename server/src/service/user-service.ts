@@ -109,9 +109,9 @@ class UserService {
 
         //5.отправляет на почту ссылку для регистрации
 
-        const link = `${process.env.API_URL}/api/users/activate/${activationLink}`;
-        await mailService.sendActivationMail({email, link}); // не работает - нужен рассылочный сервис !!!
-        // await mailService.sendActivationMailImitation({email, link: activationLink}); // пока не настроен sendActivationMail !!!
+        // const link = `${process.env.API_URL}/api/users/activate/${activationLink}`;
+        // await mailService.sendActivationMail({email, link}); // не работает - нужен рассылочный сервис !!!
+        await mailService.sendActivationMailImitation({email, link: activationLink}); // пока не настроен sendActivationMail !!!
 
         const userDTO = getUserDTO(userWithRoles as unknown as UserPseudoType) ; //!
 
@@ -120,7 +120,7 @@ class UserService {
         //7.создает / обновляет токены в БД
         await tokenService.saveToken({user_id: userDTO.user_id , refreshToken});
 
-        //8.возвращает токены и юзера : {user_id, user_email, user_activated}
+        //8.возвращает токены и юзера
         return {
             accessToken, refreshToken,
             user: userDTO
@@ -224,6 +224,7 @@ class UserService {
         const tokens = tokenService.generateTokens({userDTO});
 
         await tokenService.saveToken({user_id: userDTO.user_id, refreshToken: tokens.refreshToken});
+        console.log({tokens})
 
         return { ...tokens, user: userDTO }
     }

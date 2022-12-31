@@ -7,6 +7,7 @@ const TIMEOUT = 5000;
 
 export const createAxiosApi = () => {
   const api = axios.create({ baseURL: BASE_URL, timeout: TIMEOUT });
+  api.defaults.withCredentials = true;
 
   api.interceptors.request.use(
     (config: AxiosRequestConfig) => {

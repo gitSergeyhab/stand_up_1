@@ -56,3 +56,5 @@ export const getTypes = (pathname: string) => {
   return {mainType, listType};
 
 };
+
+export const round1 = (num: number) => Math.round(num * 10) / 10;
