@@ -13,7 +13,6 @@ CREATE TABLE countries (
 
 CREATE TABLE users ( 
     user_id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    -- user_status VARCHAR(32) DEFAULT 'USER',
     country_id INTEGER REFERENCES countries(country_id),
 
     user_email VARCHAR(128) UNIQUE,

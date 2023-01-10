@@ -24,6 +24,8 @@ export const enum MediaType {
 
 export const Header = () => {
 
+  //
+
   const [shownMenu, setShownMenu] = useState(false);
 
   const user = useSelector(getUser);
@@ -59,6 +61,7 @@ export const Header = () => {
 
   return (
     <Nav>
+
       <MenuDesktop>
         {logo}
 
@@ -68,7 +71,6 @@ export const Header = () => {
           {user ? avatar : login}
         </UserContainer>
       </MenuDesktop>
-
       <Icon shown={shownMenu} onClick={handleClickMenu} id={'header-burger'}>
         <IconSpan shown={shownMenu}/>
       </Icon>
@@ -76,6 +78,7 @@ export const Header = () => {
       <UserContainer small>
         {user ? avatar : login}
       </UserContainer>
+      <p style={{color: 'white', textAlign:'center'}}>{user ? user.nik : 'No User'}</p>
 
       <MenuMobile shown={shownMenu}>
         {navItems}

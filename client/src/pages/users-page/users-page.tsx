@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { toast } from 'react-toastify';
 import { api } from '../../store/axios-api';
 import { TestUserCC, TestUserSC } from '../../types/user-types';
 import { adaptTestUserToClient } from '../../utils/adapters/user-adapters';
 
 export const User = ({user} : {user: TestUserCC}) => {
-  const {id, nik, email, roles, activated} = user;
+  const { nik, email, roles, activated} = user;
 
   const roleElements = roles && roles.length ? roles.map((item) => <li key={item}>{item}</li>) : null;
   return (
@@ -29,11 +29,11 @@ export const UsersPage = () => {
     api.get<{users: TestUserSC[]; count: string}>('/')
       .then((res) => {
         const data = res.data.users;
-        console.log(data);
+        // console.log(data);
         const usersData = data.map(adaptTestUserToClient);
         setUsers(usersData);
-      })
-      .catch((err) => console.log(err));
+      }).catch(() => toast.error('User Error'));
+    // .catch((err) => console.log(err));
   }, []);
 
   const usersElements = users.map((item) => <User key={item.id} user={item}/>);

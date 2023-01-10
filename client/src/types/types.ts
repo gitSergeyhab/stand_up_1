@@ -1,4 +1,4 @@
-import { Action, ThunkAction } from '@reduxjs/toolkit';
+import { Action, AnyAction, ThunkAction, ThunkDispatch } from '@reduxjs/toolkit';
 import { ContentName } from '../const/const';
 import { useGetComediansQuery, useGetEventsQuery, useGetShowsQuery } from '../store/sub-api';
 import { AxiosInstance } from 'axios';
@@ -106,3 +106,6 @@ export const enum TokenType {
 
 
 export type ThunkActionResult<R = Promise<void>> = ThunkAction<R, ReducerType, AxiosInstance, Action>;
+//eslint-disable-next-line
+export type TypedDispatch<T> = ThunkDispatch<T, any, AnyAction>;
+

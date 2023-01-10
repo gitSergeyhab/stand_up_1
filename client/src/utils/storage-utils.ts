@@ -1,19 +1,22 @@
-import { TokenType } from '../types/types';
 import { LoginUserDataCC } from '../types/user-types';
 
 const STORAGE_KEY = 'su-auth-user-token';
 
 
 class StorageUtils {
-
   _getData() {
     const dataString = localStorage.getItem(STORAGE_KEY);
     const data = dataString ? JSON.parse(dataString) as LoginUserDataCC : null;
     return data;
   }
 
+  // setData(data: LoginUserDataCC) {
+  //   localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+  // }
+
   setData(data: LoginUserDataCC) {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    const {accessToken, user} = data;
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(({accessToken, user})));
   }
 
   getUser() {
@@ -22,12 +25,20 @@ class StorageUtils {
     return user;
   }
 
-  getToken(tokenType: TokenType, bearer = true) {
-    const data = this._getData();
-    if (!data) {
-      return '' ;
+  // getToken(tokenType: TokenType, bearer = true) {
+  //   const data = this._getData();
+  //   if (!data) {
+  //     return '' ;
+  //   }
+  //   const token = tokenType === TokenType.Access ? data.accessToken : data.refreshToken;
+  //   return bearer ? `Bearer ${token}` : token;
+  // }
+
+  getToken(bearer = true) {
+    const token = this._getData()?.accessToken;
+    if (!token) {
+      return '';
     }
-    const token = tokenType === TokenType.Access ? data.accessToken : data.refreshToken;
     return bearer ? `Bearer ${token}` : token;
   }
 

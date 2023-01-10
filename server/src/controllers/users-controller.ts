@@ -41,14 +41,16 @@ class UserController {
     }
 
     async refreshToken(req: Request, res: Response, next: NextFunction) {
-        console.log('refreshToken -WWW')
+
+
+        console.log('refreshToken --- start ---')
 
         const refreshToken = req.cookies.refreshToken as string;
         console.log({refreshToken})
         const user = await userService.refreshToken({refreshToken});
         console.log({user})
         tokenService.setRefreshTokenToCookie({res, refreshToken: user.refreshToken});
-        console.log({user}, 'tokenService')
+        console.log({user}, 'refreshToken --- end ---')
         return res.status(StatusCode.Ok).json(user);
     }
 

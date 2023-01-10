@@ -1,7 +1,5 @@
 export const LogoSvg = ({width} : {width: number}) => (
-  <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" fill='#faf205'
-	 viewBox="0 0 300 300" xmlSpace="preserve" width={width} height={width * 2}
-  >
+  <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" fill='#faf205' viewBox="0 0 300 300" xmlSpace="preserve" width={width} height={width * 2}>
     <g>
       <g>
         <g>

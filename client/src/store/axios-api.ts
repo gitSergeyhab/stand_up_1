@@ -1,23 +1,30 @@
 import axios, {AxiosRequestConfig} from 'axios';
-import { TokenType } from '../types/types';
 import { storageUtils } from '../utils/storage-utils';
 
-const BASE_URL = 'http://localhost:5000/api/users';
+export const BASE_URL = 'http://localhost:5000/api/users';
 const TIMEOUT = 5000;
 
 export const createAxiosApi = () => {
-  const api = axios.create({ baseURL: BASE_URL, timeout: TIMEOUT });
-  api.defaults.withCredentials = true;
+  const api = axios.create({ baseURL: BASE_URL, timeout: TIMEOUT, withCredentials: true });
 
   api.interceptors.request.use(
     (config: AxiosRequestConfig) => {
-      const token = storageUtils.getToken(TokenType.Access);
+      const token = storageUtils.getToken();
       if (config.headers) {
         config.headers.Authorization = token;
       }
       return config;
     }
   );
+
+  // axios.interceptors.response.use(
+  //   (value) => value,
+  //   (error) => {
+  //     if(error.status === 401) {
+
+  //     }
+  //   }
+  // )
 
   return api;
 };

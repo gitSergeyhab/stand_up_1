@@ -43,11 +43,11 @@ INSERT INTO resource_types(resource_type_name) VALUES
 ('Site'), ('Facebook'), ('YouTube'), ('WhatsApp'), ('Instagram'), ('VKontakte'), ('Telegram');
 
 
-INSERT INTO users (user_email, user_password, user_nik, user_status, country_id, user_city) VALUES
-    ('e@m.com', 'p1', 'admin', 'ADMIN', 3, 'Mordor'),
-    ('em@m.com', 'p12', 'user1', 'PRO-USER', 1, 'City1'),
-    ('ejdj@m.com', 'p123', 'misha', 'USER', 3, 'City12'),
-    ('eslskj@m.com', 'p144', 'xuha', 'USER', 3, 'City123');
+INSERT INTO users (user_email, user_password, user_nik, country_id, user_city) VALUES
+    ('e@m.com', 'p1', 'admin', 3, 'Mordor'),
+    ('em@m.com', 'p12', 'user1', 1, 'City1'),
+    ('ejdj@m.com', 'p123', 'misha', 3, 'City12'),
+    ('eslskj@m.com', 'p144', 'xuha', 3, 'City123');
 
 INSERT INTO users (
     user_email, user_password, user_nik, user_first_name, user_last_name, 
@@ -554,18 +554,6 @@ INSERT INTO pictures(show_id, picture_path, user_added_id) VALUES
 (2, '/img/test/d-r.jpeg', 2),
 (1, '/img/test/girl.webp', 3);
 
-INSERT INTO comedians_events VALUES
-(1,1), 
-(1,2), 
-(1,3), 
-(1,4), 
-(1,6), 
-(2,1), 
-(3,1), 
-(3,5), 
-(3,2), 
-(4,1), 
-(4,2); 
 
 INSERT INTO roles (role_name) VALUES
 ('SUPER'), ('ADMIN'), ('MODERATOR'), ('USER'), ('PRO-USER');

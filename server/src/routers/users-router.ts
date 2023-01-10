@@ -22,6 +22,7 @@ userRouter.post('/login', asyncHandler(userController.login));
 userRouter.post('/logout', asyncHandler(userController.logout));
 
 userRouter.get('/activate/:link', asyncHandler(userController.activate));
+userRouter.get('/refresh', asyncHandler(userController.refreshToken))
 
 
 

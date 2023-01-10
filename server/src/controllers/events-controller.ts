@@ -11,7 +11,7 @@ const EventOrder = {
     upcoming : 'upcoming '
 }
 
-const {Limit, Offset, EventTStatus} = DefaultQueryParams;
+const {Limit, Offset, EventStatus} = DefaultQueryParams;
 
 
 class EventsController {
@@ -112,13 +112,10 @@ class EventsController {
                 }
             )
 
-            
             const data = getDataFromSQL(result, 'events')
-
 
             return res.status(200).json({data});
     
-   
         } catch(err) {
             console.log(err)
             return res.status(500).json({message: 'error get shows by query'})
@@ -128,15 +125,13 @@ class EventsController {
     async getEventsByColumnId(req: Request, res: Response) {
         try {
             const {type, id} = req.params;
-            const {year = null, limit = Limit , offset = Offset, status = EventTStatus, test} = req.query;
+            const {year = null, limit = Limit , offset = Offset, status = EventStatus, test} = req.query;
             const columnId: string = ColumnId[type as string] || ColumnId.comedians;
-            console.log({limit, offset})
-            console.log({test}, typeof test, test.length)
 
             const where = `
                 WHERE ${columnId} = :id
                 ${year ? 'AND EXTRACT( YEAR FROM event_date) = :year' : '' } 
-                AND ${status && status !== EventTStatus ? 'event_status = :status' : '1 = 1'}
+                AND ${status && status !== EventStatus ? 'event_status = :status' : '1 = 1'}
             `;
 
             const result = await sequelize.query(
@@ -169,13 +164,8 @@ class EventsController {
                 }
             )
 
- 
-            
             const data = getDataFromSQLWithTitles(result);
             return checkTitles(data, res);
-
-
-    
    
         } catch(err) {
             console.log(err)

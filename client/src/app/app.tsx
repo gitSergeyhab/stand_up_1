@@ -16,11 +16,11 @@ import { PagePictureList } from '../pages/proto/page-picture-list/page-picture-l
 import { PageRatingList } from '../pages/proto/page-rate-list/page-rate-list';
 import { RegistrationPage } from '../pages/registration-page/registration-page';
 import { LoginPage } from '../pages/login-page/login-page';
-import { useAuthUserQuery } from '../store/user-api';
-import { useDispatch } from 'react-redux';
-import { setUser } from '../store/actions';
 import { ErrorPage } from '../pages/error-page/error-page';
 import { UsersPage } from '../pages/users-page/users-page';
+import { storageUtils } from '../utils/storage-utils';
+import { useAppDispatch } from '../hooks/use-app-dispatch';
+import { authAction } from '../store/api-actions';
 
 const AppRoute = {
   Main: '/',
@@ -52,26 +52,15 @@ const AppRoute = {
 
 export const App = () => {
 
-  // const cashless = Date.now();
+  const user = storageUtils.getUser();
 
-  // const { isError, isLoading, data } = useAuthUserQuery(null);
+  const dispatch = useAppDispatch();
 
-  // console.log('app', isError, isLoading, data, cashless);
-  const dispatch = useDispatch();
-
-
-  // useEffect(() => {
-  //   if (!isLoading) {
-  //     // console.log('useEffect', {isError, isLoading, data});
-  //     if (data) {
-  //       dispatch(setUser(data));
-  //     }
-
-  //     if (isError) {
-  //       dispatch(setUser(null));
-  //     }
-  //   }
-  // }, [isError, isLoading, data, dispatch]);
+  useEffect(() => {
+    if(user) {
+      dispatch(authAction());
+    }
+  }, [user, dispatch]);
 
 
   return (

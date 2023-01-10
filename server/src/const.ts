@@ -73,7 +73,7 @@ export const JoiMessageKey = {
   export const DefaultQueryParams = {
     Limit: 6,
     Offset: 0, 
-    EventTStatus: EventStatus.All,
+    EventStatus: EventStatus.All,
   }
 
   export const TokenExpire = {
