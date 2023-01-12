@@ -16,7 +16,6 @@ class UserController {
         const {email, password, nik} = req.body;
         const user = await userService.registration({email, nik, password});
         tokenService.setRefreshTokenToCookie({res, refreshToken: user.refreshToken});
-        console.log('!!!', req.headers.cookie, '!!!!!!')
         return res.status(StatusCode.Added).json(user);
     }
 
@@ -46,9 +45,7 @@ class UserController {
         console.log('refreshToken --- start ---')
 
         const refreshToken = req.cookies.refreshToken as string;
-        console.log({refreshToken})
         const user = await userService.refreshToken({refreshToken});
-        console.log({user})
         tokenService.setRefreshTokenToCookie({res, refreshToken: user.refreshToken});
         console.log({user}, 'refreshToken --- end ---')
         return res.status(StatusCode.Ok).json(user);

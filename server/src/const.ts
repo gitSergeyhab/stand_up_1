@@ -77,8 +77,10 @@ export const JoiMessageKey = {
   }
 
   export const TokenExpire = {
-    Access: '30m',
-    Refresh: '30d'
+    // Access: '30m',
+    // Refresh: '30d'
+    Access: '10s',
+    Refresh: '20s'
   }
 
   export const enum TokenType {

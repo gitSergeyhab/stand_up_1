@@ -26,9 +26,7 @@ export const getDataFromSQLWithTitles = (result: [unknown[], unknown]):{data: un
 
 export const checkTitles = async (data: DataType | DataTypeRate, res: Response) => {
     const native = data.titles?.native;
-    console.log('checkTitles - 0')
     if (!native) {
-        console.log('checkTitles - +')
         
         return res.status(StatusCode.NotFoundError).json({message: `not found this content with such id`})
     }

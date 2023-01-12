@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { toast } from 'react-toastify';
 import { api } from '../../store/axios-api';
 import { TestUserCC, TestUserSC } from '../../types/user-types';
@@ -25,22 +25,29 @@ export const UsersPage = () => {
   const [users, setUsers] = useState<TestUserCC[]>([]);
   // const dispatch = useDispatch()
 
-  useEffect(() => {
+  const handleHeaderClick = () => {
     api.get<{users: TestUserSC[]; count: string}>('/')
       .then((res) => {
         const data = res.data.users;
-        // console.log(data);
         const usersData = data.map(adaptTestUserToClient);
         setUsers(usersData);
       }).catch(() => toast.error('User Error'));
-    // .catch((err) => console.log(err));
-  }, []);
+  };
+
+  // useEffect(() => {
+  //   api.get<{users: TestUserSC[]; count: string}>('/')
+  //     .then((res) => {
+  //       const data = res.data.users;
+  //       const usersData = data.map(adaptTestUserToClient);
+  //       setUsers(usersData);
+  //     }).catch(() => toast.error('User Error'));
+  // }, []);
 
   const usersElements = users.map((item) => <User key={item.id} user={item}/>);
 
   return (
     <>
-      <h1>Users</h1>
+      <h1 onClick={handleHeaderClick}>Users</h1>
 
       <ul>{usersElements}</ul>
 

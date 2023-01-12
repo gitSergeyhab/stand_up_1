@@ -20,10 +20,8 @@ class UserController {
     async auth(req: UserRequest, res: Response) {
         try {
             if (req.session.user) {
-                console.log('req.session.user!')
                 return res.status(StatusCode.Ok).json({ user: req.session.user });
             } 
-            console.log('!! NO USER')
             return res.status(StatusCode.NotAuthError).json({ user: null });
         } catch {
             return res.status(StatusCode.ServerError).json({ user: null });
@@ -33,11 +31,7 @@ class UserController {
 
     async logoutUser (req: UserRequest, res: Response) {
         try {
-            console.log('logoutUser');
-            console.log('req.session - bef', req.session);
             req.session.user = null;
-            console.log('req.session - aft', req.session);
-
             return res.status(StatusCode.Ok).json({ user: null });
         } catch(err) {
             console.log('logoutUser', {err})
@@ -50,7 +44,6 @@ class UserController {
 
             const {email, password} = req.body;
 
-            // console.log({email, password} )
             const user = await sequelize.query(
                 `
                 SELECT user_id, user_nik, user_avatar, user_password, user_status, user_email

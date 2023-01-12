@@ -8,7 +8,6 @@ const dialect = process.env.SQL_DIALECT as Dialect || 'postgres';
 const host = process.env.DB_HOST || 'localhost';
 const port = +process.env.DB_PORT || 5432;
 
-console.log(process.env.DB_NAME, process.env.DB_PORT)
 
 export const sequelize = new Sequelize(
     process.env.DB_NAME || DEFAULT_DB_NAME,

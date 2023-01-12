@@ -39,7 +39,7 @@ export const PagePictureList = () => {
   if (isLoading || !res) {
     return <BigSpinner/>;
   }
-  console.log(res);
+  // console.log(res);
   const {count, data, titles} = res;
 
   const { mainType } = getTypes(pathname);

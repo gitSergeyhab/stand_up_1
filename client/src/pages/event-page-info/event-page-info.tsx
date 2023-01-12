@@ -17,11 +17,11 @@ export const EventPageInfo = () => {
   const {id} = useParams();
   const {pathname} = useLocation();
 
-  console.log(id);
+  // console.log(id);
 
 
   const {data, isError, isLoading, error} = useGetEventByIdQuery(id as string);
-  console.log(data, 'EventPageInfo');
+  // console.log(data, 'EventPageInfo');
 
   if (isError) {
     return <ErrorPage error={error}/>;

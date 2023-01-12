@@ -37,7 +37,6 @@ class CountriesController {
 
         try {
             const {sign = ''} = req.params;
-            console.log(sign)
 
             const result = await sequelize.query(
                 `

@@ -10,6 +10,7 @@ import { UserHeaderAvatar } from '../user-header-avatar/user-header-avatar';
 
 const MENU_DATA = [
   'main',
+  'users',
   ContentName.Comedians,
   ContentName.Events,
   ContentName.Places,

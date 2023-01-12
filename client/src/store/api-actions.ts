@@ -4,7 +4,7 @@ import { adaptLoginUserDataToClient } from '../utils/adapters/user-adapters';
 import { storageUtils } from '../utils/storage-utils';
 import { setUser } from './actions';
 import axios, {AxiosError} from 'axios';
-import { BASE_URL } from './axios-api';
+import { getRefresh } from './axios-api';
 import { toast } from 'react-toastify';
 
 
@@ -14,6 +14,7 @@ type RegistrationType = LoginType & {nik: string; passwordRepeat: string};
 
 
 const serErrorMessage = (cb: (message: string[]) => void, err: Error | AxiosError) => {
+  console.log({err});
   if(axios.isAxiosError(err)){
     const {errors} = err.response?.data as ErrorData;
     cb(errors);
@@ -71,7 +72,7 @@ export const logoutAction = (): ThunkActionResult =>
 export const authAction = ():ThunkActionResult =>
   async(dispatch) => {
     try {
-      const {data} = await axios.get<LoginUserDataSC>(`${BASE_URL}/refresh`, {withCredentials: true});
+      const {data} = await getRefresh();
       const userData = adaptLoginUserDataToClient(data);
       storageUtils.setData(userData);
       dispatch(setUser(userData.user));
@@ -81,6 +82,6 @@ export const authAction = ():ThunkActionResult =>
       dispatch(setUser(null));
       toast.error('Auth Error');
       toast.error( JSON.stringify(err) );
-      console.log(err);
+      // console.log(err);
     }
   };
