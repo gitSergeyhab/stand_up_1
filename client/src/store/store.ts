@@ -5,6 +5,7 @@ import { comediansApi } from './comedians-api';
 import { eventsApi } from './events-api';
 // import { mainReducer } from './main-reducer/main-reducer';
 import { subApi } from './sub-api';
+import { testSlice } from './test-store';
 import { userApi } from './user-api';
 import { userReducer } from './user-reducer/user-reducer';
 
@@ -21,6 +22,7 @@ export const reducer = combineReducers({
   [subApi.reducerPath]: subApi.reducer,
   [userApi.reducerPath]: userApi.reducer,
   [ReducerName.User]: userReducer,
+  [testSlice.name]: testSlice.reducer
 
   // [ReducerName.Main]: mainReducer
 });

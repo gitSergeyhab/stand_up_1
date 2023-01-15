@@ -21,6 +21,7 @@ import { UsersPage } from '../pages/users-page/users-page';
 import { storageUtils } from '../utils/storage-utils';
 import { useAppDispatch } from '../hooks/use-app-dispatch';
 import { authAction } from '../store/api-actions';
+import { TestPage } from '../pages/test-page/test-page';
 
 const AppRoute = {
   Main: '/',
@@ -73,7 +74,7 @@ export const App = () => {
               <Routes>
 
 
-                <Route path={AppRoute.Main} element={<MainPage/>}/>
+                {/* <Route path={AppRoute.Main} element={<MainPage/>}/> */}
 
                 <Route path={AppRoute.Comedians} element={<ComediansPage/>}/>
                 <Route path={AppRoute.Comedian} element={<ComedianPageInfo/>}/>
@@ -106,6 +107,9 @@ export const App = () => {
 
                 <Route path={AppRoute.Registration} element={<RegistrationPage/>}/>
                 <Route path={AppRoute.Login} element={<LoginPage/>}/>
+
+
+                <Route path={'/'} element={<TestPage/>}/>
 
 
                 <Route path='*' element={<ErrorPage/>}/>

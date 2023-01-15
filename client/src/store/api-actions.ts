@@ -14,7 +14,7 @@ type RegistrationType = LoginType & {nik: string; passwordRepeat: string};
 
 
 const serErrorMessage = (cb: (message: string[]) => void, err: Error | AxiosError) => {
-  console.log({err});
+  // console.log({err});
   if(axios.isAxiosError(err)){
     const {errors} = err.response?.data as ErrorData;
     cb(errors);
